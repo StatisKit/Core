@@ -29,15 +29,11 @@ void wrapper_3c3eb4c91b905a988bd9546e804a0d95()
     boost::python::object module_a640206684935d01aa5be922b3bbdf00(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_a640206684935d01aa5be922b3bbdf00.c_str()))));
     boost::python::scope().attr("_binomial_distribution_ml_estimation") = module_a640206684935d01aa5be922b3bbdf00;
     boost::python::scope scope_a640206684935d01aa5be922b3bbdf00 = module_a640206684935d01aa5be922b3bbdf00;
-    class ::std::unique_ptr< struct ::statiskit::UnivariateDistributionEstimation, struct ::std::default_delete< struct ::statiskit::UnivariateDistributionEstimation > >  (::statiskit::BinomialDistributionMLEstimation::Estimator::*method_pointer_af2f2d7b3d345551bc310931cb051a90)(struct ::statiskit::UnivariateData const &, bool const &) const = &::statiskit::BinomialDistributionMLEstimation::Estimator::operator();
-    class ::std::unique_ptr< struct ::statiskit::UnivariateDistributionEstimation::Estimator, struct ::std::default_delete< struct ::statiskit::UnivariateDistributionEstimation::Estimator > >  (::statiskit::BinomialDistributionMLEstimation::Estimator::*method_pointer_ea82a5b73fb254efa8cfb2714e43ff69)() const = &::statiskit::BinomialDistributionMLEstimation::Estimator::copy;
     bool  (::statiskit::BinomialDistributionMLEstimation::Estimator::*method_pointer_b9c9fe80edb7575c9c4761d2675e9723)() const = &::statiskit::BinomialDistributionMLEstimation::Estimator::get_force;
     void  (::statiskit::BinomialDistributionMLEstimation::Estimator::*method_pointer_23f661468c525bc296871ebdc4bd363c)(bool const &) = &::statiskit::BinomialDistributionMLEstimation::Estimator::set_force;
     boost::python::class_< class ::statiskit::BinomialDistributionMLEstimation::Estimator, autowig::Held< class ::statiskit::BinomialDistributionMLEstimation::Estimator >::Type, boost::python::bases< struct ::statiskit::OptimizationEstimation< unsigned int, class ::statiskit::BinomialDistribution, struct ::statiskit::DiscreteUnivariateDistributionEstimation >::Estimator > > class_3c3eb4c91b905a988bd9546e804a0d95("Estimator", "", boost::python::no_init);
     class_3c3eb4c91b905a988bd9546e804a0d95.def(boost::python::init<  >(""));
     class_3c3eb4c91b905a988bd9546e804a0d95.def(boost::python::init< class ::statiskit::BinomialDistributionMLEstimation::Estimator const & >(""));
-    class_3c3eb4c91b905a988bd9546e804a0d95.def("__call__", method_pointer_af2f2d7b3d345551bc310931cb051a90, "");
-    class_3c3eb4c91b905a988bd9546e804a0d95.def("copy", method_pointer_ea82a5b73fb254efa8cfb2714e43ff69, "");
     class_3c3eb4c91b905a988bd9546e804a0d95.def("get_force", method_pointer_b9c9fe80edb7575c9c4761d2675e9723, "");
     class_3c3eb4c91b905a988bd9546e804a0d95.def("set_force", method_pointer_23f661468c525bc296871ebdc4bd363c, "");
 

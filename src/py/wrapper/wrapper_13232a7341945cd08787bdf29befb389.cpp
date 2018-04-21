@@ -56,7 +56,6 @@ void wrapper_13232a7341945cd08787bdf29befb389()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    unsigned int  (::statiskit::MixtureDistribution< ::statiskit::SingularDistribution >::*method_pointer_9126658cc9765bad8e36a6634f617e9c)() const = &::statiskit::MixtureDistribution< struct ::statiskit::SingularDistribution >::get_nb_parameters;
     ::statiskit::Index  (::statiskit::MixtureDistribution< ::statiskit::SingularDistribution >::*method_pointer_f29a9062a3a352369fcb0522a15b8cf3)() const = &::statiskit::MixtureDistribution< struct ::statiskit::SingularDistribution >::get_nb_states;
     struct ::statiskit::SingularDistribution const * (::statiskit::MixtureDistribution< ::statiskit::SingularDistribution >::*method_pointer_6fec79f58d915ece83cbb6574ebbe8d1)(::statiskit::Index const &) const = &::statiskit::MixtureDistribution< struct ::statiskit::SingularDistribution >::get_observation;
     void  (::statiskit::MixtureDistribution< ::statiskit::SingularDistribution >::*method_pointer_68960ed00cc65811a690382a0d67ba31)(::statiskit::Index const &, struct ::statiskit::SingularDistribution const &) = &::statiskit::MixtureDistribution< struct ::statiskit::SingularDistribution >::set_observation;
@@ -68,7 +67,6 @@ void wrapper_13232a7341945cd08787bdf29befb389()
     double  (::statiskit::MixtureDistribution< ::statiskit::SingularDistribution >::*method_pointer_7371ce416e5556a6b595feb14bf9b48b)(struct ::statiskit::MultivariateEvent const *) const = &::statiskit::MixtureDistribution< struct ::statiskit::SingularDistribution >::uncertainty;
     double  (::statiskit::MixtureDistribution< ::statiskit::SingularDistribution >::*method_pointer_49ba69a598e250d89edd74201e72a6f0)(struct ::statiskit::MultivariateData const &) const = &::statiskit::MixtureDistribution< struct ::statiskit::SingularDistribution >::uncertainty;
     boost::python::class_< autowig::Wrap_13232a7341945cd08787bdf29befb389, autowig::Held< autowig::Wrap_13232a7341945cd08787bdf29befb389 >::Type, boost::python::bases< struct ::statiskit::SingularDistribution >, boost::noncopyable > class_13232a7341945cd08787bdf29befb389("_MixtureDistribution_13232a7341945cd08787bdf29befb389", "", boost::python::no_init);
-    class_13232a7341945cd08787bdf29befb389.def("get_nb_parameters", method_pointer_9126658cc9765bad8e36a6634f617e9c, "");
     class_13232a7341945cd08787bdf29befb389.def("get_nb_states", method_pointer_f29a9062a3a352369fcb0522a15b8cf3, "");
     class_13232a7341945cd08787bdf29befb389.def("get_observation", method_pointer_6fec79f58d915ece83cbb6574ebbe8d1, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
     class_13232a7341945cd08787bdf29befb389.def("set_observation", method_pointer_68960ed00cc65811a690382a0d67ba31, "");

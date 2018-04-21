@@ -28,6 +28,7 @@ class TestData(unittest.TestCase):
         del self.__class__._data
         self.__class__._data = data
 
+    @attr(win = False)
     def test_access(self):
         """Test named data access"""
         for uevent, mevent in zip(self._data.pen.events, self._data.events):
@@ -72,9 +73,10 @@ class TestData(unittest.TestCase):
 
     def test_extract(self):
         """Test multivariate data extraction"""
-        data = self._data.extract([0, 1])
+        data = self._data.extract(0, 1)
         self.assertEqual(len(data), len(self._data))
 
+    @attr(osx = False)
     def test_cdf_plot(self):
         """Test univariate data cdf plot"""
         for component in self._data.components:

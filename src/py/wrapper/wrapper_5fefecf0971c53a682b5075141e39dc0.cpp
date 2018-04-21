@@ -25,13 +25,11 @@ void wrapper_5fefecf0971c53a682b5075141e39dc0()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    class ::std::unique_ptr< class ::statiskit::SlopeHeuristicSolver, struct ::std::default_delete< class ::statiskit::SlopeHeuristicSolver > >  (::statiskit::SlopeHeuristicBiSquareSolver::*method_pointer_2b5a79276ec85fe2ae814efee333a121)() const = &::statiskit::SlopeHeuristicBiSquareSolver::copy;
     double const & (::statiskit::SlopeHeuristicBiSquareSolver::*method_pointer_9bddc4d28425559fa247588656301e76)() const = &::statiskit::SlopeHeuristicBiSquareSolver::get_k;
     void  (::statiskit::SlopeHeuristicBiSquareSolver::*method_pointer_1de2922e7e925d388fa01a069fb88c41)(double const &) = &::statiskit::SlopeHeuristicBiSquareSolver::set_k;
     boost::python::class_< class ::statiskit::SlopeHeuristicBiSquareSolver, autowig::Held< class ::statiskit::SlopeHeuristicBiSquareSolver >::Type, boost::python::bases< class ::statiskit::SlopeHeuristicIWLSSolver > > class_5fefecf0971c53a682b5075141e39dc0("SlopeHeuristicBiSquareSolver", "", boost::python::no_init);
     class_5fefecf0971c53a682b5075141e39dc0.def(boost::python::init<  >(""));
     class_5fefecf0971c53a682b5075141e39dc0.def(boost::python::init< class ::statiskit::SlopeHeuristicBiSquareSolver const & >(""));
-    class_5fefecf0971c53a682b5075141e39dc0.def("copy", method_pointer_2b5a79276ec85fe2ae814efee333a121, "");
     class_5fefecf0971c53a682b5075141e39dc0.def("get_k", method_pointer_9bddc4d28425559fa247588656301e76, boost::python::return_value_policy< boost::python::return_by_value >(), "");
     class_5fefecf0971c53a682b5075141e39dc0.def("set_k", method_pointer_1de2922e7e925d388fa01a069fb88c41, "");
 

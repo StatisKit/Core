@@ -25,12 +25,10 @@ void wrapper_7b62905e006b57cc879769143ac42b3a()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    struct ::statiskit::UnivariateDistribution const * (::statiskit::LazyEstimation< ::statiskit::ShiftedDistribution< ::statiskit::DiscreteUnivariateDistribution >, ::statiskit::DiscreteUnivariateDistributionEstimation >::*method_pointer_654fc2ae1b6157f3925a0712dab4f17c)() const = &::statiskit::LazyEstimation< class ::statiskit::ShiftedDistribution< struct ::statiskit::DiscreteUnivariateDistribution >, struct ::statiskit::DiscreteUnivariateDistributionEstimation >::get_estimated;
     boost::python::class_< class ::statiskit::LazyEstimation< class ::statiskit::ShiftedDistribution< struct ::statiskit::DiscreteUnivariateDistribution >, struct ::statiskit::DiscreteUnivariateDistributionEstimation >, autowig::Held< class ::statiskit::LazyEstimation< class ::statiskit::ShiftedDistribution< struct ::statiskit::DiscreteUnivariateDistribution >, struct ::statiskit::DiscreteUnivariateDistributionEstimation > >::Type, boost::python::bases< struct ::statiskit::DiscreteUnivariateDistributionEstimation > > class_7b62905e006b57cc879769143ac42b3a("_LazyEstimation_7b62905e006b57cc879769143ac42b3a", "", boost::python::no_init);
     class_7b62905e006b57cc879769143ac42b3a.def(boost::python::init<  >(""));
     class_7b62905e006b57cc879769143ac42b3a.def(boost::python::init< class ::statiskit::ShiftedDistribution< struct ::statiskit::DiscreteUnivariateDistribution > const * >(""));
     class_7b62905e006b57cc879769143ac42b3a.def(boost::python::init< class ::statiskit::LazyEstimation< class ::statiskit::ShiftedDistribution< struct ::statiskit::DiscreteUnivariateDistribution >, struct ::statiskit::DiscreteUnivariateDistributionEstimation > const & >(""));
-    class_7b62905e006b57cc879769143ac42b3a.def("get_estimated", method_pointer_654fc2ae1b6157f3925a0712dab4f17c, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
 
     if(autowig::Held< class ::statiskit::LazyEstimation< class ::statiskit::ShiftedDistribution< struct ::statiskit::DiscreteUnivariateDistribution >, struct ::statiskit::DiscreteUnivariateDistributionEstimation > >::is_class)
     {

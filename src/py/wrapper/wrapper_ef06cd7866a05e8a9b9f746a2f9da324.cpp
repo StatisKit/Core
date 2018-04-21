@@ -50,13 +50,11 @@ void wrapper_ef06cd7866a05e8a9b9f746a2f9da324()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    unsigned int  (::statiskit::BetaCompoundDiscreteUnivariateDistribution::*method_pointer_cf22030de03557b1aef636a8696154de)() const = &::statiskit::BetaCompoundDiscreteUnivariateDistribution::get_nb_parameters;
     double const & (::statiskit::BetaCompoundDiscreteUnivariateDistribution::*method_pointer_aa65e59810c1571d8fbed02f3b5f63e8)() const = &::statiskit::BetaCompoundDiscreteUnivariateDistribution::get_alpha;
     void  (::statiskit::BetaCompoundDiscreteUnivariateDistribution::*method_pointer_6c9c4a4147e55bfbbf1c2244d715d0f0)(double const &) = &::statiskit::BetaCompoundDiscreteUnivariateDistribution::set_alpha;
     double const & (::statiskit::BetaCompoundDiscreteUnivariateDistribution::*method_pointer_4d3f934733425bf2a2ad74c54ad78ca1)() const = &::statiskit::BetaCompoundDiscreteUnivariateDistribution::get_gamma;
     void  (::statiskit::BetaCompoundDiscreteUnivariateDistribution::*method_pointer_2575ec00accd5909a8e72c6c46d12645)(double const &) = &::statiskit::BetaCompoundDiscreteUnivariateDistribution::set_gamma;
     boost::python::class_< autowig::Wrap_ef06cd7866a05e8a9b9f746a2f9da324, autowig::Held< autowig::Wrap_ef06cd7866a05e8a9b9f746a2f9da324 >::Type, boost::python::bases< struct ::statiskit::DiscreteUnivariateDistribution >, boost::noncopyable > class_ef06cd7866a05e8a9b9f746a2f9da324("BetaCompoundDiscreteUnivariateDistribution", "", boost::python::no_init);
-    class_ef06cd7866a05e8a9b9f746a2f9da324.def("get_nb_parameters", method_pointer_cf22030de03557b1aef636a8696154de, "");
     class_ef06cd7866a05e8a9b9f746a2f9da324.def("get_alpha", method_pointer_aa65e59810c1571d8fbed02f3b5f63e8, boost::python::return_value_policy< boost::python::return_by_value >(), "");
     class_ef06cd7866a05e8a9b9f746a2f9da324.def("set_alpha", method_pointer_6c9c4a4147e55bfbbf1c2244d715d0f0, "");
     class_ef06cd7866a05e8a9b9f746a2f9da324.def("get_gamma", method_pointer_4d3f934733425bf2a2ad74c54ad78ca1, boost::python::return_value_policy< boost::python::return_by_value >(), "");

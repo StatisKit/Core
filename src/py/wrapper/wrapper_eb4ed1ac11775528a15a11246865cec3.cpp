@@ -41,9 +41,7 @@ void wrapper_eb4ed1ac11775528a15a11246865cec3()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    class ::std::unique_ptr< struct ::statiskit::Schedule, struct ::std::default_delete< struct ::statiskit::Schedule > >  (::statiskit::PolymorphicCopy< ::statiskit::Schedule, ::statiskit::ExponentialSchedule, ::statiskit::Schedule >::*method_pointer_9b565121c8e55dc993b285b56b1874cc)() const = &::statiskit::PolymorphicCopy< struct ::statiskit::Schedule, class ::statiskit::ExponentialSchedule, struct ::statiskit::Schedule >::copy;
     boost::python::class_< autowig::Wrap_eb4ed1ac11775528a15a11246865cec3, autowig::Held< autowig::Wrap_eb4ed1ac11775528a15a11246865cec3 >::Type, boost::python::bases< struct ::statiskit::Schedule >, boost::noncopyable > class_eb4ed1ac11775528a15a11246865cec3("_PolymorphicCopy_eb4ed1ac11775528a15a11246865cec3", "", boost::python::no_init);
-    class_eb4ed1ac11775528a15a11246865cec3.def("copy", method_pointer_9b565121c8e55dc993b285b56b1874cc, "");
 
     if(autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::Schedule, class ::statiskit::ExponentialSchedule, struct ::statiskit::Schedule > >::is_class)
     {

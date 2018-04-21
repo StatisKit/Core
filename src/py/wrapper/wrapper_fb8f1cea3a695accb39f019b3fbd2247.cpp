@@ -25,21 +25,17 @@ void wrapper_fb8f1cea3a695accb39f019b3fbd2247()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    enum ::statiskit::event_type  (::statiskit::IntervalCensoredEvent< ::statiskit::DiscreteEvent >::*method_pointer_b5b7c5bb9a2e5ddc8667751935bbf6a7)() const = &::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent >::get_event;
     int const & (::statiskit::IntervalCensoredEvent< ::statiskit::DiscreteEvent >::*method_pointer_8376654e7157578aa3f686833ab27fac)() const = &::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent >::get_lower_bound;
     int const & (::statiskit::IntervalCensoredEvent< ::statiskit::DiscreteEvent >::*method_pointer_5801af14002b5532ba366122c0678191)() const = &::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent >::get_upper_bound;
     int  (::statiskit::IntervalCensoredEvent< ::statiskit::DiscreteEvent >::*method_pointer_d7218a6b4e365c178e8a5e168c11181b)() const = &::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent >::get_range;
     int  (::statiskit::IntervalCensoredEvent< ::statiskit::DiscreteEvent >::*method_pointer_a384afd04e015445bf0fb505549fa4ce)() const = &::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent >::get_center;
-    class ::std::unique_ptr< struct ::statiskit::UnivariateEvent, struct ::std::default_delete< struct ::statiskit::UnivariateEvent > >  (::statiskit::IntervalCensoredEvent< ::statiskit::DiscreteEvent >::*method_pointer_1c6fee8716f358a6a4f6358d3e31aa2c)() const = &::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent >::copy;
     boost::python::class_< class ::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent >, autowig::Held< class ::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent > >::Type, boost::python::bases< struct ::statiskit::DiscreteEvent > > class_fb8f1cea3a695accb39f019b3fbd2247("_IntervalCensoredEvent_fb8f1cea3a695accb39f019b3fbd2247", "", boost::python::no_init);
     class_fb8f1cea3a695accb39f019b3fbd2247.def(boost::python::init< int const &, int const & >(""));
     class_fb8f1cea3a695accb39f019b3fbd2247.def(boost::python::init< class ::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent > const & >(""));
-    class_fb8f1cea3a695accb39f019b3fbd2247.def("get_event", method_pointer_b5b7c5bb9a2e5ddc8667751935bbf6a7, "");
     class_fb8f1cea3a695accb39f019b3fbd2247.def("get_lower_bound", method_pointer_8376654e7157578aa3f686833ab27fac, boost::python::return_value_policy< boost::python::return_by_value >(), "");
     class_fb8f1cea3a695accb39f019b3fbd2247.def("get_upper_bound", method_pointer_5801af14002b5532ba366122c0678191, boost::python::return_value_policy< boost::python::return_by_value >(), "");
     class_fb8f1cea3a695accb39f019b3fbd2247.def("get_range", method_pointer_d7218a6b4e365c178e8a5e168c11181b, "");
     class_fb8f1cea3a695accb39f019b3fbd2247.def("get_center", method_pointer_a384afd04e015445bf0fb505549fa4ce, "");
-    class_fb8f1cea3a695accb39f019b3fbd2247.def("copy", method_pointer_1c6fee8716f358a6a4f6358d3e31aa2c, "");
 
     if(autowig::Held< class ::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent > >::is_class)
     {

@@ -170,6 +170,9 @@ namespace statiskit
 
     struct STATISKIT_CORE_API MultivariateEvent
     {        
+
+        virtual ~MultivariateEvent() = 0;
+
         virtual Index size() const = 0;
                 
         virtual const UnivariateEvent* get(const Index& index) const = 0;
@@ -197,5 +200,7 @@ namespace statiskit
     };
 }
 
+#ifndef AUTOWIG
 #include "event.hpp"
+#endif
 #endif

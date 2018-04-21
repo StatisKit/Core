@@ -44,9 +44,7 @@ void wrapper_d6970cd0a37451cfbcd48d316b17aaa0()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    class ::std::unique_ptr< struct ::statiskit::MultivariateDistributionEstimation::Estimator, struct ::std::default_delete< struct ::statiskit::MultivariateDistributionEstimation::Estimator > >  (::statiskit::PolymorphicCopy< ::statiskit::MultivariateDistributionEstimation::Estimator, ::statiskit::SplittingDistributionEstimation::Estimator, ::statiskit::DiscreteMultivariateDistributionEstimation::Estimator >::*method_pointer_a0b487653a3856b1bb4b5c6fad17a750)() const = &::statiskit::PolymorphicCopy< struct ::statiskit::MultivariateDistributionEstimation::Estimator, class ::statiskit::SplittingDistributionEstimation::Estimator, struct ::statiskit::DiscreteMultivariateDistributionEstimation::Estimator >::copy;
     boost::python::class_< autowig::Wrap_d6970cd0a37451cfbcd48d316b17aaa0, autowig::Held< autowig::Wrap_d6970cd0a37451cfbcd48d316b17aaa0 >::Type, boost::python::bases< struct ::statiskit::DiscreteMultivariateDistributionEstimation::Estimator >, boost::noncopyable > class_d6970cd0a37451cfbcd48d316b17aaa0("_PolymorphicCopy_d6970cd0a37451cfbcd48d316b17aaa0", "", boost::python::no_init);
-    class_d6970cd0a37451cfbcd48d316b17aaa0.def("copy", method_pointer_a0b487653a3856b1bb4b5c6fad17a750, "");
 
     if(autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::MultivariateDistributionEstimation::Estimator, class ::statiskit::SplittingDistributionEstimation::Estimator, struct ::statiskit::DiscreteMultivariateDistributionEstimation::Estimator > >::is_class)
     {

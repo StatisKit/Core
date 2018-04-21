@@ -8,6 +8,9 @@ namespace statiskit
     SlopeHeuristicSolver::SlopeHeuristicSolver(const SlopeHeuristicSolver& solver)
     { _solver = solver._solver; }
 
+    SlopeHeuristicSolver::~SlopeHeuristicSolver()
+    {}
+
     linalg::solver_type SlopeHeuristicSolver::get_solver() const
     { return _solver; }
 
@@ -122,6 +125,9 @@ namespace statiskit
             { W(index, index) = 0.; }
         }
     }
+
+    SlopeHeuristicSelector::~SlopeHeuristicSelector()
+    {}
 
     SlopeHeuristicMaximalSelector::SlopeHeuristicMaximalSelector()
     {}

@@ -25,10 +25,8 @@ void wrapper_86ceaf8153c052c9b470c7e534cdb934()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    class ::std::unique_ptr< struct ::statiskit::UnivariateData, struct ::std::default_delete< struct ::statiskit::UnivariateData > >  (::statiskit::PolymorphicCopy< ::statiskit::UnivariateData, ::statiskit::WeightedUnivariateData, ::statiskit::WeightedData< ::statiskit::UnivariateData > >::*method_pointer_6e21f6b78023505f9b865f862d37ecdf)() const = &::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateData, class ::statiskit::WeightedUnivariateData, class ::statiskit::WeightedData< struct ::statiskit::UnivariateData > >::copy;
     boost::python::class_< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateData, class ::statiskit::WeightedUnivariateData, class ::statiskit::WeightedData< struct ::statiskit::UnivariateData > >, autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateData, class ::statiskit::WeightedUnivariateData, class ::statiskit::WeightedData< struct ::statiskit::UnivariateData > > >::Type, boost::python::bases< class ::statiskit::WeightedData< struct ::statiskit::UnivariateData > > > class_86ceaf8153c052c9b470c7e534cdb934("_PolymorphicCopy_86ceaf8153c052c9b470c7e534cdb934", "", boost::python::no_init);
     class_86ceaf8153c052c9b470c7e534cdb934.def(boost::python::init<  >(""));
-    class_86ceaf8153c052c9b470c7e534cdb934.def("copy", method_pointer_6e21f6b78023505f9b865f862d37ecdf, "");
 
     if(autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateData, class ::statiskit::WeightedUnivariateData, class ::statiskit::WeightedData< struct ::statiskit::UnivariateData > > >::is_class)
     {

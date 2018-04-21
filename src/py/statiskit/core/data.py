@@ -64,7 +64,7 @@ del get_dispersion, set_dispersion
 def wrapper_set_name(f):
     @wraps(f)
     def set_name(self, name):
-        if not isinstance(name, basestring):
+        if not isinstance(name, str):
             raise TypeError('expected basestring, but got {!r}'.format(type(name)))
         is_name = True
         try:
@@ -109,7 +109,7 @@ class Events(object):
                 self._events = events
                 self._index = 0
 
-            def next(self):
+            def __next__(self):
                 if self._index < len(self._events):
                     event = self._events[self._index]
                     self._index += 1
@@ -128,7 +128,7 @@ def wrapper_events(f0, f1, f2):
     @wraps(f1)
     def __getitem__(self, index):
         if isinstance(index, slice):
-            return [self[index] for index in xrange(*index.indices(len(self)))]
+            return [self[index] for index in range(*index.indices(len(self)))]
         else:
             if index < 0:
                 index += len(self)
@@ -173,7 +173,7 @@ def __str__(self):
         rows = [("", str(self.name))] + [(str(index), str(event)) if event is not None else (repr(index), '?') for index, event in enumerate(events) if index < controls.head] + [('...', '...')] + [(repr(index), repr(event)) if event is not None else (repr(index), '?') for index, event in enumerate(events) if index > max(len(events) - controls.tail, controls.head)]
     else:
         rows = [("", str(self.name))] + [(str(index), str(event)) if event is not None else (repr(index), '?') for index, event in enumerate(events)]
-    columns = zip(*rows)
+    columns = list(zip(*rows))
     maxima = [max(max(*[len(row) for row in column]), 3) + 2 for column in columns]
     string = []
     for index, row in enumerate(rows):
@@ -203,7 +203,7 @@ UnivariateDataFrame._repr_html_ = _repr_html_
 del _repr_html_
 
 def pdf_plot(self, axes=None, **kwargs):
-    from estimation import frequency_estimation, histogram_estimation
+    from .estimation import frequency_estimation, histogram_estimation
     sample_space = self.sample_space
     norm = kwargs.pop('norm', False)
     if isinstance(norm, bool):
@@ -236,7 +236,7 @@ UnivariateDataFrame.pdf_plot = pdf_plot
 del pdf_plot
 
 def cdf_plot(self, axes=None, **kwargs):
-    from estimation import frequency_estimation
+    from .estimation import frequency_estimation
     sample_space = self.sample_space
     norm = kwargs.pop('norm', False)
     if isinstance(norm, bool):
@@ -260,7 +260,7 @@ UnivariateDataFrame.cdf_plot = cdf_plot
 del cdf_plot
 
 def box_plot(self, axes=None, **kwargs):
-    from estimation import frequency_estimation
+    from .estimation import frequency_estimation
     sample_space = self.sample_space
     norm = kwargs.pop('norm', False)
     if isinstance(norm, bool):
@@ -368,7 +368,7 @@ class Components(object):
                 self._components = components
                 self._index = 0
 
-            def next(self):
+            def __next__(self):
                 if self._index < len(self._components):
                     component = self._components.extract(self._index)
                     self._index += 1
@@ -442,7 +442,7 @@ class Components(object):
                 self._components = components
                 self._index = 0
 
-            def next(self):
+            def __next__(self):
                 if self._index < len(self._components):
                     component = self._components[self._index]
                     self._index += 1
@@ -486,7 +486,7 @@ def __repr__(self):
         rows = [[""] + [repr(component.name) for component in self.components]] + [[repr(index)] + [repr(uevent) if uevent is not None else '?' for uevent in mevent] for index, mevent in enumerate(events) if index < controls.head] + [['...'] + ['...'] * len(self.components)] + [[repr(index)] + [repr(uevent) if uevent is not None else '?' for uevent in mevent] for index, mevent in enumerate(events) if index > max(len(events) - controls.tail, controls.head)]
     else:
         rows = [[""] + [repr(component.name) for component in self.components]] + [[repr(index)] + [repr(uevent) if uevent is not None else '?' for uevent in mevent] for index, mevent in enumerate(events)]
-    columns = zip(*rows)
+    columns = list(zip(*rows))
     maxima = [max(max(*[len(row) for row in column]), 3) + 2 for column in columns]
     string = []
     for index, row in enumerate(rows):

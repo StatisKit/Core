@@ -31,6 +31,7 @@ class AbstractTestDiscreteUnivariateDistribution(AbstractTestUnivariateDistribut
                                 self._dist.quantile(self._pmax) + 1,
                                 num=self._num,
                                 dtype=numpy.int):
+            v = int(v)
             self.assertAlmostEqual(self._dist.cdf(v - 1) + self._dist.pdf(v), self._dist.cdf(v))
             if not self._dist.pdf(v) == 0:
                 self.assertAlmostEqual(math.log(self._dist.pdf(v)), self._dist.ldf(v))
@@ -38,6 +39,7 @@ class AbstractTestDiscreteUnivariateDistribution(AbstractTestUnivariateDistribut
     def test_quantile(self):
         """Test quantile computation"""
         for p in numpy.linspace(self._pmin, self._pmax, num=self._num):
+            p = float(p)
             q = self._dist.quantile(p)
             self.assertGreaterEqual(self._dist.cdf(q), p)
             self.assertLess(self._dist.cdf(q - 1), p)
@@ -58,6 +60,7 @@ class AbstractTestContinuousUnivariateDistribution(AbstractTestUnivariateDistrib
                                 self._dist.quantile(self._pmax),
                                 num=self._num,
                                 dtype=numpy.double):
+            v = float(v)
             self.assertAlmostEqual(self._dist.cdf(v + self._epsilon), self._dist.cdf(v) + self._epsilon * self._dist.pdf(v), places=self._places)
             if not self._dist.pdf(v) == 0:
                 self.assertAlmostEqual(math.log(self._dist.pdf(v)), self._dist.ldf(v))
@@ -65,6 +68,7 @@ class AbstractTestContinuousUnivariateDistribution(AbstractTestUnivariateDistrib
     def test_quantile(self):
         """Test quantile computation"""
         for p in numpy.linspace(self._pmin, self._pmax, num=self._num):
+            p = float(p)
             q = self._dist.quantile(p)
             self.assertGreaterEqual(self._dist.cdf(q + self._epsilon), p)
             self.assertLessEqual(self._dist.cdf(q - self._epsilon), p)

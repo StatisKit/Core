@@ -25,12 +25,10 @@ void wrapper_d72a9c13e27a5de5800ea382cc4d107f()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    struct ::statiskit::UnivariateDistribution const * (::statiskit::LazyEstimation< ::statiskit::ContinuousUnivariateMixtureDistribution, ::statiskit::ContinuousUnivariateDistributionEstimation >::*method_pointer_a6bc9c7946de52649e0ddb4317b00ef5)() const = &::statiskit::LazyEstimation< struct ::statiskit::ContinuousUnivariateMixtureDistribution, struct ::statiskit::ContinuousUnivariateDistributionEstimation >::get_estimated;
     boost::python::class_< class ::statiskit::LazyEstimation< struct ::statiskit::ContinuousUnivariateMixtureDistribution, struct ::statiskit::ContinuousUnivariateDistributionEstimation >, autowig::Held< class ::statiskit::LazyEstimation< struct ::statiskit::ContinuousUnivariateMixtureDistribution, struct ::statiskit::ContinuousUnivariateDistributionEstimation > >::Type, boost::python::bases< struct ::statiskit::ContinuousUnivariateDistributionEstimation > > class_d72a9c13e27a5de5800ea382cc4d107f("_LazyEstimation_d72a9c13e27a5de5800ea382cc4d107f", "", boost::python::no_init);
     class_d72a9c13e27a5de5800ea382cc4d107f.def(boost::python::init<  >(""));
     class_d72a9c13e27a5de5800ea382cc4d107f.def(boost::python::init< struct ::statiskit::ContinuousUnivariateMixtureDistribution const * >(""));
     class_d72a9c13e27a5de5800ea382cc4d107f.def(boost::python::init< class ::statiskit::LazyEstimation< struct ::statiskit::ContinuousUnivariateMixtureDistribution, struct ::statiskit::ContinuousUnivariateDistributionEstimation > const & >(""));
-    class_d72a9c13e27a5de5800ea382cc4d107f.def("get_estimated", method_pointer_a6bc9c7946de52649e0ddb4317b00ef5, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
 
     if(autowig::Held< class ::statiskit::LazyEstimation< struct ::statiskit::ContinuousUnivariateMixtureDistribution, struct ::statiskit::ContinuousUnivariateDistributionEstimation > >::is_class)
     {

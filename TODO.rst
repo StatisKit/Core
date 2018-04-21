@@ -1,1 +1,0 @@
-* Constructor inheritance as soon as StatisKit development for windows is c ompatible with MSVC superior to 12.0 (This is an AutoWIG requirment)

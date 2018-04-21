@@ -26,12 +26,10 @@ void wrapper_a8fb4974396a5f4ca5779c02d0f58b37()
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     bool const & (::statiskit::UnivariateVarianceEstimation::*method_pointer_82667d41ae9658d3b19c94ed2fb3aeda)() const = &::statiskit::UnivariateVarianceEstimation::get_bias;
-    double const & (::statiskit::UnivariateVarianceEstimation::*method_pointer_99b67991bc085a7f86526e56972d9ca3)() const = &::statiskit::UnivariateVarianceEstimation::get_dispersion;
     boost::python::class_< class ::statiskit::UnivariateVarianceEstimation, autowig::Held< class ::statiskit::UnivariateVarianceEstimation >::Type, boost::python::bases< class ::statiskit::UnivariateDispersionEstimation > > class_a8fb4974396a5f4ca5779c02d0f58b37("UnivariateVarianceEstimation", "", boost::python::no_init);
     class_a8fb4974396a5f4ca5779c02d0f58b37.def(boost::python::init< double const &, bool const &, double const & >(""));
     class_a8fb4974396a5f4ca5779c02d0f58b37.def(boost::python::init< class ::statiskit::UnivariateVarianceEstimation const & >(""));
     class_a8fb4974396a5f4ca5779c02d0f58b37.def("get_bias", method_pointer_82667d41ae9658d3b19c94ed2fb3aeda, boost::python::return_value_policy< boost::python::return_by_value >(), "");
-    class_a8fb4974396a5f4ca5779c02d0f58b37.def("get_dispersion", method_pointer_99b67991bc085a7f86526e56972d9ca3, boost::python::return_value_policy< boost::python::return_by_value >(), "");
 
     if(autowig::Held< class ::statiskit::UnivariateVarianceEstimation >::is_class)
     {

@@ -7,11 +7,12 @@ source:
 
 build:
   number: 0
+  detect_binary_files_with_prefix: False
 
 about:
   home: http://statiskit-stl.readthedocs.org
   license: Apache License 2.0
-  summary: C++ Development Files for Basic Utilities for Statistical Analyses
+  summary: C++ Development Files of Basic Utilities for Statistical Analyses
 
 requirements:
   build:
@@ -20,7 +21,8 @@ requirements:
     - libtoolchain-dev
     - libstatiskit_stl-dev
     - libstatiskit_linalg-dev
+    - libboost_core-dev
   run:
-    - python
     - libstatiskit_stl-dev
     - libstatiskit_linalg-dev
+    - libboost_core-dev

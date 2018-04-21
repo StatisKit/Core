@@ -13,6 +13,9 @@
 
 namespace statiskit
 {
+    SingularDistribution::~SingularDistribution()
+    {}
+    
     double SingularDistribution::loglikelihood(const MultivariateData& data) const
     {
         double llh = 0.;

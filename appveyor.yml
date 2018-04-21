@@ -7,12 +7,10 @@ platform:
 environment:
   matrix:
     - CONDA_RECIPE: bin/conda/libstatiskit_core-dev
-      CONDA_VERSION: 2
-    - CONDA_RECIPE: bin/conda/libstatiskit_core-dev
       CONDA_VERSION: 3
     - CONDA_RECIPE: bin\conda\libstatiskit_core
-    - CONDA_RECIPE: bin\conda\python-statiskit_core
-      CONDA_VERSION: 2
+    # - CONDA_RECIPE: bin\conda\python-statiskit_core
+    #   CONDA_VERSION: 2
     - CONDA_RECIPE: bin\conda\python-statiskit_core
       CONDA_VERSION: 3
 

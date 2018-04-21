@@ -25,12 +25,10 @@ void wrapper_9d7f0f97517952029268e1fd35ac8843()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    struct ::statiskit::UnivariateConditionalDistribution const * (::statiskit::LazyEstimation< ::statiskit::CategoricalUnivariateConditionalDistribution, ::statiskit::CategoricalUnivariateConditionalDistributionEstimation >::*method_pointer_0310d37eabd65173b25f0900e3920d91)() const = &::statiskit::LazyEstimation< struct ::statiskit::CategoricalUnivariateConditionalDistribution, struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation >::get_estimated;
     boost::python::class_< class ::statiskit::LazyEstimation< struct ::statiskit::CategoricalUnivariateConditionalDistribution, struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation >, autowig::Held< class ::statiskit::LazyEstimation< struct ::statiskit::CategoricalUnivariateConditionalDistribution, struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation > >::Type, boost::python::bases< struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation > > class_9d7f0f97517952029268e1fd35ac8843("_LazyEstimation_9d7f0f97517952029268e1fd35ac8843", "", boost::python::no_init);
     class_9d7f0f97517952029268e1fd35ac8843.def(boost::python::init<  >(""));
     class_9d7f0f97517952029268e1fd35ac8843.def(boost::python::init< struct ::statiskit::CategoricalUnivariateConditionalDistribution const * >(""));
     class_9d7f0f97517952029268e1fd35ac8843.def(boost::python::init< class ::statiskit::LazyEstimation< struct ::statiskit::CategoricalUnivariateConditionalDistribution, struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation > const & >(""));
-    class_9d7f0f97517952029268e1fd35ac8843.def("get_estimated", method_pointer_0310d37eabd65173b25f0900e3920d91, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
 
     if(autowig::Held< class ::statiskit::LazyEstimation< struct ::statiskit::CategoricalUnivariateConditionalDistribution, struct ::statiskit::CategoricalUnivariateConditionalDistributionEstimation > >::is_class)
     {

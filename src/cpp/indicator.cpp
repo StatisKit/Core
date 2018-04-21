@@ -5,12 +5,27 @@ namespace statiskit
     qualitative_sample_space_error::qualitative_sample_space_error() : parameter_error("data", "unexpected " + __impl::to_string(CATEGORICAL) + " outcome")
     {}
 
+    UnivariateLocationEstimation::~UnivariateLocationEstimation()
+    {}
+
+    UnivariateLocationEstimation::Estimator::~Estimator()
+    {}
+
+    MultivariateLocationEstimation::~MultivariateLocationEstimation()
+    {}
+
+    MultivariateLocationEstimation::Estimator::~Estimator()
+    {}
+
     UnivariateMeanEstimation::UnivariateMeanEstimation(const double& location)
     { _location = location; }
 
     UnivariateMeanEstimation::UnivariateMeanEstimation(const UnivariateMeanEstimation& estimation)
     { _location = estimation._location; }
 
+    UnivariateMeanEstimation::~UnivariateMeanEstimation()
+    {}
+    
     const double& UnivariateMeanEstimation::get_location() const
     { return _location; }
 
@@ -18,6 +33,9 @@ namespace statiskit
     {}
 
     UnivariateMeanEstimation::Estimator::Estimator(const Estimator& estimator)
+    {}
+
+    UnivariateMeanEstimation::Estimator::~Estimator()
     {}
 
     std::unique_ptr< UnivariateLocationEstimation > UnivariateMeanEstimation::Estimator::operator() (const UnivariateData& data) const
@@ -68,10 +86,16 @@ namespace statiskit
     MultivariateMeanEstimation::MultivariateMeanEstimation(const MultivariateMeanEstimation& estimation)
     { _location = estimation._location; }
 
+    MultivariateMeanEstimation::~MultivariateMeanEstimation()
+    {}
+
     MultivariateMeanEstimation::Estimator::Estimator()
     {}
 
     MultivariateMeanEstimation::Estimator::Estimator(const Estimator& estimator)
+    {}
+
+    MultivariateMeanEstimation::Estimator::~Estimator()
     {}
 
     std::unique_ptr< MultivariateLocationEstimation > MultivariateMeanEstimation::Estimator::operator() (const MultivariateData& data) const
@@ -99,8 +123,29 @@ namespace statiskit
     UnivariateDispersionEstimation::UnivariateDispersionEstimation(const UnivariateDispersionEstimation& estimation)
     { _location = estimation._location; }
 
+    UnivariateDispersionEstimation::~UnivariateDispersionEstimation()
+    {}
+
     const double& UnivariateDispersionEstimation::get_location() const
     { return _location; }
+
+    UnivariateDispersionEstimation::Estimator::~Estimator()
+    {}
+
+    MultivariateDispersionEstimation::MultivariateDispersionEstimation(const Eigen::VectorXd& location)
+    { _location = location; }
+
+    MultivariateDispersionEstimation::MultivariateDispersionEstimation(const MultivariateDispersionEstimation& estimation)
+    { _location = estimation._location; }
+
+    const Eigen::VectorXd& MultivariateDispersionEstimation::get_location() const
+    { return _location; }
+
+    MultivariateDispersionEstimation::~MultivariateDispersionEstimation()
+    {}
+
+    MultivariateDispersionEstimation::Estimator::~Estimator()
+    {}
 
     UnivariateVarianceEstimation::UnivariateVarianceEstimation(const double& location, const bool& bias, const double& dispersion) : UnivariateDispersionEstimation(location)
     { 
@@ -113,6 +158,9 @@ namespace statiskit
         _bias = estimation._bias;
         _dispersion = estimation._dispersion;
     }
+
+    UnivariateVarianceEstimation::~UnivariateVarianceEstimation()
+    {}
 
     const bool& UnivariateVarianceEstimation::get_bias() const
     { return _bias; }
@@ -128,7 +176,10 @@ namespace statiskit
 
     UnivariateVarianceEstimation::Estimator::Estimator(const Estimator& estimator)
     { _bias = estimator._bias; }
-    
+
+    UnivariateVarianceEstimation::Estimator::~Estimator()
+    {}
+
     std::unique_ptr< UnivariateDispersionEstimation > UnivariateVarianceEstimation::Estimator::operator() (const UnivariateData& data, const double& location) const
     { 
         double total = data.compute_total(), total_square = 0.;
@@ -188,15 +239,6 @@ namespace statiskit
     void UnivariateVarianceEstimation::Estimator::set_bias(const bool& bias)
     { _bias = bias; }
 
-    MultivariateDispersionEstimation::MultivariateDispersionEstimation(const Eigen::VectorXd& location)
-    { _location = location; }
-
-    MultivariateDispersionEstimation::MultivariateDispersionEstimation(const MultivariateDispersionEstimation& estimation)
-    { _location = estimation._location; }
-
-    const Eigen::VectorXd& MultivariateDispersionEstimation::get_location() const
-    { return _location; }
-
     MultivariateVarianceEstimation::MultivariateVarianceEstimation(const Eigen::VectorXd& location, const Eigen::MatrixXd& dispersion, const bool& bias) : MultivariateDispersionEstimation(location)
     { 
         _dispersion = dispersion;
@@ -208,6 +250,9 @@ namespace statiskit
         _dispersion = estimation._dispersion;
         _bias = estimation._bias;
     }
+
+    MultivariateVarianceEstimation::~MultivariateVarianceEstimation()
+    {}
 
     const bool& MultivariateVarianceEstimation::get_bias() const
     { return _bias; }
@@ -224,6 +269,9 @@ namespace statiskit
     MultivariateVarianceEstimation::Estimator::Estimator(const Estimator& estimator)
     { _bias = estimator._bias; }
 
+    MultivariateVarianceEstimation::Estimator::~Estimator()
+    {}
+    
     std::unique_ptr< MultivariateDispersionEstimation > MultivariateVarianceEstimation::Estimator::operator() (const MultivariateData& data, const Eigen::VectorXd& location) const
     {
         Eigen::MatrixXd dispersion = Eigen::MatrixXd(location.size(), location.size());

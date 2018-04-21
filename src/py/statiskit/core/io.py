@@ -1,19 +1,21 @@
 import warnings
 from tempfile import NamedTemporaryFile
 import os
+import six
 
 from . import _core
 
 from .controls import controls
 from .data import UnivariateDataFrame, MultivariateDataFrame
 from .sample_space import NominalSampleSpace
+from .event import outcome_type
 
 __all__ = ['read_csv', 'from_list', 'from_pandas']
 
 def read_csv(filepath, sep=None, header=False, **kwargs):
     """
     """
-    if sep and not isinstance(sep, basestring):
+    if sep and not isinstance(sep, str):
         raise TypeError('\'sep\' parameter')
     with open(filepath, 'r') as filehandler:
         lines = filehandler.readlines()
@@ -24,14 +26,14 @@ def read_csv(filepath, sep=None, header=False, **kwargs):
         data = [[] for event in lines[0].split(sep)]
     for line in lines:
         for index, event in enumerate(line.split(sep)):
-            data[index].append(event.strip().strip('"').strip("'"))
+            data[index].append(str(event.strip().strip('"').strip("'")))
     data = from_list(*data, **kwargs)
     if header:
         if isinstance(data, UnivariateDataFrame):
             data.name = names.pop()
         elif isinstance(data, MultivariateDataFrame):
                 for i, j in enumerate(names):
-                    data.components[i].name = j
+                    data.components[i].name = str(j)
     return data
 
 def write_csv(data, filepath, sep=' ', header=False, censored=True):
@@ -39,11 +41,14 @@ def write_csv(data, filepath, sep=' ', header=False, censored=True):
     """
     if not isinstance(data, MultivariateDataFrame):
         raise TypeError('\'data\' parameter')
-    if not isinstance(sep, basestring):
+    if not isinstance(sep, str):
         raise TypeError('\'sep\' parameter')
     with open(filepath, 'w') as filehandler:
         if header:
-            filehandler.write(sep.join(component.name for component in data.components)+'\n')
+            if six.PY2:
+                filehandler.write(unicode(sep.join(component.name for component in data.components)+'\n'))
+            else:
+                filehandler.write(sep.join(component.name for component in data.components)+'\n')
         if censored:
             for mevent in data.events:
                 line = []
@@ -68,7 +73,10 @@ def write_csv(data, filepath, sep=' ', header=False, censored=True):
                                 raise NotImplementedError
                         else:
                             raise NotImplementedError
-                filehandler.write(sep.join(line)+'\n')
+                if six.PY2:
+                    filehandler.write(unicode(sep.join(line)+'\n'))
+                else:
+                    filehandler.write(sep.join(line)+'\n')
         else:
             for mevent in data.events:
                 line = []
@@ -88,22 +96,33 @@ def from_list(*data, **kwargs):
         sample_spaces = kwargs.pop('sample_spaces')
     else:
         sample_spaces = []
-        for _data in data:
+        outcomes = kwargs.pop('outcomes', [None] * len(data))
+        outcomes = [outcome if outcome is None or isinstance(outcome, outcome_type) else outcome_type.names[outcome] for outcome in outcomes]
+        for index, _data in enumerate(data):
             nbstr = 0
             nbint = 0
             nbflt = 0
-            for event in _data:
-                try:
-                    controls.ZZ(event)
-                    nbint += 1
-                except:
+            if outcomes[index] is None:
+                for event in _data:
                     try:
-                        controls.RR(event)
-                        nbflt += 1
+                        controls.ZZ(event)
+                        nbint += 1
                     except:
-                        nbstr += 1
+                        try:
+                            controls.RR(event)
+                            nbflt += 1
+                        except:
+                            nbstr += 1
+            elif outcomes[index] is outcome_type.CATEGORICAL:
+                nbstr = float("inf")
+            elif outcomes[index] is outcome_type.DISCRETE:
+                nbint = float("inf")
+            elif outcomes[index] is outcome_type.CONTINUOUS:
+                nbflt = float("inf")
+            else:
+                raise ValueError("'outcomes' parameter")
             if nbstr > nbint + nbflt:
-                sample_spaces.append(NominalSampleSpace([value.strip() for value in _data]))
+                sample_spaces.append(NominalSampleSpace([str(value.strip()) for value in _data]))
             elif nbint > nbstr + nbflt:
                 sample_spaces.append(controls.ZZ)
             elif nbflt > nbstr + nbint:

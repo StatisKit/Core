@@ -88,10 +88,10 @@ def location_estimation(algo='mean', data="univariate", **kwargs):
         try:
             algo = mapping[algo]()
         except KeyError:
-            raise ValueError('\'algo\' parameter, possible values are ' + ', '.join('"' + algo + '"' for algo in mapping.iterkeys()))
+            raise ValueError('\'algo\' parameter, possible values are ' + ', '.join('"' + algo + '"' for algo in mapping.keys()))
         except:
             raise
-        for attr in kwargs.keys():
+        for attr in list(kwargs.keys()):
             if hasattr(algo, attr):
                 setattr(algo, attr, kwargs.pop(attr))
         if data:
@@ -103,10 +103,10 @@ def location_estimation(algo='mean', data="univariate", **kwargs):
         try:
             algo = mapping[algo]()
         except KeyError:
-            raise ValueError('\'algo\' parameter, possible values are ' + ', '.join('"' + algo + '"' for algo in mapping.iterkeys()))
+            raise ValueError('\'algo\' parameter, possible values are ' + ', '.join('"' + algo + '"' for algo in mapping.keys()))
         except:
             raise
-        for attr in kwargs.keys():
+        for attr in list(kwargs.keys()):
             if hasattr(algo, attr):
                 setattr(algo, attr, kwargs.pop(attr))
         if isinstance(data, UnivariateData):
@@ -145,10 +145,10 @@ def dispersion_estimation(algo='variance', data="univariate", **kwargs):
         try:
             algo = mapping[algo]()
         except KeyError:
-            raise ValueError('\'algo\' parameter, possible values are ' + ', '.join('"' + algo + '"' for algo in mapping.iterkeys()))
+            raise ValueError('\'algo\' parameter, possible values are ' + ', '.join('"' + algo + '"' for algo in mapping.keys()))
         except:
             raise
-        for attr in kwargs.keys():
+        for attr in list(kwargs.keys()):
             if hasattr(algo, attr):
                 setattr(algo, attr, kwargs.pop(attr))
         if data:
@@ -160,10 +160,10 @@ def dispersion_estimation(algo='variance', data="univariate", **kwargs):
         try:
             algo = mapping[algo]()
         except KeyError:
-            raise ValueError('\'algo\' parameter, possible values are ' + ', '.join('"' + algo + '"' for algo in mapping.iterkeys()))
+            raise ValueError('\'algo\' parameter, possible values are ' + ', '.join('"' + algo + '"' for algo in mapping.keys()))
         except:
             raise
-        for attr in kwargs.keys():
+        for attr in list(kwargs.keys()):
             if hasattr(algo, attr):
                 setattr(algo, attr, kwargs.pop(attr))
         if isinstance(data, UnivariateData):

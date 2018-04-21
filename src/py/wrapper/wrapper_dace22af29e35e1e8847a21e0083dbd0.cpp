@@ -25,13 +25,11 @@ void wrapper_dace22af29e35e1e8847a21e0083dbd0()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    class ::std::unique_ptr< class ::statiskit::SlopeHeuristicSolver, struct ::std::default_delete< class ::statiskit::SlopeHeuristicSolver > >  (::statiskit::SlopeHeuristicHuberSolver::*method_pointer_5151bbc5eb4b566ab9793e729765c98f)() const = &::statiskit::SlopeHeuristicHuberSolver::copy;
     double const & (::statiskit::SlopeHeuristicHuberSolver::*method_pointer_4b87ddb1d0a553e89a54cc1bba96ed07)() const = &::statiskit::SlopeHeuristicHuberSolver::get_k;
     void  (::statiskit::SlopeHeuristicHuberSolver::*method_pointer_06199c1def0458c387775cd5080ca40a)(double const &) = &::statiskit::SlopeHeuristicHuberSolver::set_k;
     boost::python::class_< class ::statiskit::SlopeHeuristicHuberSolver, autowig::Held< class ::statiskit::SlopeHeuristicHuberSolver >::Type, boost::python::bases< class ::statiskit::SlopeHeuristicIWLSSolver > > class_dace22af29e35e1e8847a21e0083dbd0("SlopeHeuristicHuberSolver", "", boost::python::no_init);
     class_dace22af29e35e1e8847a21e0083dbd0.def(boost::python::init<  >(""));
     class_dace22af29e35e1e8847a21e0083dbd0.def(boost::python::init< class ::statiskit::SlopeHeuristicHuberSolver const & >(""));
-    class_dace22af29e35e1e8847a21e0083dbd0.def("copy", method_pointer_5151bbc5eb4b566ab9793e729765c98f, "");
     class_dace22af29e35e1e8847a21e0083dbd0.def("get_k", method_pointer_4b87ddb1d0a553e89a54cc1bba96ed07, boost::python::return_value_policy< boost::python::return_by_value >(), "");
     class_dace22af29e35e1e8847a21e0083dbd0.def("set_k", method_pointer_06199c1def0458c387775cd5080ca40a, "");
 

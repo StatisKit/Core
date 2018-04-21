@@ -28,6 +28,9 @@ namespace statiskit
     outcome_type ContinuousEvent::get_outcome() const
     { return CONTINUOUS; }
 
+    MultivariateEvent::~MultivariateEvent()
+    {}
+    
     VectorEvent::VectorEvent(const Index& size)
     { _events.resize(size, nullptr); }
 

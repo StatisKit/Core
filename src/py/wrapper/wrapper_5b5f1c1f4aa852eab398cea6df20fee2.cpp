@@ -56,15 +56,11 @@ void wrapper_5b5f1c1f4aa852eab398cea6df20fee2()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    struct ::statiskit::MultivariateSampleSpace const * (::statiskit::WeightedData< ::statiskit::MultivariateData >::*method_pointer_b5f43de177835cf7a8332223a0439efa)() const = &::statiskit::WeightedData< struct ::statiskit::MultivariateData >::get_sample_space;
-    class ::std::unique_ptr< struct ::statiskit::MultivariateData::Generator, struct ::std::default_delete< struct ::statiskit::MultivariateData::Generator > >  (::statiskit::WeightedData< ::statiskit::MultivariateData >::*method_pointer_db766366b24e53159689129a8160deae)() const = &::statiskit::WeightedData< struct ::statiskit::MultivariateData >::generator;
     struct ::statiskit::MultivariateData const * (::statiskit::WeightedData< ::statiskit::MultivariateData >::*method_pointer_24860636c996556c8cece089c4290285)() const = &::statiskit::WeightedData< struct ::statiskit::MultivariateData >::get_data;
     ::statiskit::Index  (::statiskit::WeightedData< ::statiskit::MultivariateData >::*method_pointer_2ce657ba87ce5daf9e0bc47c5dc1432e)() const = &::statiskit::WeightedData< struct ::statiskit::MultivariateData >::get_nb_weights;
     double  (::statiskit::WeightedData< ::statiskit::MultivariateData >::*method_pointer_7da327a8236953bdbdbe7d839fab134b)(::statiskit::Index const &) const = &::statiskit::WeightedData< struct ::statiskit::MultivariateData >::get_weight;
     void  (::statiskit::WeightedData< ::statiskit::MultivariateData >::*method_pointer_cbfdf5edbda858af9e4598c8ab86074d)(::statiskit::Index const &, double const &) = &::statiskit::WeightedData< struct ::statiskit::MultivariateData >::set_weight;
     boost::python::class_< autowig::Wrap_5b5f1c1f4aa852eab398cea6df20fee2, autowig::Held< autowig::Wrap_5b5f1c1f4aa852eab398cea6df20fee2 >::Type, boost::python::bases< struct ::statiskit::MultivariateData >, boost::noncopyable > class_5b5f1c1f4aa852eab398cea6df20fee2("_WeightedData_5b5f1c1f4aa852eab398cea6df20fee2", "", boost::python::no_init);
-    class_5b5f1c1f4aa852eab398cea6df20fee2.def("get_sample_space", method_pointer_b5f43de177835cf7a8332223a0439efa, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
-    class_5b5f1c1f4aa852eab398cea6df20fee2.def("__iter__", method_pointer_db766366b24e53159689129a8160deae, "");
     class_5b5f1c1f4aa852eab398cea6df20fee2.def("get_data", method_pointer_24860636c996556c8cece089c4290285, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
     class_5b5f1c1f4aa852eab398cea6df20fee2.def("get_nb_weights", method_pointer_2ce657ba87ce5daf9e0bc47c5dc1432e, "");
     class_5b5f1c1f4aa852eab398cea6df20fee2.def("get_weight", method_pointer_7da327a8236953bdbdbe7d839fab134b, "");

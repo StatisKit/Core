@@ -55,7 +55,7 @@ def __call__(self, event):
     """
     if event is None or isinstance(event, CategoricalEvent):
         return event
-    elif isinstance(event, basestring):
+    elif isinstance(event, str):
         event = event.strip()
         if event in ['', '?']:
             return None
@@ -105,7 +105,7 @@ def wrapper_encoding(f, g):
 
     @wraps(g)
     def setter(self, encoding):
-        if isinstance(encoding, basestring):
+        if isinstance(encoding, str):
             encoding = encoding_type.names[encoding.upper()]
         g(self, encoding)
 
@@ -145,7 +145,7 @@ def __call__(self, event):
         return event
     elif isinstance(event, int):
         return DiscreteElementaryEvent(event)
-    elif isinstance(event, basestring):
+    elif isinstance(event, str):
         event = event.replace('\n', '').strip(' ')
         if event in ['', '?']:
             return None
@@ -244,7 +244,7 @@ def __call__(self, event):
             return ContinuousElementaryEvent(event)
         else:
             return None
-    elif isinstance(event, basestring):
+    elif isinstance(event, str):
         event = event.replace('\n', '').strip(' ')
         if event in ['', '?']:
             return None

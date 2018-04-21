@@ -25,11 +25,9 @@ void wrapper_c5daab4ee3ac55c89ee2ee06a88fb23c()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    double const & (::statiskit::UnivariateMeanEstimation::*method_pointer_04704d86bfe655f08e731c5bcc1ac148)() const = &::statiskit::UnivariateMeanEstimation::get_location;
     boost::python::class_< class ::statiskit::UnivariateMeanEstimation, autowig::Held< class ::statiskit::UnivariateMeanEstimation >::Type, boost::python::bases< struct ::statiskit::UnivariateLocationEstimation > > class_c5daab4ee3ac55c89ee2ee06a88fb23c("UnivariateMeanEstimation", "", boost::python::no_init);
     class_c5daab4ee3ac55c89ee2ee06a88fb23c.def(boost::python::init< double const & >(""));
     class_c5daab4ee3ac55c89ee2ee06a88fb23c.def(boost::python::init< class ::statiskit::UnivariateMeanEstimation const & >(""));
-    class_c5daab4ee3ac55c89ee2ee06a88fb23c.def("get_location", method_pointer_04704d86bfe655f08e731c5bcc1ac148, boost::python::return_value_policy< boost::python::return_by_value >(), "");
 
     if(autowig::Held< class ::statiskit::UnivariateMeanEstimation >::is_class)
     {

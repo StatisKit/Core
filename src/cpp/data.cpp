@@ -2,6 +2,9 @@
 
 namespace statiskit
 { 
+    UnivariateData::~UnivariateData()
+    {}
+
     Index UnivariateData::size() const
     {
         Index index = 0;
@@ -165,6 +168,9 @@ namespace statiskit
         }
         return maximum;
     }
+
+    UnivariateData::Generator::~Generator()
+    {}
 
     unsigned int NamedData::__index = 0;
 
@@ -357,6 +363,9 @@ namespace statiskit
         { throw proxy_connection_error(); }
         return 1;
     }
+
+    MultivariateData::~MultivariateData()
+    {}
     
     Index MultivariateData::size() const
     {
@@ -382,6 +391,8 @@ namespace statiskit
         return total;
     }
 
+    MultivariateData::Generator::~Generator()
+    {}
 
     MultivariateDataFrame::MultivariateDataFrame()
     {

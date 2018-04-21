@@ -50,13 +50,7 @@ void wrapper_055ebc8a6eb3586cb94dfd0b3df1eb0f()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    double  (::statiskit::UnivariateMixtureDistribution< ::statiskit::DiscreteUnivariateDistribution >::*method_pointer_b288349953745909be3b581da8f23621)(int const &) const = &::statiskit::UnivariateMixtureDistribution< struct ::statiskit::DiscreteUnivariateDistribution >::ldf;
-    double  (::statiskit::UnivariateMixtureDistribution< ::statiskit::DiscreteUnivariateDistribution >::*method_pointer_1f7e0f6d5a4658e791627aac9a3e075c)(int const &) const = &::statiskit::UnivariateMixtureDistribution< struct ::statiskit::DiscreteUnivariateDistribution >::pdf;
-    class ::std::unique_ptr< struct ::statiskit::UnivariateEvent, struct ::std::default_delete< struct ::statiskit::UnivariateEvent > >  (::statiskit::UnivariateMixtureDistribution< ::statiskit::DiscreteUnivariateDistribution >::*method_pointer_d152937768ff50b8823d85a82c980d17)() const = &::statiskit::UnivariateMixtureDistribution< struct ::statiskit::DiscreteUnivariateDistribution >::simulate;
     boost::python::class_< autowig::Wrap_055ebc8a6eb3586cb94dfd0b3df1eb0f, autowig::Held< autowig::Wrap_055ebc8a6eb3586cb94dfd0b3df1eb0f >::Type, boost::python::bases< class ::statiskit::MixtureDistribution< struct ::statiskit::DiscreteUnivariateDistribution > >, boost::noncopyable > class_055ebc8a6eb3586cb94dfd0b3df1eb0f("_UnivariateMixtureDistribution_055ebc8a6eb3586cb94dfd0b3df1eb0f", "", boost::python::no_init);
-    class_055ebc8a6eb3586cb94dfd0b3df1eb0f.def("ldf", method_pointer_b288349953745909be3b581da8f23621, "");
-    class_055ebc8a6eb3586cb94dfd0b3df1eb0f.def("pdf", method_pointer_1f7e0f6d5a4658e791627aac9a3e075c, "");
-    class_055ebc8a6eb3586cb94dfd0b3df1eb0f.def("simulate", method_pointer_d152937768ff50b8823d85a82c980d17, "");
 
     if(autowig::Held< struct ::statiskit::UnivariateMixtureDistribution< struct ::statiskit::DiscreteUnivariateDistribution > >::is_class)
     {

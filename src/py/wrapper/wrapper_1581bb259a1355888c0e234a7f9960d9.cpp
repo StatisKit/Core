@@ -29,8 +29,6 @@ void wrapper_1581bb259a1355888c0e234a7f9960d9()
     boost::python::object module_dbc8a0461eeb579aa69a16cbe03a3913(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_dbc8a0461eeb579aa69a16cbe03a3913.c_str()))));
     boost::python::scope().attr("_binomial_distribution_mm_estimation") = module_dbc8a0461eeb579aa69a16cbe03a3913;
     boost::python::scope scope_dbc8a0461eeb579aa69a16cbe03a3913 = module_dbc8a0461eeb579aa69a16cbe03a3913;
-    class ::std::unique_ptr< struct ::statiskit::UnivariateDistributionEstimation, struct ::std::default_delete< struct ::statiskit::UnivariateDistributionEstimation > >  (::statiskit::BinomialDistributionMMEstimation::Estimator::*method_pointer_69e6ca58b0f25323934c5aaf40ba6d78)(struct ::statiskit::UnivariateData const &, bool const &) const = &::statiskit::BinomialDistributionMMEstimation::Estimator::operator();
-    class ::std::unique_ptr< struct ::statiskit::UnivariateDistributionEstimation::Estimator, struct ::std::default_delete< struct ::statiskit::UnivariateDistributionEstimation::Estimator > >  (::statiskit::BinomialDistributionMMEstimation::Estimator::*method_pointer_519b4daa399d573db56191c6f25aa53c)() const = &::statiskit::BinomialDistributionMMEstimation::Estimator::copy;
     struct ::statiskit::UnivariateLocationEstimation::Estimator * (::statiskit::BinomialDistributionMMEstimation::Estimator::*method_pointer_6d96ac53d1b95ead90800c8c317b84ac)() = &::statiskit::BinomialDistributionMMEstimation::Estimator::get_location;
     void  (::statiskit::BinomialDistributionMMEstimation::Estimator::*method_pointer_5d577514ebff586cb056a3bcecd2ab4e)(struct ::statiskit::UnivariateLocationEstimation::Estimator const &) = &::statiskit::BinomialDistributionMMEstimation::Estimator::set_location;
     struct ::statiskit::UnivariateDispersionEstimation::Estimator * (::statiskit::BinomialDistributionMMEstimation::Estimator::*method_pointer_43ba873cf7495e93b13d36b1d62fd2d0)() = &::statiskit::BinomialDistributionMMEstimation::Estimator::get_dispersion;
@@ -38,8 +36,6 @@ void wrapper_1581bb259a1355888c0e234a7f9960d9()
     boost::python::class_< class ::statiskit::BinomialDistributionMMEstimation::Estimator, autowig::Held< class ::statiskit::BinomialDistributionMMEstimation::Estimator >::Type, boost::python::bases< struct ::statiskit::DiscreteUnivariateDistributionEstimation::Estimator > > class_1581bb259a1355888c0e234a7f9960d9("Estimator", "", boost::python::no_init);
     class_1581bb259a1355888c0e234a7f9960d9.def(boost::python::init<  >(""));
     class_1581bb259a1355888c0e234a7f9960d9.def(boost::python::init< class ::statiskit::BinomialDistributionMMEstimation::Estimator const & >(""));
-    class_1581bb259a1355888c0e234a7f9960d9.def("__call__", method_pointer_69e6ca58b0f25323934c5aaf40ba6d78, "");
-    class_1581bb259a1355888c0e234a7f9960d9.def("copy", method_pointer_519b4daa399d573db56191c6f25aa53c, "");
     class_1581bb259a1355888c0e234a7f9960d9.def("get_location", method_pointer_6d96ac53d1b95ead90800c8c317b84ac, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
     class_1581bb259a1355888c0e234a7f9960d9.def("set_location", method_pointer_5d577514ebff586cb056a3bcecd2ab4e, "");
     class_1581bb259a1355888c0e234a7f9960d9.def("get_dispersion", method_pointer_43ba873cf7495e93b13d36b1d62fd2d0, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");

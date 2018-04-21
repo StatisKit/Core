@@ -25,12 +25,10 @@ void wrapper_7189dbb358a659bb802e95b3ea6ebebd()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    struct ::statiskit::MultivariateDistribution const * (::statiskit::LazyEstimation< ::statiskit::DiscreteMultivariateDistribution, ::statiskit::DiscreteMultivariateDistributionEstimation >::*method_pointer_dd0335181270587c9a7779f82bf0b96f)() const = &::statiskit::LazyEstimation< struct ::statiskit::DiscreteMultivariateDistribution, struct ::statiskit::DiscreteMultivariateDistributionEstimation >::get_estimated;
     boost::python::class_< class ::statiskit::LazyEstimation< struct ::statiskit::DiscreteMultivariateDistribution, struct ::statiskit::DiscreteMultivariateDistributionEstimation >, autowig::Held< class ::statiskit::LazyEstimation< struct ::statiskit::DiscreteMultivariateDistribution, struct ::statiskit::DiscreteMultivariateDistributionEstimation > >::Type, boost::python::bases< struct ::statiskit::DiscreteMultivariateDistributionEstimation > > class_7189dbb358a659bb802e95b3ea6ebebd("_LazyEstimation_7189dbb358a659bb802e95b3ea6ebebd", "", boost::python::no_init);
     class_7189dbb358a659bb802e95b3ea6ebebd.def(boost::python::init<  >(""));
     class_7189dbb358a659bb802e95b3ea6ebebd.def(boost::python::init< struct ::statiskit::DiscreteMultivariateDistribution const * >(""));
     class_7189dbb358a659bb802e95b3ea6ebebd.def(boost::python::init< class ::statiskit::LazyEstimation< struct ::statiskit::DiscreteMultivariateDistribution, struct ::statiskit::DiscreteMultivariateDistributionEstimation > const & >(""));
-    class_7189dbb358a659bb802e95b3ea6ebebd.def("get_estimated", method_pointer_dd0335181270587c9a7779f82bf0b96f, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
 
     if(autowig::Held< class ::statiskit::LazyEstimation< struct ::statiskit::DiscreteMultivariateDistribution, struct ::statiskit::DiscreteMultivariateDistributionEstimation > >::is_class)
     {

@@ -16,6 +16,7 @@ namespace statiskit
         public:
             SlopeHeuristicSolver();
             SlopeHeuristicSolver(const SlopeHeuristicSolver& solver);
+            virtual ~SlopeHeuristicSolver();
 
             virtual Eigen::VectorXd operator() (const Eigen::MatrixXd& X, const Eigen::VectorXd& y) const = 0;
 
@@ -97,6 +98,8 @@ namespace statiskit
 
     struct STATISKIT_CORE_API SlopeHeuristicSelector
     { 
+        virtual ~SlopeHeuristicSelector();
+
         virtual Index operator() (const SlopeHeuristic& sh) const = 0;
 
         virtual std::unique_ptr< SlopeHeuristicSelector > copy() const = 0; 
@@ -192,5 +195,7 @@ namespace statiskit
     };
 }
 
+#ifndef AUTOWIG
 #include "slope_heuristic.hpp"
+#endif
 #endif

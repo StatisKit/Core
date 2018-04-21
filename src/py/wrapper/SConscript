@@ -1,34 +1,23 @@
 # -*-python-*-
 
-from SCons.Errors import EnvironmentError
+Import("env")
+pyenv = env.Clone(tools = ['boost_python'])
 
-try:
-    Import("env")
-    pyenv = env.Clone(tools = ['boost_python'])
+pyenv.AppendUnique(LIBS  = ['statiskit_core'])
+if pyenv['SYSTEM'] == 'linux':
+    pyenv.AppendUnique(CCFLAGS = ['-Wno-ignored-attributes'])
 
-    pyenv.AppendUnique(LIBS = ['statiskit_core'])
-    if env['SYSTEM'] == 'linux':
-        pyenv.AppendUnique(CCFLAGS = ['-Wno-attributes', '-Wno-ignored-attributes'])
-    elif env['SYSTEM'] == 'osx':
-        pyenv.AppendUnique(CCFLAGS = ['-Wno-delete-non-virtual-dtor'])
+exclude = """
+""".split()
 
-    exclude = """
-    """.split()
+sources = [source for source in pyenv.Glob('*.*') if source.name not in exclude]
 
-    sources = [source for source in pyenv.Glob('*.*') if source.name not in exclude]
+targets = pyenv.BoostPythonExtension("../statiskit/core/__core", sources, preserve_egg_dir=False)
+Alias("py", targets)
+Alias("install", targets)
+pyenv.Depends(targets, "cpp")
 
-    targets = pyenv.BoostPythonExtension("../statiskit/core/__core", sources)
-    Alias("py", targets)
-    Alias("install", targets)
-    pyenv.Depends(targets, "cpp")
-    
-    targets = pyenv.PythonPackage(statiskit = '../statiskit')
-    Alias("py", targets)
-    Alias("install", targets)
-    pyenv.Depends(targets, "cpp")
-except EnvironmentError:
-    Alias("py", [])
-    Alias("install", [])
-    pass
-except Exception:
-    raise
+targets = pyenv.PythonPackage(statiskit='../statiskit')
+Alias("py", targets)
+Alias("install", targets)
+pyenv.Depends(targets, "cpp")

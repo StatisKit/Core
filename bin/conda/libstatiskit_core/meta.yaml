@@ -16,8 +16,11 @@ about:
 requirements:
     build:
         - libtoolchain
-        - libstatiskit_stl-dev
-        - libstatiskit_linalg-dev
+        - libstatiskit_core-dev
+        - libstatiskit_stl
+        - libstatiskit_linalg
+        - libboost_core-dev
     run:
+        - libboost
         - libstatiskit_stl
         - libstatiskit_linalg

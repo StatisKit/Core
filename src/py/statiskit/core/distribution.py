@@ -128,7 +128,7 @@ del UnivariateDistribution.get_nb_parameters
 def wrapper_probability(f):
     @wraps(f)
     def probability(self, event, **kwargs):
-        if isinstance(event, basestring):
+        if isinstance(event, str):
             event = CategoricalElementaryEvent(event)
         elif isinstance(event, int):
             event = DiscreteElementaryEvent(event)
@@ -140,7 +140,6 @@ def wrapper_probability(f):
     return probability
 
 UnivariateDistribution.probability = wrapper_probability(UnivariateDistribution.probability)
-OrdinalDistribution.probability = wrapper_probability(OrdinalDistribution.probability)
 
 def simulation(self, size):
     if isinstance(self, NominalDistribution):
@@ -164,7 +163,7 @@ def pdf_plot(self, axes=None, fmt='|', **kwargs):
     if axes is None:
         axes = pyplot.subplot(1,1,1)
     labels = getattr(self, 'ordered_values', getattr(self, 'values'))
-    x, labels = zip(*[(index, label) for index, label in enumerate(labels)])
+    x, labels = list(zip(*[(index, label) for index, label in enumerate(labels)]))
     y = [self.probability(label, log=False) for label in labels]
     if 'norm' in kwargs:
         norm = kwargs.pop('norm')
@@ -197,8 +196,8 @@ del CategoricalUnivariateDistribution.get_values
 def wrapper(f):
     @wraps(f)
     def __init__(self, *args, **kwargs):
-        f(self, args)
-        for attr in kwargs.keys():
+        f(self, [str(arg) for arg in args])
+        for attr in list(kwargs.keys()):
             if hasattr(self, attr):
                 setattr(self, attr, kwargs.pop(attr))
             else:
@@ -229,7 +228,7 @@ def cdf_plot(self, axes=None, fmt='|', **kwargs):
     if axes is None:
         axes = pyplot.subplot(1,1,1)
     labels = self.ordered_values
-    x, labels = zip(*[(index, label) for index, label in enumerate(labels)])
+    x, labels = list(zip(*[(index, label) for index, label in enumerate(labels)]))
     y = self.pi
     if 'norm' in kwargs:
         norm = kwargs.pop('norm')
@@ -237,7 +236,7 @@ def cdf_plot(self, axes=None, fmt='|', **kwargs):
     else:
         y = [p for p in y]
     y = [y[i] for i in self.rank]
-    y = [sum(y[:i]) for i in xrange(1, len(y)+1)]
+    y = [sum(y[:i]) for i in range(1, len(y)+1)]
     if '|' in fmt:
         fmt = fmt.replace('|', '')
         width = kwargs.pop('width', .8)
@@ -281,7 +280,7 @@ def box_plot(self, axes=None, edgecolor="k", width=.5, vert=True, whiskers=(.09,
         axes.plot([pos-width/2., pos+width/2.], [qe, qe], color=edgecolor)
         axes.plot([pos, pos], [qb, q1], color=edgecolor)
         axes.plot([pos, pos], [q3, qe], color=edgecolor)
-        axes.set_yticks(range(len(values)))
+        axes.set_yticks(list(range(len(values))))
         axes.set_yticklabels(values)
     else:
         axes.bar(q1, width, q3-q1, pos-width/2., facecolor=facecolor, edgecolor=edgecolor)
@@ -290,7 +289,7 @@ def box_plot(self, axes=None, edgecolor="k", width=.5, vert=True, whiskers=(.09,
         axes.plot([qe, qe], [pos-width/2., pos+width/2.], color=edgecolor)
         axes.plot([qb, q1], [pos, pos], color=edgecolor)
         axes.plot([q3, qe], [pos, pos], color=edgecolor)
-        axes.set_xticks(range(len(values)))
+        axes.set_xticks(list(range(len(values))))
         axes.set_xticklabels(values)
     return axes
 
@@ -325,7 +324,7 @@ def pdf_plot(self, axes=None, fmt='|', **kwargs):
             kwargs['qmin'] = int(qmin)
         if 'qmax' not in kwargs and 'pmax' not in kwargs:
             kwargs['qmax'] = int(qmax)
-    x = kwargs.pop('quantiles', range(kwargs.pop('qmin', self.quantile(kwargs.pop('pmin', 0.025))), kwargs.pop('qmax', self.quantile(kwargs.pop('pmax', 0.975)))+1))
+    x = kwargs.pop('quantiles', list(range(kwargs.pop('qmin', self.quantile(kwargs.pop('pmin', 0.025))), kwargs.pop('qmax', self.quantile(kwargs.pop('pmax', 0.975)))+1)))
     y = [self.pdf(q) for q in x]
     if 'norm' in kwargs:
         norm = kwargs.pop('norm')
@@ -352,7 +351,7 @@ def cdf_plot(self, axes=None, fmt='o-', **kwargs):
             kwargs['qmin'] = int(qmin)
         if 'qmax' not in kwargs and 'pmax' not in kwargs:
             kwargs['qmax'] = int(qmax)
-    x = kwargs.pop('quantiles', range(kwargs.pop('qmin', self.quantile(kwargs.pop('pmin', 0.025))), kwargs.pop('qmax', self.quantile(kwargs.pop('pmax', 0.975)))+1))
+    x = kwargs.pop('quantiles', list(range(kwargs.pop('qmin', self.quantile(kwargs.pop('pmin', 0.025))), kwargs.pop('qmax', self.quantile(kwargs.pop('pmax', 0.975)))+1)))
     y = [self.cdf(q) for q in x]
     if 'norm' in kwargs:
         norm = kwargs.pop('norm')
@@ -887,7 +886,7 @@ def wrapper_probability(f):
         if not isinstance(event, MultivariateEvent):
             event = VectorEvent(len(events))
             for index, component in enumerate(events):
-                if isinstance(component, basestring):
+                if isinstance(component, str):
                     event[index] = CategoricalElementaryEvent(component)
                 elif isinstance(component, int):
                     event[index] = DiscreteElementaryEvent(component)
@@ -906,7 +905,9 @@ def wrapper_probability(f):
 MultivariateDistribution.probability = wrapper_probability(MultivariateDistribution.probability)
 
 def simulation(self, size):
-    return from_list(*map(list, zip(*[self.simulate() for index in range(size)])))
+    events = [self.simulate() for index in range(size)]
+    data = from_list(*list(map(list, list(zip(*events)))))
+    return data
 
 MultivariateDistribution.simulation = simulation
 del simulation
@@ -1021,7 +1022,7 @@ def statiskit_mixture_distribution_decorator(cls):
                     else:
                         skwargs = [{}] * self.nb_states
                     for index, (pi, observation) in enumerate(zip(self.pi, self.observations)):
-                        for key, value in kwargs.iteritems():
+                        for key, value in kwargs.items():
                             if not key in skwargs[index]:
                                 skwargs[index][key] = value
                         axes = observation.pdf_plot(axes=axes, norm=pi*norm, *args, **skwargs[index])

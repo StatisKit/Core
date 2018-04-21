@@ -17,7 +17,7 @@ def load(*args):
         component.sample_space = component.sample_space.as_ordinal()
         kwargs['capushe.csv'] = capushe
 
-    for arg in kwargs.keys():
+    for arg in list(kwargs.keys()):
         if kwargs[arg] is None:
             kwargs[arg] = read_csv(os.path.join(os.path.dirname(__file__), arg),
                                    header=True,

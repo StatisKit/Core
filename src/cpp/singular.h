@@ -1,5 +1,5 @@
-#ifndef STATISKIT_CORE_OPERATOR_H
-#define STATISKIT_CORE_OPERATOR_H
+#ifndef STATISKIT_CORE_SINGULAR_H
+#define STATISKIT_CORE_SINGULAR_H
 
 #include "base.h"
 #include "data.h"
@@ -11,6 +11,8 @@ namespace statiskit
     {
         typedef MultivariateData data_type;
 
+        virtual ~SingularDistribution() = 0;
+        
         virtual Index get_nb_components() const = 0;
 
         virtual unsigned int get_nb_parameters() const = 0;

@@ -17,8 +17,12 @@ namespace statiskit
         typedef UnivariateEvent event_type;
         typedef WeightedUnivariateData weighted_type;
 
+        virtual ~UnivariateData() = 0;
+
         struct STATISKIT_CORE_API Generator
         {
+            virtual ~Generator() = 0;
+            
             virtual bool is_valid() const = 0;
 
             virtual Generator& operator++() = 0;
@@ -46,7 +50,7 @@ namespace statiskit
             NamedData();
             NamedData(const std::string& name);
             NamedData(const NamedData& named_data);
-            ~NamedData();
+            virtual ~NamedData();
 
             const std::string& get_name() const;
             void set_name(const std::string& name);
@@ -115,8 +119,12 @@ namespace statiskit
         typedef MultivariateEvent event_type;
         typedef WeightedMultivariateData weighted_type;
 
+        virtual ~MultivariateData() = 0;
+
         struct STATISKIT_CORE_API Generator
         {
+            virtual ~Generator() = 0;
+
             virtual bool is_valid() const = 0;
 
             virtual Generator& operator++() = 0;
@@ -608,5 +616,7 @@ namespace statiskit
     };*/
 }
 
+#ifndef AUTOWIG
 #include "data.hpp"
+#endif
 #endif

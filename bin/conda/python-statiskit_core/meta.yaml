@@ -11,15 +11,20 @@ build:
 about:
   home: http://statiskit-core.readthedocs.io
   license: Apache License 2.0
+  summary: A Python Interface from C++ Library of Basic Utilities for Statistical Analyses
 
 requirements:
   build:
     - libtoolchain
     - python-toolchain
-    - libboost_python-dev
+    - libboost_core-dev
+    - libstatiskit_core-dev
     - libstatiskit_core
+    - libboost_python-dev
+    - libboost_python
     - python
   run:
+    - libboost_python
     - libstatiskit_core
     - python-statiskit_linalg
     - python-statiskit_stl

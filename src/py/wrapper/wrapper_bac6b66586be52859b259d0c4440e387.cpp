@@ -25,11 +25,9 @@ void wrapper_bac6b66586be52859b259d0c4440e387()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & (::statiskit::MultivariateMeanEstimation::*method_pointer_7a6a8ba32da959bbb57c1f3bf4e12d78)() const = &::statiskit::MultivariateMeanEstimation::get_location;
     boost::python::class_< class ::statiskit::MultivariateMeanEstimation, autowig::Held< class ::statiskit::MultivariateMeanEstimation >::Type, boost::python::bases< struct ::statiskit::MultivariateLocationEstimation > > class_bac6b66586be52859b259d0c4440e387("MultivariateMeanEstimation", "", boost::python::no_init);
     class_bac6b66586be52859b259d0c4440e387.def(boost::python::init< class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & >(""));
     class_bac6b66586be52859b259d0c4440e387.def(boost::python::init< class ::statiskit::MultivariateMeanEstimation const & >(""));
-    class_bac6b66586be52859b259d0c4440e387.def("get_location", method_pointer_7a6a8ba32da959bbb57c1f3bf4e12d78, boost::python::return_value_policy< boost::python::return_by_value >(), "");
 
     if(autowig::Held< class ::statiskit::MultivariateMeanEstimation >::is_class)
     {

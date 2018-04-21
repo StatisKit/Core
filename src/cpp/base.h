@@ -69,7 +69,7 @@ namespace statiskit
 
         /** Get the random generator
          * 
-         * The random generator used is the <a href="http://www.boost.org/doc/libs/1_60_0/doc/html/boost/random/mt19937.html">Mersenne Twister</a> random generator of the Boost.Random library
+         * The random generator used is the <a href="http://www.boost.org /doc/libs/1_60_0/doc/html/boost/random/mt19937.html">Mersenne Twister</a> random generator of the Boost.Random library
          */
         STATISKIT_CORE_API boost::mt19937& get_random_generator();
 
@@ -200,5 +200,7 @@ namespace statiskit
 namespace std { template<typename T, typename... Args> unique_ptr<T> make_unique(Args&&... args); }
 #endif
 
+#ifndef AUTOWIG
 #include "base.hpp"
+#endif
 #endif

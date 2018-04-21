@@ -21,7 +21,7 @@ def wrapper_probability(f):
         if not isinstance(event, MultivariateEvent):
             event = VectorEvent(len(events))
             for index, component in enumerate(events):
-                if isinstance(component, basestring):
+                if isinstance(component, str):
                     event[index] = CategoricalElementaryEvent(component)
                 elif isinstance(component, int):
                     event[index] = DiscreteElementaryEvent(component)

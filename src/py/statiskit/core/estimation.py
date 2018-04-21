@@ -179,7 +179,7 @@ def selection_decorator(cls):
         @wraps(f)
         def __getitem__(self, index):
             if isinstance(index, slice):
-                return [self[index] for index in xrange(*index.indices(len(self)))]
+                return [self[index] for index in range(*index.indices(len(self)))]
             else:
                 if index < 0:
                     index += len(self)
@@ -238,7 +238,7 @@ def selection_decorator(cls):
             @wraps(f)
             def __getitem__(self, index):
                 if isinstance(index, slice):
-                    return [self[index] for index in xrange(*index.indices(len(self)))]
+                    return [self[index] for index in range(*index.indices(len(self)))]
                 else:
                     if index < 0:
                         index += len(self)
@@ -254,7 +254,7 @@ def selection_decorator(cls):
             @wraps(f)
             def __setitem__(self, index, estimator):
                 if isinstance(index, slice):
-                    return [self[index] for index in xrange(*index.indices(len(self)))]
+                    return [self[index] for index in range(*index.indices(len(self)))]
                 else:
                     if index < 0:
                         index += len(self)
@@ -301,7 +301,7 @@ def optimization_estimation_decorator(cls):
         @wraps(f1)
         def __getitem__(self, index):
             if isinstance(index, slice):
-                return [self[index] for index in xrange(*index.indices(len(self)))]
+                return [self[index] for index in range(*index.indices(len(self)))]
             else:
                 if index < 0:
                     index += len(self)
@@ -333,12 +333,12 @@ def _estimation(algo, data, mapping, **kwargs):
     try:
         algo = mapping[algo]()
     except KeyError:
-        raise ValueError('\'algo\' parameter, possible values are ' + ', '.join('"' + algo + '"' for algo in mapping.iterkeys()))
+        raise ValueError('\'algo\' parameter, possible values are ' + ', '.join('"' + algo + '"' for algo in mapping.keys()))
     except:
         raise
     if data:
         lazy = kwargs.pop('lazy', False)
-    for attr in kwargs.keys():
+    for attr in list(kwargs.keys()):
         if hasattr(algo, attr):
             setattr(algo, attr, kwargs.pop(attr))
         else:
@@ -503,7 +503,7 @@ def singular_selection(*args, **kwargs):
         mapping = dict(criterion = SingularDistributionSelection.CriterionEstimator)
         estimators = []
         for arg in args:
-            estimators.append(singular_selection(arg, **dict((key, value) for (key, value) in kwargs.iteritems() if key == "sum")))
+            estimators.append(singular_selection(arg, **dict((key, value) for (key, value) in kwargs.items() if key == "sum")))
         kwargs.pop('sum', None)
         return _estimation(algo, data, mapping, estimators=estimators, **kwargs)
 
@@ -590,9 +590,9 @@ def mixture_estimation(data, algo='em', **kwargs):
             mapping = dict(em = CategoricalMultivariateMixtureDistributionEMEstimation.Estimator)
         elif outcome is outcome_type.DISCRETE:
             if kwargs.pop('singular', False):
-                mapping = dict(em = DiscreteMultivariateMixtureDistributionEMEstimation.Estimator)
-            else:
                 mapping = dict(em = MixtureSingularDistributionEMEstimation.Estimator)
+            else:
+                mapping = dict(em = DiscreteMultivariateMixtureDistributionEMEstimation.Estimator)
         elif outcome is outcome_type.CONTINUOUS:
             mapping = dict(em = ContinuousMultivariateMixtureDistributionEMEstimation.Estimator)
     else:

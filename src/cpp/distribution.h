@@ -24,6 +24,8 @@ namespace statiskit
     {	
         typedef UnivariateData data_type;
 
+        virtual ~UnivariateDistribution() = 0;
+
     	/// \brief Get the number of parameters of the distribution.
         virtual unsigned int get_nb_parameters() const = 0;
         
@@ -1982,6 +1984,8 @@ namespace statiskit
     {
         typedef UnivariateDistribution response_type;
         
+        virtual ~UnivariateConditionalDistribution() = 0;
+
         /// \Brief This is an operation of conditioning that returns the conditional distribution \f$ Y \vert \boldsymbol{X} = \boldsymbol{x} \f$.
         virtual const UnivariateDistribution* operator() (const MultivariateEvent& event) const = 0;
 
@@ -2013,6 +2017,8 @@ namespace statiskit
         typedef MultivariateData data_type;
         typedef UnivariateDistribution marginal_type;
             
+        virtual ~MultivariateDistribution() = 0;
+
         /// \brief Get the number of components of the distribution.
         virtual Index get_nb_components() const = 0;
 
@@ -2153,27 +2159,21 @@ namespace statiskit
     typedef IndependentMultivariateDistribution< DiscreteMultivariateDistribution > DiscreteIndependentMultivariateDistribution;
     typedef IndependentMultivariateDistribution< ContinuousMultivariateDistribution > ContinuousIndependentMultivariateDistribution;*/
 
-    /** \Brief This class MultivariateConditionalDistribution represents the conditional distribution \f$ Y \vert \boldsymbol{X} \f$ of an univariate random component \f$ Y\f$ given a multivariate component \f$ \boldsymbol{X} \f$.
-     *
-     */
+
     struct STATISKIT_CORE_API MultivariateConditionalDistribution
     {
         typedef MultivariateDistribution response_type;
         
+        virtual ~MultivariateConditionalDistribution() = 0;
+        
         virtual Index get_nb_components() const = 0;
 
-        /// \Brief This is an operation of conditioning that returns the conditional distribution \f$ Y \vert \boldsymbol{X} = \boldsymbol{x} \f$.
         virtual const MultivariateDistribution* operator() (const MultivariateEvent& event) const = 0;
 
         double loglikelihood(const MultivariateConditionalData& data) const;
 
-        /// \Brief Get the sample space of the response component \f$ Y \f$.
-        //virtual std::unique_ptr< MultivariateSampleSpace > get_response_space() const = 0;
-
-        /// \Brief Get the sample space of the explanatory components \f$ \boldsymbol{X} \f$.
         virtual const MultivariateSampleSpace* get_explanatory_space() const = 0;
 
-        /// \Brief Get the number of parameters of the \f$ Y \vert \boldsymbol{X} \f$.
         virtual unsigned int get_nb_parameters() const = 0;
 
         virtual std::unique_ptr< MultivariateConditionalDistribution > copy() const = 0;
@@ -2331,5 +2331,7 @@ namespace statiskit
     typedef std::vector< ContinuousMultivariateDistribution* > ContinuousMultivariateDistributionVector;
 }
 
+#ifndef AUTOWIG
 #include "distribution.hpp"
+#endif
 #endif

@@ -25,7 +25,7 @@ UnivariateEvent.event = property(UnivariateEvent.get_event)
 del UnivariateEvent.get_event
 
 def type_to_event(event):
-    if isinstance(event, basestring):
+    if isinstance(event, str):
         event = CategoricalElementaryEvent(event)
     elif isinstance(event, int):
         event = DiscreteElementaryEvent(event)
@@ -263,7 +263,7 @@ def wrapper(f):
     @wraps(f)
     def __getitem__(self, index):
         if isinstance(index, slice):
-            return [self[_index] for _index in xrange(*index.indices(len(self)))]
+            return [self[_index] for _index in range(*index.indices(len(self)))]
         else:
             if index < 0:
                 index += len(self)
@@ -291,7 +291,7 @@ def wrapper(f):
     @wraps(f)
     def __setitem__(self, index, event):
         if isinstance(index, slice):
-            for _index, _event in zip(xrange(*index.indices(len(self))), event):
+            for _index, _event in zip(range(*index.indices(len(self))), event):
                 self[_index] = _event
         if index < 0:
             index += len(self)

@@ -64,10 +64,10 @@ void wrapper_6d1d52249a4c562691e57f68df4bcc06()
     class ::std::unique_ptr< struct ::statiskit::MultivariateConditionalDistribution, struct ::std::default_delete< struct ::statiskit::MultivariateConditionalDistribution > >  (::statiskit::MultivariateConditionalDistribution::*method_pointer_5602cdbf2c275bce8b45653e1d25ff61)() const = &::statiskit::MultivariateConditionalDistribution::copy;
     boost::python::class_< autowig::Wrap_6d1d52249a4c562691e57f68df4bcc06, autowig::Held< autowig::Wrap_6d1d52249a4c562691e57f68df4bcc06 >::Type, boost::noncopyable > class_6d1d52249a4c562691e57f68df4bcc06("MultivariateConditionalDistribution", "", boost::python::no_init);
     class_6d1d52249a4c562691e57f68df4bcc06.def("get_nb_components", boost::python::pure_virtual(method_pointer_5c154b63f1c35786827ec4701044e25a), "");
-    class_6d1d52249a4c562691e57f68df4bcc06.def("__call__", boost::python::pure_virtual(method_pointer_3285f0544f0e5aada41213932efa56a7), boost::python::return_value_policy< boost::python::reference_existing_object >(), ":Parameter:\n    `event` (:py:class:`statiskit.core.statiskit.MultivariateEvent`) - Undocumented\n\n:Return Type:\n    :py:class:`statiskit.core.statiskit.MultivariateDistribution`\n\n");
+    class_6d1d52249a4c562691e57f68df4bcc06.def("__call__", boost::python::pure_virtual(method_pointer_3285f0544f0e5aada41213932efa56a7), boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
     class_6d1d52249a4c562691e57f68df4bcc06.def("loglikelihood", method_pointer_7e3a06a6af745947b31f4facd34b7010, "");
-    class_6d1d52249a4c562691e57f68df4bcc06.def("get_explanatory_space", boost::python::pure_virtual(method_pointer_7efcb466ce8a5d1094143e91829eeb72), boost::python::return_value_policy< boost::python::reference_existing_object >(), ":Return Type:\n    :py:class:`statiskit.core.statiskit.MultivariateSampleSpace`\n\n");
-    class_6d1d52249a4c562691e57f68df4bcc06.def("get_nb_parameters", boost::python::pure_virtual(method_pointer_645f02f88f8b570697bc8d8b93b48d3b), ":Return Type:\n    :cpp:any:`unsigned` int\n\n");
+    class_6d1d52249a4c562691e57f68df4bcc06.def("get_explanatory_space", boost::python::pure_virtual(method_pointer_7efcb466ce8a5d1094143e91829eeb72), boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
+    class_6d1d52249a4c562691e57f68df4bcc06.def("get_nb_parameters", boost::python::pure_virtual(method_pointer_645f02f88f8b570697bc8d8b93b48d3b), "");
     class_6d1d52249a4c562691e57f68df4bcc06.def("copy", boost::python::pure_virtual(method_pointer_5602cdbf2c275bce8b45653e1d25ff61), "");
     if(autowig::Held< struct ::statiskit::MultivariateConditionalDistribution >::is_class)
     {

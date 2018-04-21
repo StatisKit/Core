@@ -25,13 +25,11 @@ void wrapper_939d85e97df35cb48d17558623c03cc2()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    double  (::statiskit::ContinuousUnivariateMixtureDistribution::*method_pointer_39511e05621e52e7865885f3d6de22d9)(double const &) const = &::statiskit::ContinuousUnivariateMixtureDistribution::quantile;
     double  (::statiskit::ContinuousUnivariateMixtureDistribution::*method_pointer_5a80b4f2d62d5f8eb5a5eab5c8e22df8)() const = &::statiskit::ContinuousUnivariateMixtureDistribution::get_epsilon;
     void  (::statiskit::ContinuousUnivariateMixtureDistribution::*method_pointer_7671a0e8c58458eeaf32f52d562575f5)(double const &) = &::statiskit::ContinuousUnivariateMixtureDistribution::set_epsilon;
     boost::python::class_< struct ::statiskit::ContinuousUnivariateMixtureDistribution, autowig::Held< struct ::statiskit::ContinuousUnivariateMixtureDistribution >::Type, boost::python::bases< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, struct ::statiskit::ContinuousUnivariateMixtureDistribution, struct ::statiskit::QuantitativeUnivariateMixtureDistribution< struct ::statiskit::ContinuousUnivariateDistribution > > > > class_939d85e97df35cb48d17558623c03cc2("ContinuousUnivariateMixtureDistribution", "", boost::python::no_init);
     class_939d85e97df35cb48d17558623c03cc2.def(boost::python::init< class ::std::vector< struct ::statiskit::ContinuousUnivariateDistribution *, class ::std::allocator< struct ::statiskit::ContinuousUnivariateDistribution * > > const, class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & >(""));
     class_939d85e97df35cb48d17558623c03cc2.def(boost::python::init< struct ::statiskit::ContinuousUnivariateMixtureDistribution const & >(""));
-    class_939d85e97df35cb48d17558623c03cc2.def("quantile", method_pointer_39511e05621e52e7865885f3d6de22d9, "");
     class_939d85e97df35cb48d17558623c03cc2.def("get_epsilon", method_pointer_5a80b4f2d62d5f8eb5a5eab5c8e22df8, "");
     class_939d85e97df35cb48d17558623c03cc2.def("set_epsilon", method_pointer_7671a0e8c58458eeaf32f52d562575f5, "");
 

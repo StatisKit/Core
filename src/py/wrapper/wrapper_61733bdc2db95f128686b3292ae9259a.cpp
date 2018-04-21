@@ -47,13 +47,7 @@ void wrapper_61733bdc2db95f128686b3292ae9259a()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    double  (::statiskit::QuantitativeUnivariateMixtureDistribution< ::statiskit::ContinuousUnivariateDistribution >::*method_pointer_13b291014f9656599dba7f710c381612)(double const &) const = &::statiskit::QuantitativeUnivariateMixtureDistribution< struct ::statiskit::ContinuousUnivariateDistribution >::cdf;
-    double  (::statiskit::QuantitativeUnivariateMixtureDistribution< ::statiskit::ContinuousUnivariateDistribution >::*method_pointer_fe2975161b6758f3bc67e5c9cf1c912d)() const = &::statiskit::QuantitativeUnivariateMixtureDistribution< struct ::statiskit::ContinuousUnivariateDistribution >::get_mean;
-    double  (::statiskit::QuantitativeUnivariateMixtureDistribution< ::statiskit::ContinuousUnivariateDistribution >::*method_pointer_f235f53d7b8f5b4fbad21d4284b2f2d8)() const = &::statiskit::QuantitativeUnivariateMixtureDistribution< struct ::statiskit::ContinuousUnivariateDistribution >::get_variance;
     boost::python::class_< autowig::Wrap_61733bdc2db95f128686b3292ae9259a, autowig::Held< autowig::Wrap_61733bdc2db95f128686b3292ae9259a >::Type, boost::python::bases< struct ::statiskit::UnivariateMixtureDistribution< struct ::statiskit::ContinuousUnivariateDistribution > >, boost::noncopyable > class_61733bdc2db95f128686b3292ae9259a("_QuantitativeUnivariateMixtureDistribution_61733bdc2db95f128686b3292ae9259a", "", boost::python::no_init);
-    class_61733bdc2db95f128686b3292ae9259a.def("cdf", method_pointer_13b291014f9656599dba7f710c381612, "");
-    class_61733bdc2db95f128686b3292ae9259a.def("get_mean", method_pointer_fe2975161b6758f3bc67e5c9cf1c912d, "");
-    class_61733bdc2db95f128686b3292ae9259a.def("get_variance", method_pointer_f235f53d7b8f5b4fbad21d4284b2f2d8, "");
 
     if(autowig::Held< struct ::statiskit::QuantitativeUnivariateMixtureDistribution< struct ::statiskit::ContinuousUnivariateDistribution > >::is_class)
     {

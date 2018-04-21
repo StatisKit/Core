@@ -25,11 +25,7 @@ void wrapper_c3848ca82c6150b480894755016faabf()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    class ::std::unique_ptr< struct ::statiskit::MultivariateData::Generator, struct ::std::default_delete< struct ::statiskit::MultivariateData::Generator > >  (::statiskit::MultivariateDataFrame::*method_pointer_cb42d7d3c1215410ae8eec0a996355f2)() const = &::statiskit::MultivariateDataFrame::generator;
-    struct ::statiskit::MultivariateSampleSpace const * (::statiskit::MultivariateDataFrame::*method_pointer_d0a4ed242b5f5262a3f67c7c65f5d1ed)() const = &::statiskit::MultivariateDataFrame::get_sample_space;
     void  (::statiskit::MultivariateDataFrame::*method_pointer_ceb65df6fb445fa2846e8bb4a96abc30)(struct ::statiskit::MultivariateSampleSpace const &) = &::statiskit::MultivariateDataFrame::set_sample_space;
-    class ::std::unique_ptr< struct ::statiskit::UnivariateData, struct ::std::default_delete< struct ::statiskit::UnivariateData > >  (::statiskit::MultivariateDataFrame::*method_pointer_86c4eec981d358ffb89d951709ca042f)(::statiskit::Index const &) const = &::statiskit::MultivariateDataFrame::extract;
-    class ::std::unique_ptr< struct ::statiskit::MultivariateData, struct ::std::default_delete< struct ::statiskit::MultivariateData > >  (::statiskit::MultivariateDataFrame::*method_pointer_0ab68ca083ea50fb8331aae3f3cc6f20)(::statiskit::Indices const &) const = &::statiskit::MultivariateDataFrame::extract;
     ::statiskit::Index  (::statiskit::MultivariateDataFrame::*method_pointer_3d40300675955653b701c20d2aa3e360)() const = &::statiskit::MultivariateDataFrame::get_nb_components;
     class ::statiskit::UnivariateDataFrame const * (::statiskit::MultivariateDataFrame::*method_pointer_b9d069c00f5c563587cb7bb977d07267)(::statiskit::Index const &) const = &::statiskit::MultivariateDataFrame::get_component;
     void  (::statiskit::MultivariateDataFrame::*method_pointer_bd6f29af832854fd90b48c846aef5083)(::statiskit::Index const &, class ::statiskit::UnivariateDataFrame const &) = &::statiskit::MultivariateDataFrame::set_component;
@@ -47,11 +43,7 @@ void wrapper_c3848ca82c6150b480894755016faabf()
     boost::python::class_< class ::statiskit::MultivariateDataFrame, autowig::Held< class ::statiskit::MultivariateDataFrame >::Type, boost::python::bases< struct ::statiskit::PolymorphicCopy< struct ::statiskit::MultivariateData, class ::statiskit::MultivariateDataFrame, struct ::statiskit::MultivariateData > > > class_c3848ca82c6150b480894755016faabf("MultivariateDataFrame", "", boost::python::no_init);
     class_c3848ca82c6150b480894755016faabf.def(boost::python::init<  >(""));
     class_c3848ca82c6150b480894755016faabf.def(boost::python::init< class ::statiskit::MultivariateDataFrame const & >(""));
-    class_c3848ca82c6150b480894755016faabf.def("__iter__", method_pointer_cb42d7d3c1215410ae8eec0a996355f2, "");
-    class_c3848ca82c6150b480894755016faabf.def("get_sample_space", method_pointer_d0a4ed242b5f5262a3f67c7c65f5d1ed, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
     class_c3848ca82c6150b480894755016faabf.def("set_sample_space", method_pointer_ceb65df6fb445fa2846e8bb4a96abc30, "");
-    class_c3848ca82c6150b480894755016faabf.def("extract", method_pointer_86c4eec981d358ffb89d951709ca042f, "");
-    class_c3848ca82c6150b480894755016faabf.def("extract", method_pointer_0ab68ca083ea50fb8331aae3f3cc6f20, "");
     class_c3848ca82c6150b480894755016faabf.def("get_nb_components", method_pointer_3d40300675955653b701c20d2aa3e360, "");
     class_c3848ca82c6150b480894755016faabf.def("get_component", method_pointer_b9d069c00f5c563587cb7bb977d07267, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
     class_c3848ca82c6150b480894755016faabf.def("set_component", method_pointer_bd6f29af832854fd90b48c846aef5083, "");

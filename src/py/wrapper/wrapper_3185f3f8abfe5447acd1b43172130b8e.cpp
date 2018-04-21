@@ -50,9 +50,7 @@ void wrapper_3185f3f8abfe5447acd1b43172130b8e()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    class ::std::unique_ptr< struct ::statiskit::MultivariateData, struct ::std::default_delete< struct ::statiskit::MultivariateData > >  (::statiskit::PolymorphicCopy< ::statiskit::MultivariateData, ::statiskit::WeightedMultivariateData, ::statiskit::WeightedData< ::statiskit::MultivariateData > >::*method_pointer_0def23e37b8e561c9b9ff59c00924f09)() const = &::statiskit::PolymorphicCopy< struct ::statiskit::MultivariateData, class ::statiskit::WeightedMultivariateData, class ::statiskit::WeightedData< struct ::statiskit::MultivariateData > >::copy;
     boost::python::class_< autowig::Wrap_3185f3f8abfe5447acd1b43172130b8e, autowig::Held< autowig::Wrap_3185f3f8abfe5447acd1b43172130b8e >::Type, boost::python::bases< class ::statiskit::WeightedData< struct ::statiskit::MultivariateData > >, boost::noncopyable > class_3185f3f8abfe5447acd1b43172130b8e("_PolymorphicCopy_3185f3f8abfe5447acd1b43172130b8e", "", boost::python::no_init);
-    class_3185f3f8abfe5447acd1b43172130b8e.def("copy", method_pointer_0def23e37b8e561c9b9ff59c00924f09, "");
 
     if(autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::MultivariateData, class ::statiskit::WeightedMultivariateData, class ::statiskit::WeightedData< struct ::statiskit::MultivariateData > > >::is_class)
     {

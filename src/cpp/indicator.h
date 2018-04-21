@@ -11,10 +11,14 @@ namespace statiskit
 
     struct STATISKIT_CORE_API UnivariateLocationEstimation
     { 
+        virtual ~UnivariateLocationEstimation() = 0;
+
         virtual const double& get_location() const = 0;
 
         struct STATISKIT_CORE_API Estimator
         { 
+            virtual ~Estimator() = 0;
+
             virtual std::unique_ptr< UnivariateLocationEstimation > operator() (const UnivariateData& data) const = 0;
 
             virtual std::unique_ptr< Estimator > copy() const = 0;
@@ -23,10 +27,14 @@ namespace statiskit
 
     struct STATISKIT_CORE_API MultivariateLocationEstimation
     {
+        virtual ~MultivariateLocationEstimation() = 0;
+
         virtual const Eigen::VectorXd& get_location() const = 0;
 
         struct STATISKIT_CORE_API Estimator
         { 
+            virtual ~Estimator() = 0;
+
             virtual std::unique_ptr< MultivariateLocationEstimation > operator() (const MultivariateData& data) const = 0;
 
             virtual std::unique_ptr< Estimator > copy() const = 0;
@@ -38,6 +46,7 @@ namespace statiskit
         public:
             UnivariateMeanEstimation(const double& location);
             UnivariateMeanEstimation(const UnivariateMeanEstimation& estimation);
+            virtual ~UnivariateMeanEstimation();
 
             virtual const double& get_location() const;
          
@@ -45,6 +54,7 @@ namespace statiskit
             { 
                 Estimator();
                 Estimator(const Estimator& estimator);
+                virtual ~Estimator();
 
                 virtual std::unique_ptr< UnivariateLocationEstimation > operator() (const UnivariateData& data) const;
 
@@ -60,6 +70,7 @@ namespace statiskit
         public:
             MultivariateMeanEstimation(const Eigen::VectorXd& location);
             MultivariateMeanEstimation(const MultivariateMeanEstimation& estimation);
+            virtual ~MultivariateMeanEstimation();
 
             virtual const Eigen::VectorXd& get_location() const;
 
@@ -67,6 +78,7 @@ namespace statiskit
             { 
                 Estimator();
                 Estimator(const Estimator& estimator);
+                virtual ~Estimator();
 
                 virtual std::unique_ptr< MultivariateLocationEstimation > operator() (const MultivariateData& data) const;
 
@@ -82,6 +94,7 @@ namespace statiskit
         public:
             UnivariateDispersionEstimation(const double& location);
             UnivariateDispersionEstimation(const UnivariateDispersionEstimation& estimation);
+            virtual ~UnivariateDispersionEstimation() = 0;
 
             const double& get_location() const;
 
@@ -89,6 +102,8 @@ namespace statiskit
            
             struct STATISKIT_CORE_API Estimator
             {
+                virtual ~Estimator() = 0;
+
                 virtual std::unique_ptr< UnivariateDispersionEstimation > operator() (const UnivariateData& data, const double& location) const = 0;
 
                 virtual std::unique_ptr< Estimator > copy() const = 0;
@@ -103,6 +118,7 @@ namespace statiskit
         public:
             MultivariateDispersionEstimation(const Eigen::VectorXd& location);
             MultivariateDispersionEstimation(const MultivariateDispersionEstimation& estimation);
+            virtual ~MultivariateDispersionEstimation() = 0;
 
             const Eigen::VectorXd& get_location() const;
 
@@ -110,6 +126,8 @@ namespace statiskit
 
             struct STATISKIT_CORE_API Estimator
             { 
+                virtual ~Estimator() = 0;
+
                 virtual std::unique_ptr< MultivariateDispersionEstimation > operator() (const MultivariateData& data, const Eigen::VectorXd& location) const = 0;
 
                 virtual std::unique_ptr< Estimator > copy() const = 0;
@@ -124,6 +142,7 @@ namespace statiskit
         public:
             UnivariateVarianceEstimation(const double& location, const bool& bias, const double& dispersion);
             UnivariateVarianceEstimation(const UnivariateVarianceEstimation& estimation);
+            virtual ~UnivariateVarianceEstimation();
 
             const bool& get_bias() const;
 
@@ -135,6 +154,7 @@ namespace statiskit
                     Estimator();
                     Estimator(const bool& bias);
                     Estimator(const Estimator& estimator);
+                    virtual ~Estimator();
                       
                     virtual std::unique_ptr< UnivariateDispersionEstimation > operator() (const UnivariateData& data, const double& location) const;
 
@@ -157,6 +177,7 @@ namespace statiskit
         public:
             MultivariateVarianceEstimation(const Eigen::VectorXd& location, const Eigen::MatrixXd& dispersion, const bool& bias);
             MultivariateVarianceEstimation(const MultivariateVarianceEstimation& estimation);
+            virtual ~MultivariateVarianceEstimation();
 
             const bool& get_bias() const;
 
@@ -168,6 +189,7 @@ namespace statiskit
                     Estimator();
                     Estimator(const bool& bias);
                     Estimator(const Estimator& estimator);
+                    virtual ~Estimator();
                       
                     virtual std::unique_ptr< MultivariateDispersionEstimation > operator() (const MultivariateData& data, const Eigen::VectorXd& location) const;
 

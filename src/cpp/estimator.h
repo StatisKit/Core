@@ -597,5 +597,7 @@ namespace statiskit
     typedef MixtureSingularDistributionEMEstimation::Estimator MixtureSingularDistributionEMEstimator;
 }
 
+#ifndef AUTOWIG
 #include "estimator.hpp"
+#endif
 #endif

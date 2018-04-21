@@ -29,11 +29,9 @@ void wrapper_2eae4ac2dbf259029ee0e81da54c2c15()
     boost::python::object module_b487f4fc27725338b969ff43c4c8f4e4(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_b487f4fc27725338b969ff43c4c8f4e4.c_str()))));
     boost::python::scope().attr("_multinomial_singular_distribution_estimation") = module_b487f4fc27725338b969ff43c4c8f4e4;
     boost::python::scope scope_b487f4fc27725338b969ff43c4c8f4e4 = module_b487f4fc27725338b969ff43c4c8f4e4;
-    class ::std::unique_ptr< struct ::statiskit::SingularDistributionEstimation, struct ::std::default_delete< struct ::statiskit::SingularDistributionEstimation > >  (::statiskit::MultinomialSingularDistributionEstimation::Estimator::*method_pointer_7999ef22d4065751bd22034e5812a8e3)(struct ::statiskit::MultivariateData const &, bool const &) const = &::statiskit::MultinomialSingularDistributionEstimation::Estimator::operator();
     boost::python::class_< struct ::statiskit::MultinomialSingularDistributionEstimation::Estimator, autowig::Held< struct ::statiskit::MultinomialSingularDistributionEstimation::Estimator >::Type, boost::python::bases< struct ::statiskit::PolymorphicCopy< struct ::statiskit::SingularDistributionEstimation::Estimator, struct ::statiskit::MultinomialSingularDistributionEstimation::Estimator, struct ::statiskit::SingularDistributionEstimation::Estimator > > > class_2eae4ac2dbf259029ee0e81da54c2c15("Estimator", "", boost::python::no_init);
     class_2eae4ac2dbf259029ee0e81da54c2c15.def(boost::python::init<  >(""));
     class_2eae4ac2dbf259029ee0e81da54c2c15.def(boost::python::init< struct ::statiskit::MultinomialSingularDistributionEstimation::Estimator const & >(""));
-    class_2eae4ac2dbf259029ee0e81da54c2c15.def("__call__", method_pointer_7999ef22d4065751bd22034e5812a8e3, "");
 
     if(autowig::Held< struct ::statiskit::MultinomialSingularDistributionEstimation::Estimator >::is_class)
     {

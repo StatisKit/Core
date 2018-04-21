@@ -25,7 +25,7 @@ def wrapper(f):
     @wraps(f)
     def __getitem__(self, index):
         if isinstance(index, slice):
-            return [self[index] for index in xrange(*index.indices(len(self)))]
+            return [self[index] for index in range(*index.indices(len(self)))]
         else:
             if index < 0:
                 index += len(self)
@@ -42,7 +42,7 @@ class ScoresProxy(Proxy):
         if predicted:
             index = self._obj.selector(self._obj)
             alpha, beta = self._obj.intercepts[index], self._obj.slopes[index]
-            axes.plot(*zip(*[(extremum, alpha + beta * extremum) for extremum in (self._obj.penshapes[index], self._obj.penshapes[-1])]))
+            axes.plot(*list(zip(*[(extremum, alpha + beta * extremum) for extremum in (self._obj.penshapes[index], self._obj.penshapes[-1])])))
             pass
         axes.plot(self._obj.penshapes[:], self[:], fmt, *args, **kwargs)
         axes.set_xlabel('Penality shape')
@@ -105,7 +105,7 @@ def wrapper(f):
     @wraps(f)
     def __getitem__(self, index):
         if isinstance(index, slice):
-            return [self[index] for index in xrange(*index.indices(len(self)))]
+            return [self[index] for index in range(*index.indices(len(self)))]
         else:
             if index < 0:
                 index += len(self)
@@ -169,7 +169,7 @@ def slope_heuristic_selection_decorator(cls):
         @wraps(f)
         def __getitem__(self, index):
             if isinstance(index, slice):
-                return [self[index] for index in xrange(*index.indices(len(self)))]
+                return [self[index] for index in range(*index.indices(len(self)))]
             else:
                 if index < 0:
                     index += len(self)

@@ -47,9 +47,7 @@ void wrapper_7963cd416f6c50c09445d3b27e4f9428()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    class ::std::unique_ptr< struct ::statiskit::UnivariateDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateDistribution > >  (::statiskit::PolymorphicCopy< ::statiskit::UnivariateDistribution, ::statiskit::GeometricDistribution, ::statiskit::DiscreteUnivariateDistribution >::*method_pointer_8900ad62e63950c5a85971d4d5a063e4)() const = &::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::GeometricDistribution, struct ::statiskit::DiscreteUnivariateDistribution >::copy;
     boost::python::class_< autowig::Wrap_7963cd416f6c50c09445d3b27e4f9428, autowig::Held< autowig::Wrap_7963cd416f6c50c09445d3b27e4f9428 >::Type, boost::python::bases< struct ::statiskit::DiscreteUnivariateDistribution >, boost::noncopyable > class_7963cd416f6c50c09445d3b27e4f9428("_PolymorphicCopy_7963cd416f6c50c09445d3b27e4f9428", "", boost::python::no_init);
-    class_7963cd416f6c50c09445d3b27e4f9428.def("copy", method_pointer_8900ad62e63950c5a85971d4d5a063e4, "");
 
     if(autowig::Held< struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::GeometricDistribution, struct ::statiskit::DiscreteUnivariateDistribution > >::is_class)
     {

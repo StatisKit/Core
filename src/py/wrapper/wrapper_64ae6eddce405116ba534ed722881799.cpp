@@ -44,15 +44,11 @@ void wrapper_64ae6eddce405116ba534ed722881799()
     boost::python::object module_fa414b05d29e5f4ea0b6d6cb5cf81b01(boost::python::handle<  >(boost::python::borrowed(PyImport_AddModule(name_fa414b05d29e5f4ea0b6d6cb5cf81b01.c_str()))));
     boost::python::scope().attr("statiskit") = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
     boost::python::scope scope_fa414b05d29e5f4ea0b6d6cb5cf81b01 = module_fa414b05d29e5f4ea0b6d6cb5cf81b01;
-    struct ::statiskit::UnivariateSampleSpace const * (::statiskit::WeightedData< ::statiskit::UnivariateData >::*method_pointer_c43b4fed6707533ebc14a286dfd1d037)() const = &::statiskit::WeightedData< struct ::statiskit::UnivariateData >::get_sample_space;
-    class ::std::unique_ptr< struct ::statiskit::UnivariateData::Generator, struct ::std::default_delete< struct ::statiskit::UnivariateData::Generator > >  (::statiskit::WeightedData< ::statiskit::UnivariateData >::*method_pointer_57b9553abf9954478e69ba31cf3316cb)() const = &::statiskit::WeightedData< struct ::statiskit::UnivariateData >::generator;
     struct ::statiskit::UnivariateData const * (::statiskit::WeightedData< ::statiskit::UnivariateData >::*method_pointer_92c5532a3e0f5f3da7c680e762f4907d)() const = &::statiskit::WeightedData< struct ::statiskit::UnivariateData >::get_data;
     ::statiskit::Index  (::statiskit::WeightedData< ::statiskit::UnivariateData >::*method_pointer_fffe7b48b166550baaca4c08c07a0847)() const = &::statiskit::WeightedData< struct ::statiskit::UnivariateData >::get_nb_weights;
     double  (::statiskit::WeightedData< ::statiskit::UnivariateData >::*method_pointer_d0e260fcdc205b2eba4822c5ec5880d0)(::statiskit::Index const &) const = &::statiskit::WeightedData< struct ::statiskit::UnivariateData >::get_weight;
     void  (::statiskit::WeightedData< ::statiskit::UnivariateData >::*method_pointer_2d5ccb9b59a85039917dbc4ac3b10b92)(::statiskit::Index const &, double const &) = &::statiskit::WeightedData< struct ::statiskit::UnivariateData >::set_weight;
     boost::python::class_< autowig::Wrap_64ae6eddce405116ba534ed722881799, autowig::Held< autowig::Wrap_64ae6eddce405116ba534ed722881799 >::Type, boost::python::bases< struct ::statiskit::UnivariateData >, boost::noncopyable > class_64ae6eddce405116ba534ed722881799("_WeightedData_64ae6eddce405116ba534ed722881799", "", boost::python::no_init);
-    class_64ae6eddce405116ba534ed722881799.def("get_sample_space", method_pointer_c43b4fed6707533ebc14a286dfd1d037, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
-    class_64ae6eddce405116ba534ed722881799.def("__iter__", method_pointer_57b9553abf9954478e69ba31cf3316cb, "");
     class_64ae6eddce405116ba534ed722881799.def("get_data", method_pointer_92c5532a3e0f5f3da7c680e762f4907d, boost::python::return_value_policy< boost::python::reference_existing_object >(), "");
     class_64ae6eddce405116ba534ed722881799.def("get_nb_weights", method_pointer_fffe7b48b166550baaca4c08c07a0847, "");
     class_64ae6eddce405116ba534ed722881799.def("get_weight", method_pointer_d0e260fcdc205b2eba4822c5ec5880d0, "");

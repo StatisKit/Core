@@ -146,7 +146,7 @@ namespace statiskit
                     criterion_type _criterion;
 
                     virtual double scoring(const typename B::estimated_type * estimated, typename B::data_type const & data) const;
-            };
+            };/**/
 
         protected:
             std::vector< B * > _estimations;
@@ -417,8 +417,10 @@ namespace statiskit
     };
 
     typedef Selection< ContinuousMultivariateConditionalDistribution, ContinuousMultivariateConditionalDistributionEstimation > ContinuousMultivariateConditionalDistributionSelection;
-    typedef ContinuousMultivariateConditionalDistributionSelection::CriterionEstimator ContinuousMultivariateConditionalDistributionCriterionEstimator;
+    typedef ContinuousMultivariateConditionalDistributionSelection::CriterionEstimator ContinuousMultivariateConditionalDistributionCriterionEstimator;  
 }
 
+#ifndef AUTOWIG
 #include "estimation.hpp"
+#endif
 #endif
