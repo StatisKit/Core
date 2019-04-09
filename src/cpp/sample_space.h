@@ -61,11 +61,10 @@ namespace statiskit
             virtual Eigen::RowVectorXd encode(const std::string& outcome) const = 0;
 
         protected:
-            std::set< std::string > _values;
-            encoding_type _encoding;     
+            std::shared_ptr< std::set< std::string > > values;
+            encoding_type encoding;     
 
             virtual bool is_compatible_value(const std::string& value) const;
-       
     };
 
     class OrdinalSampleSpace;
@@ -93,7 +92,7 @@ namespace statiskit
             std::unique_ptr< UnivariateSampleSpace > copy() const;
 
         protected:
-            std::set< std::string >::const_iterator _reference;
+            std::set< std::string >::const_iterator reference;
     };
 
     class STATISKIT_CORE_API OrdinalSampleSpace : public CategoricalSampleSpace
@@ -122,7 +121,9 @@ namespace statiskit
             virtual std::unique_ptr< UnivariateSampleSpace > copy() const;
 
         protected:
-            std::vector< Index > _rank;
+            std::shared_ptr< std::vector< Index > > _rank;
+
+            virtual void detach();
     };
 
     class UnivariateConditionalData;
