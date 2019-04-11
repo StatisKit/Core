@@ -8,6 +8,8 @@ namespace autowig
     {
         public:
 
+
+        public:
             typedef ::statiskit::SingularDistributionEstimation::estimated_type const * return_type_5a217a5a2172529fb9cae0338394139f;
             virtual return_type_5a217a5a2172529fb9cae0338394139f get_estimated() const override { PYBIND11_OVERLOAD_PURE(return_type_5a217a5a2172529fb9cae0338394139f, class_type, get_estimated, ); };
     };

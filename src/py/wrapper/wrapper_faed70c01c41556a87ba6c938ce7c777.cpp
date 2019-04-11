@@ -8,19 +8,31 @@ namespace autowig
     {
         public:
 
+
+        public:
             typedef class ::std::unique_ptr< struct ::statiskit::MultivariateSampleSpace, struct ::std::default_delete< struct ::statiskit::MultivariateSampleSpace > >  return_type_40d149de873956828c7a7bb6efb1b291;
             virtual return_type_40d149de873956828c7a7bb6efb1b291 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_40d149de873956828c7a7bb6efb1b291, class_type, copy, ); };
+
+        public:
             typedef class ::Eigen::Matrix< double, 1, -1, 1, 1, -1 >  return_type_453c7ae8bd33563d9ea0317dca724475;
             typedef struct ::statiskit::MultivariateEvent const & param_453c7ae8bd33563d9ea0317dca724475_0_type;
             virtual return_type_453c7ae8bd33563d9ea0317dca724475 encode(param_453c7ae8bd33563d9ea0317dca724475_0_type param_0) const override { PYBIND11_OVERLOAD(return_type_453c7ae8bd33563d9ea0317dca724475, class_type, encode, param_0); };
+
+        public:
             typedef ::statiskit::Index  return_type_58045e2837b651c18e64ce6ac4e0be9e;
             virtual return_type_58045e2837b651c18e64ce6ac4e0be9e encode() const override { PYBIND11_OVERLOAD(return_type_58045e2837b651c18e64ce6ac4e0be9e, class_type, encode, ); };
+
+        public:
             typedef bool  return_type_817740fe51f5581ca0b50fe3fdee1e78;
             typedef struct ::statiskit::MultivariateEvent const * param_817740fe51f5581ca0b50fe3fdee1e78_0_type;
             virtual return_type_817740fe51f5581ca0b50fe3fdee1e78 is_compatible(param_817740fe51f5581ca0b50fe3fdee1e78_0_type param_0) const override { PYBIND11_OVERLOAD(return_type_817740fe51f5581ca0b50fe3fdee1e78, class_type, is_compatible, param_0); };
+
+        public:
             typedef struct ::statiskit::UnivariateSampleSpace const * return_type_89faf58ffa485b8fafccbd250d1fe75d;
             typedef ::statiskit::Index const & param_89faf58ffa485b8fafccbd250d1fe75d_0_type;
             virtual return_type_89faf58ffa485b8fafccbd250d1fe75d get(param_89faf58ffa485b8fafccbd250d1fe75d_0_type param_0) const override { PYBIND11_OVERLOAD_PURE(return_type_89faf58ffa485b8fafccbd250d1fe75d, class_type, get, param_0); };
+
+        public:
             typedef ::statiskit::Index  return_type_34b56241180a545dbbc2cc99f5f4650e;
             virtual return_type_34b56241180a545dbbc2cc99f5f4650e size() const override { PYBIND11_OVERLOAD_PURE(return_type_34b56241180a545dbbc2cc99f5f4650e, class_type, size, ); };
     };

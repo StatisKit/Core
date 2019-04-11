@@ -2723,7 +2723,7 @@ namespace statiskit
 
     double MultinormalDistribution::probability(const MultivariateEvent* event, const bool& logarithm) const
     {
-        throw not_implemented_error("probability");
+        NOT_IMPLEMENTED();
         return 0.;
     }
 

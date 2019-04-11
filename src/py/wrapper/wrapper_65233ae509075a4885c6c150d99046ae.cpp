@@ -8,28 +8,22 @@ namespace autowig
     {
         public:
 
-            typedef class ::std::unordered_set< statiskit::Index, struct ::std::hash< statiskit::Index >, struct ::std::equal_to< statiskit::Index >, class ::std::allocator< statiskit::Index > >  return_type_d4181de1506551d9b4cabd76eecd0c24;
-            virtual return_type_d4181de1506551d9b4cabd76eecd0c24 children() const override { PYBIND11_OVERLOAD(return_type_d4181de1506551d9b4cabd76eecd0c24, class_type, children, ); };
+
+        protected:
             typedef double  return_type_744f08fdf88a5deb9ed150b0a6582da2;
             typedef struct ::statiskit::SingularDistribution const * param_744f08fdf88a5deb9ed150b0a6582da2_0_type;
             typedef struct ::statiskit::MultivariateData const & param_744f08fdf88a5deb9ed150b0a6582da2_1_type;
             virtual return_type_744f08fdf88a5deb9ed150b0a6582da2 scoring(param_744f08fdf88a5deb9ed150b0a6582da2_0_type param_0, param_744f08fdf88a5deb9ed150b0a6582da2_1_type param_1) const override { PYBIND11_OVERLOAD_PURE(return_type_744f08fdf88a5deb9ed150b0a6582da2, class_type, scoring, param_0, param_1); };
-            typedef class ::std::unique_ptr< struct ::statiskit::SingularDistributionEstimation, struct ::std::default_delete< struct ::statiskit::SingularDistributionEstimation > >  return_type_38bec538cb785ba8a98ef67b225e42e1;
-            typedef struct ::statiskit::MultivariateData const & param_38bec538cb785ba8a98ef67b225e42e1_0_type;
-            typedef bool const & param_38bec538cb785ba8a98ef67b225e42e1_1_type;
-            virtual return_type_38bec538cb785ba8a98ef67b225e42e1 operator()(param_38bec538cb785ba8a98ef67b225e42e1_0_type param_0, param_38bec538cb785ba8a98ef67b225e42e1_1_type param_1) const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_38bec538cb785ba8a98ef67b225e42e1, class_type, operator(), param_0, param_1); };
+
+        public:
             typedef class ::std::unique_ptr< struct ::statiskit::SingularDistributionEstimation::Estimator, struct ::std::default_delete< struct ::statiskit::SingularDistributionEstimation::Estimator > >  return_type_8b02691f7b535adda732068708b90596;
             virtual return_type_8b02691f7b535adda732068708b90596 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_8b02691f7b535adda732068708b90596, class_type, copy, ); };
-            typedef ::uintptr_t  return_type_ed723b56ee6d50838db979e102419f39;
-            virtual return_type_ed723b56ee6d50838db979e102419f39 identifier() const override { PYBIND11_OVERLOAD(return_type_ed723b56ee6d50838db979e102419f39, class_type, identifier, ); };
     };
 
     class Publicist : public class_type
     {
         public:
-            using class_type::children;
             using class_type::scoring;
-            using class_type::identifier;
     };
 }
 

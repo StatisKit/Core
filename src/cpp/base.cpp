@@ -82,7 +82,7 @@ namespace statiskit
     void set_seed(const Index& seed)
     { __impl::_random_generator.seed(seed); }
 
-    not_implemented_error::not_implemented_error(const std::string& function) : std::runtime_error("'" + function + "' is not yet implemented")
+    not_implemented_error::not_implemented_error(const std::string& function, const std::string& file, const unsigned int& line) : std::runtime_error("'" + function + "' in file '" + file + "' at line " + __impl::to_string(line) + " is not implemented")
     {}
 
     proxy_connection_error::proxy_connection_error() : std::exception()

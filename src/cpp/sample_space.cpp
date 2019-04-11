@@ -348,13 +348,14 @@ namespace statiskit
     }
 
     void HierarchicalSampleSpace::set_encoding(const encoding_type& encoding)
-    {}
+    {
+        NOT_IMPLEMENTED();
+    }
 
     Eigen::RowVectorXd HierarchicalSampleSpace::encode(const std::string& value) const
     {
-        Eigen::RowVectorXd dummy; // TODO
-        throw not_implemented_error("encode");
-        return dummy;
+        NOT_IMPLEMENTED();
+        return Eigen::RowVectorXd();
     }
 
     void HierarchicalSampleSpace::partition(const std::string& leave, const CategoricalSampleSpace& sample_space)

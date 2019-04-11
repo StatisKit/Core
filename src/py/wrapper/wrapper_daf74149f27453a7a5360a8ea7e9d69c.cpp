@@ -9,14 +9,22 @@ namespace autowig
         public:
             using ::statiskit::UnivariateDistribution::UnivariateDistribution;
 
+
+        public:
             typedef class ::std::unique_ptr< struct ::statiskit::UnivariateDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateDistribution > >  return_type_7043746e82585022aaf3d0d72cbf150b;
             virtual return_type_7043746e82585022aaf3d0d72cbf150b copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_7043746e82585022aaf3d0d72cbf150b, class_type, copy, ); };
+
+        public:
             typedef class ::std::unique_ptr< struct ::statiskit::UnivariateEvent, struct ::std::default_delete< struct ::statiskit::UnivariateEvent > >  return_type_320fcafd931d58898fc5be99cb1979fe;
             virtual return_type_320fcafd931d58898fc5be99cb1979fe simulate() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_320fcafd931d58898fc5be99cb1979fe, class_type, simulate, ); };
+
+        public:
             typedef double  return_type_e54dcb61962b537ca725a1f2230202dc;
             typedef struct ::statiskit::UnivariateEvent const * param_e54dcb61962b537ca725a1f2230202dc_0_type;
             typedef bool const & param_e54dcb61962b537ca725a1f2230202dc_1_type;
             virtual return_type_e54dcb61962b537ca725a1f2230202dc probability(param_e54dcb61962b537ca725a1f2230202dc_0_type param_0, param_e54dcb61962b537ca725a1f2230202dc_1_type param_1) const override { PYBIND11_OVERLOAD_PURE(return_type_e54dcb61962b537ca725a1f2230202dc, class_type, probability, param_0, param_1); };
+
+        public:
             typedef unsigned int  return_type_0826ef63abcb5a8d83b7e3e2df48a620;
             virtual return_type_0826ef63abcb5a8d83b7e3e2df48a620 get_nb_parameters() const override { PYBIND11_OVERLOAD_PURE(return_type_0826ef63abcb5a8d83b7e3e2df48a620, class_type, get_nb_parameters, ); };
     };

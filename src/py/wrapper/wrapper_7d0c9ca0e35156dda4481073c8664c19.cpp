@@ -9,34 +9,42 @@ namespace autowig
         public:
             using ::statiskit::MixtureDistribution< ::statiskit::DiscreteUnivariateDistribution >::MixtureDistribution;
 
+
+        public:
             typedef void  return_type_246a8d3423cf5748b68f545f10de89b7;
             typedef ::statiskit::Index const & param_246a8d3423cf5748b68f545f10de89b7_0_type;
             typedef struct ::statiskit::DiscreteUnivariateDistribution const & param_246a8d3423cf5748b68f545f10de89b7_1_type;
             virtual return_type_246a8d3423cf5748b68f545f10de89b7 set_observation(param_246a8d3423cf5748b68f545f10de89b7_0_type param_0, param_246a8d3423cf5748b68f545f10de89b7_1_type param_1) override { PYBIND11_OVERLOAD(return_type_246a8d3423cf5748b68f545f10de89b7, class_type, set_observation, param_0, param_1); };
-            typedef unsigned int  return_type_f927fce3d16b5492bcef59bbf039772b;
-            virtual return_type_f927fce3d16b5492bcef59bbf039772b get_nb_parameters() const override { PYBIND11_OVERLOAD(return_type_f927fce3d16b5492bcef59bbf039772b, class_type, get_nb_parameters, ); };
+
+        public:
             typedef double  return_type_c6a8fd2e5dc454c89e463671fdf91f3e;
             virtual return_type_c6a8fd2e5dc454c89e463671fdf91f3e get_variance() const override { PYBIND11_OVERLOAD_PURE(return_type_c6a8fd2e5dc454c89e463671fdf91f3e, class_type, get_variance, ); };
+
+        public:
             typedef double  return_type_9fdf92df3e8c5e0e85306b85eb662025;
             virtual return_type_9fdf92df3e8c5e0e85306b85eb662025 get_mean() const override { PYBIND11_OVERLOAD_PURE(return_type_9fdf92df3e8c5e0e85306b85eb662025, class_type, get_mean, ); };
-            typedef class ::std::unique_ptr< struct ::statiskit::UnivariateEvent, struct ::std::default_delete< struct ::statiskit::UnivariateEvent > >  return_type_9b1e41d78cb15fb485b076a8136faf6b;
-            virtual return_type_9b1e41d78cb15fb485b076a8136faf6b simulate() const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_9b1e41d78cb15fb485b076a8136faf6b, class_type, simulate, ); };
+
+        public:
             typedef int  return_type_0f752a27239a55e4a5244da5bea67286;
             typedef double const & param_0f752a27239a55e4a5244da5bea67286_0_type;
             virtual return_type_0f752a27239a55e4a5244da5bea67286 quantile(param_0f752a27239a55e4a5244da5bea67286_0_type param_0) const override { PYBIND11_OVERLOAD(return_type_0f752a27239a55e4a5244da5bea67286, class_type, quantile, param_0); };
+
+        public:
             typedef double  return_type_b8cb3c3bef9a57b0b9e80ef518f215b7;
             typedef int const & param_b8cb3c3bef9a57b0b9e80ef518f215b7_0_type;
             virtual return_type_b8cb3c3bef9a57b0b9e80ef518f215b7 cdf(param_b8cb3c3bef9a57b0b9e80ef518f215b7_0_type param_0) const override { PYBIND11_OVERLOAD(return_type_b8cb3c3bef9a57b0b9e80ef518f215b7, class_type, cdf, param_0); };
+
+        public:
             typedef double  return_type_e743676180d85397828cc79f44d4d185;
             typedef int const & param_e743676180d85397828cc79f44d4d185_0_type;
             virtual return_type_e743676180d85397828cc79f44d4d185 pdf(param_e743676180d85397828cc79f44d4d185_0_type param_0) const override { PYBIND11_OVERLOAD(return_type_e743676180d85397828cc79f44d4d185, class_type, pdf, param_0); };
+
+        public:
             typedef double  return_type_e31fb7a7a5b852af9574d7d8bac3da21;
             typedef int const & param_e31fb7a7a5b852af9574d7d8bac3da21_0_type;
             virtual return_type_e31fb7a7a5b852af9574d7d8bac3da21 ldf(param_e31fb7a7a5b852af9574d7d8bac3da21_0_type param_0) const override { PYBIND11_OVERLOAD(return_type_e31fb7a7a5b852af9574d7d8bac3da21, class_type, ldf, param_0); };
-            typedef double  return_type_c3377d2e9b535f76985d786c2f3a6fe0;
-            typedef struct ::statiskit::UnivariateEvent const * param_c3377d2e9b535f76985d786c2f3a6fe0_0_type;
-            typedef bool const & param_c3377d2e9b535f76985d786c2f3a6fe0_1_type;
-            virtual return_type_c3377d2e9b535f76985d786c2f3a6fe0 probability(param_c3377d2e9b535f76985d786c2f3a6fe0_0_type param_0, param_c3377d2e9b535f76985d786c2f3a6fe0_1_type param_1) const override { PYBIND11_OVERLOAD(return_type_c3377d2e9b535f76985d786c2f3a6fe0, class_type, probability, param_0, param_1); };
+
+        public:
             typedef class ::std::unique_ptr< struct ::statiskit::UnivariateDistribution, struct ::std::default_delete< struct ::statiskit::UnivariateDistribution > >  return_type_7043746e82585022aaf3d0d72cbf150b;
             virtual return_type_7043746e82585022aaf3d0d72cbf150b copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_7043746e82585022aaf3d0d72cbf150b, class_type, copy, ); };
     };

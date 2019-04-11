@@ -16,32 +16,35 @@
 #include <unordered_map>
 
 #if defined WIN32 || defined _WIN32 || defined __CYGWIN__
-  #ifdef LIBSTATISKIT_CORE
-    #ifdef __GNUC__
-      #define STATISKIT_CORE_API __attribute__ ((dllexport))
+    #define __PRETTY_FUNCTION__ __FUNCSIG__
+    #ifdef LIBSTATISKIT_CORE
+        #ifdef __GNUC__
+            #define STATISKIT_CORE_API __attribute__ ((dllexport))
+        #else
+            #define STATISKIT_CORE_API __declspec(dllexport)
+        #endif
     #else
-      #define STATISKIT_CORE_API __declspec(dllexport)
+        #ifdef __GNUC__
+            #define STATISKIT_CORE_API __attribute__ ((dllimport))
+        #else
+            #define STATISKIT_CORE_API __declspec(dllimport)
+        #endif
     #endif
-  #else
-    #ifdef __GNUC__
-      #define STATISKIT_CORE_API __attribute__ ((dllimport))
-    #else
-      #define STATISKIT_CORE_API __declspec(dllimport)
-    #endif
-  #endif
 #else
-  #if __GNUC__ >= 4
-    #define STATISKIT_CORE_API __attribute__ ((visibility ("default")))
-  #else
-    #define STATISKIT_CORE_API
-  #endif
+    #if __GNUC__ >= 4
+        #define STATISKIT_CORE_API __attribute__ ((visibility ("default")))
+    #else
+        #define STATISKIT_CORE_API
+    #endif
 #endif
 
+#define NOT_IMPLEMENTED() _Pragma("message \"not implemented function\""); throw not_implemented_error(__PRETTY_FUNCTION__, __FILE__, __LINE__)
+
 #ifdef NDEBUG
-#define BREAKPOINT __pragma(message("BREAKPOINT found in file '" __FILE__ "' at line " STR(__LINE__)) " but not used");
+#define BREAKPOINT() _Pragma("message \"breakpoint ignored\"")
 #else
 #include <csignal>
-#define BREAKPOINT std::raise(SIGINT);
+#define BREAKPOINT() std::raise(SIGINT)
 #endif
 
 namespace statiskit
@@ -88,7 +91,7 @@ namespace statiskit
     STATISKIT_CORE_API void set_seed(const Index& seed);
 
     struct STATISKIT_CORE_API not_implemented_error : std::runtime_error
-    { not_implemented_error(const std::string& function); };
+    { not_implemented_error(const std::string& function, const std::string& file, const unsigned int& line); };
 
     struct STATISKIT_CORE_API proxy_connection_error : std::exception
     { proxy_connection_error(); };

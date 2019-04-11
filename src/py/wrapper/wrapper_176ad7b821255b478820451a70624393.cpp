@@ -8,8 +8,12 @@ namespace autowig
     {
         public:
 
+
+        public:
             typedef class ::std::unique_ptr< struct ::statiskit::MultivariateLocationEstimation::Estimator, struct ::std::default_delete< struct ::statiskit::MultivariateLocationEstimation::Estimator > >  return_type_8c923ab987815d75950c21bd5ebe0e9a;
             virtual return_type_8c923ab987815d75950c21bd5ebe0e9a copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_8c923ab987815d75950c21bd5ebe0e9a, class_type, copy, ); };
+
+        public:
             typedef class ::std::unique_ptr< struct ::statiskit::MultivariateLocationEstimation, struct ::std::default_delete< struct ::statiskit::MultivariateLocationEstimation > >  return_type_e9ba7deeca0056cb9754cfd757b7c670;
             typedef struct ::statiskit::MultivariateData const & param_e9ba7deeca0056cb9754cfd757b7c670_0_type;
             virtual return_type_e9ba7deeca0056cb9754cfd757b7c670 operator()(param_e9ba7deeca0056cb9754cfd757b7c670_0_type param_0) const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_e9ba7deeca0056cb9754cfd757b7c670, class_type, operator(), param_0); };

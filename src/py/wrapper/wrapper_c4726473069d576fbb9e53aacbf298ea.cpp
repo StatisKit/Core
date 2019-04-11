@@ -9,6 +9,8 @@ namespace autowig
         public:
             using ::statiskit::CategoricalUnivariateDistributionEstimation::CategoricalUnivariateDistributionEstimation;
 
+
+        public:
             typedef ::statiskit::UnivariateDistributionEstimation::estimated_type const * return_type_bd794e40246350b583a72b6a11ca75d8;
             virtual return_type_bd794e40246350b583a72b6a11ca75d8 get_estimated() const override { PYBIND11_OVERLOAD_PURE(return_type_bd794e40246350b583a72b6a11ca75d8, class_type, get_estimated, ); };
     };

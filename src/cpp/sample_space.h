@@ -161,6 +161,8 @@ namespace statiskit
             std::map< std::string, std::string > _parents;
 
             virtual bool is_compatible_value(const std::string& value) const;   
+
+            virtual void detach();
     };
 
     struct STATISKIT_CORE_API DiscreteSampleSpace : public UnivariateSampleSpace
