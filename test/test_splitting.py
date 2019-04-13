@@ -14,11 +14,9 @@ class TestDirichletMultinomialSplitting(unittest.TestCase, AbstractTestDiscreteM
 
     @classmethod
     def setUpClass(cls):
-        """Test Dirichlet multinomial splitting distribution construction"""
         cls._dist = core.SplittingDistribution(core.PoissonDistribution(15.),
                                                core.DirichletMultinomialSingularDistribution(linalg.Vector([2., 1.])))
     def test_estimation(self):
-        """Test Dirichlet multinomial splitting estimation"""
         data = self._dist.simulation(10)
         mle = core.splitting_estimation(sum=core.poisson_estimation('ml'),
                                         singular=core.singular_selection('DM'),
@@ -33,12 +31,10 @@ class TestMultinomialSplitting(unittest.TestCase, AbstractTestDiscreteMultivaria
 
     @classmethod
     def setUpClass(cls):
-        """Test multinomial splitting distribution construction"""
         cls._dist = core.SplittingDistribution(core.BinomialDistribution(5, .5),
                                                core.MultinomialSingularDistribution(linalg.Vector([.25, .75])))
 
     def test_estimation(self):
-        """Test multinomial splitting estimation"""
         data = self._dist.simulation(10)
         mle = core.splitting_estimation(sum=core.binomial_estimation('ml'),
                                         singular=core.singular_selection('MN'),

@@ -8,8 +8,6 @@ namespace autowig
     {
         public:
 
-
-        public:
             typedef double const & return_type_9dde6f7d86c45ddd8e7676fbf005dcc2;
             virtual return_type_9dde6f7d86c45ddd8e7676fbf005dcc2 get_location() const override { PYBIND11_OVERLOAD_PURE(return_type_9dde6f7d86c45ddd8e7676fbf005dcc2, class_type, get_location, ); };
     };

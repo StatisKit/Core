@@ -8,17 +8,11 @@ namespace autowig
     {
         public:
 
-
-        public:
             typedef class ::std::unique_ptr< struct ::statiskit::MultivariateEvent, struct ::std::default_delete< struct ::statiskit::MultivariateEvent > >  return_type_ee0381fa29a75d5782f895a637e2a8d5;
             virtual return_type_ee0381fa29a75d5782f895a637e2a8d5 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_ee0381fa29a75d5782f895a637e2a8d5, class_type, copy, ); };
-
-        public:
             typedef struct ::statiskit::UnivariateEvent const * return_type_10a704d5992d559888ef502fa18a5a47;
             typedef ::statiskit::Index const & param_10a704d5992d559888ef502fa18a5a47_0_type;
             virtual return_type_10a704d5992d559888ef502fa18a5a47 get(param_10a704d5992d559888ef502fa18a5a47_0_type param_0) const override { PYBIND11_OVERLOAD_PURE(return_type_10a704d5992d559888ef502fa18a5a47, class_type, get, param_0); };
-
-        public:
             typedef ::statiskit::Index  return_type_b16ba67d442357de95884c2b80cd9413;
             virtual return_type_b16ba67d442357de95884c2b80cd9413 size() const override { PYBIND11_OVERLOAD_PURE(return_type_b16ba67d442357de95884c2b80cd9413, class_type, size, ); };
     };

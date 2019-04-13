@@ -8,12 +8,8 @@ namespace autowig
     {
         public:
 
-
-        public:
             typedef class ::std::unique_ptr< struct ::statiskit::UnivariateDispersionEstimation::Estimator, struct ::std::default_delete< struct ::statiskit::UnivariateDispersionEstimation::Estimator > >  return_type_8f20422aab135f9fb601488df3d82cfa;
             virtual return_type_8f20422aab135f9fb601488df3d82cfa copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_8f20422aab135f9fb601488df3d82cfa, class_type, copy, ); };
-
-        public:
             typedef class ::std::unique_ptr< class ::statiskit::UnivariateDispersionEstimation, struct ::std::default_delete< class ::statiskit::UnivariateDispersionEstimation > >  return_type_4e882ea0348e56a2816e3f3d20b8b14f;
             typedef struct ::statiskit::UnivariateData const & param_4e882ea0348e56a2816e3f3d20b8b14f_0_type;
             typedef double const & param_4e882ea0348e56a2816e3f3d20b8b14f_1_type;

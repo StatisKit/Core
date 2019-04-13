@@ -13,10 +13,8 @@ class TestLogistic(unittest.TestCase, AbstractTestContinuousUnivariateDistributi
 
     @classmethod
     def setUpClass(cls):
-        """Test Laplace distribution construction"""
         cls._dist = core.LaplaceDistribution(1.,1.)
 
     @classmethod
     def tearDownClass(cls):
-        """Test Lapace distribution deletion"""
         del cls._dist

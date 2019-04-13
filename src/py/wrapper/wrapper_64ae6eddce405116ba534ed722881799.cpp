@@ -9,17 +9,15 @@ namespace autowig
         public:
             using ::statiskit::WeightedData< ::statiskit::UnivariateData >::WeightedData;
 
-
-        public:
             typedef double  return_type_d0e260fcdc205b2eba4822c5ec5880d0;
             typedef ::statiskit::Index const & param_d0e260fcdc205b2eba4822c5ec5880d0_0_type;
             virtual return_type_d0e260fcdc205b2eba4822c5ec5880d0 get_weight(param_d0e260fcdc205b2eba4822c5ec5880d0_0_type param_0) const override { PYBIND11_OVERLOAD(return_type_d0e260fcdc205b2eba4822c5ec5880d0, class_type, get_weight, param_0); };
-
-        public:
+            typedef class ::std::unique_ptr< struct ::statiskit::UnivariateData::Generator, struct ::std::default_delete< struct ::statiskit::UnivariateData::Generator > >  return_type_57b9553abf9954478e69ba31cf3316cb;
+            virtual return_type_57b9553abf9954478e69ba31cf3316cb generator() const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_57b9553abf9954478e69ba31cf3316cb, class_type, generator, ); };
+            typedef struct ::statiskit::UnivariateSampleSpace const * return_type_c43b4fed6707533ebc14a286dfd1d037;
+            virtual return_type_c43b4fed6707533ebc14a286dfd1d037 get_sample_space() const override { PYBIND11_OVERLOAD(return_type_c43b4fed6707533ebc14a286dfd1d037, class_type, get_sample_space, ); };
             typedef class ::std::unique_ptr< struct ::statiskit::UnivariateData, struct ::std::default_delete< struct ::statiskit::UnivariateData > >  return_type_f924b25c6e335944a81f6073e12504ff;
             virtual return_type_f924b25c6e335944a81f6073e12504ff copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_f924b25c6e335944a81f6073e12504ff, class_type, copy, ); };
-
-        public:
             typedef ::statiskit::Index  return_type_ccb6e82201a6558e9733151230bbc9af;
             virtual return_type_ccb6e82201a6558e9733151230bbc9af size() const override { PYBIND11_OVERLOAD(return_type_ccb6e82201a6558e9733151230bbc9af, class_type, size, ); };
     };

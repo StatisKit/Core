@@ -8,12 +8,8 @@ namespace autowig
     {
         public:
 
-
-        public:
             typedef class ::std::unique_ptr< struct ::statiskit::SlopeHeuristicSelector, struct ::std::default_delete< struct ::statiskit::SlopeHeuristicSelector > >  return_type_b99a360f77cf53eb8f24401404499387;
             virtual return_type_b99a360f77cf53eb8f24401404499387 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_b99a360f77cf53eb8f24401404499387, class_type, copy, ); };
-
-        public:
             typedef ::statiskit::Index  return_type_df1ee527da8655d4b2d9d5bb1e30ff8e;
             typedef class ::statiskit::SlopeHeuristic const & param_df1ee527da8655d4b2d9d5bb1e30ff8e_0_type;
             virtual return_type_df1ee527da8655d4b2d9d5bb1e30ff8e operator()(param_df1ee527da8655d4b2d9d5bb1e30ff8e_0_type param_0) const override { PYBIND11_OVERLOAD_PURE(return_type_df1ee527da8655d4b2d9d5bb1e30ff8e, class_type, operator(), param_0); };

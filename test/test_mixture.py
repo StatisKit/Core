@@ -14,13 +14,11 @@ class TestMixture(unittest.TestCase, AbstractTestDiscreteUnivariateDistribution)
 
     @classmethod
     def setUpClass(cls):
-        """Test mixture distribution construction"""
         cls._dist = core.MixtureDistribution(core.PoissonDistribution(.5),
                                              core.PoissonDistribution(10.),
                                              pi = linalg.Vector([.25, .75]))
 
     def test_estimation_em(self):
-        """Test mixture estimation using the EM algorithm"""
         data = self._dist.simulation(100)
         em = core.mixture_estimation(data, 'em',
                                      initializator = core.MixtureDistribution(core.PoissonDistribution(3.),
@@ -34,4 +32,4 @@ class TestMixture(unittest.TestCase, AbstractTestDiscreteUnivariateDistribution)
         #     self.assertGreaterEqual(curr, prev)
 
     def test_posterior(self):
-        """Test mixture posterior probabilities"""
+        pass

@@ -13,10 +13,8 @@ class TestBeta(unittest.TestCase, AbstractTestContinuousUnivariateDistribution):
 
     @classmethod
     def setUpClass(cls):
-        """Test Beta distribution construction"""
         cls._dist = core.BetaDistribution()
 
     @classmethod
     def tearDownClass(cls):
-        """Test Beta distribution deletion"""
         del cls._dist

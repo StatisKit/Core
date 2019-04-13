@@ -43,7 +43,7 @@ namespace statiskit
 
         boost::mt19937 _random_generator = boost::mt19937(0);
 
-        boost::mt19937& get_random_generator()
+        boost::mt19937& get_random_generator(void)
         { return _random_generator; }
 
         std::unordered_map< uintptr_t, unsigned int > iterations = std::unordered_map< uintptr_t, unsigned int >();
@@ -76,16 +76,13 @@ namespace statiskit
         }
     }
     
-    void set_seed()
+    void set_seed(void)
     { __impl::_random_generator.seed(); }
 
     void set_seed(const Index& seed)
     { __impl::_random_generator.seed(seed); }
 
     not_implemented_error::not_implemented_error(const std::string& function, const std::string& file, const unsigned int& line) : std::runtime_error("'" + function + "' in file '" + file + "' at line " + __impl::to_string(line) + " is not implemented")
-    {}
-
-    proxy_connection_error::proxy_connection_error() : std::exception()
     {}
 
     parameter_error::parameter_error(const std::string& parameter, const std::string& error) : std::runtime_error("'" + parameter + "' parameter: " + error)
@@ -100,7 +97,7 @@ namespace statiskit
     nullptr_error::nullptr_error(const std::string& parameter) : parameter_error(parameter, "cannot be set to nullptr")
     {}
 
-    Schedule::~Schedule()
+    Schedule::~Schedule(void)
     {}
 
     ExponentialSchedule::ExponentialSchedule(const double& theta)
@@ -109,13 +106,13 @@ namespace statiskit
     ExponentialSchedule::ExponentialSchedule(const ExponentialSchedule& schedule)
     { _theta = schedule._theta; }
 
-    ExponentialSchedule::~ExponentialSchedule()
+    ExponentialSchedule::~ExponentialSchedule(void)
     {}
 
     double ExponentialSchedule::operator() (const double& stage) const
     { return exp(- stage / _theta); }
 
-    const double& ExponentialSchedule::get_theta() const
+    const double& ExponentialSchedule::get_theta(void) const
     { return _theta; }
 
     void ExponentialSchedule::set_theta(const double& theta)

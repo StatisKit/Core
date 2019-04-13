@@ -15,16 +15,13 @@ class TestSlopeHeuristic(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """Test multivariate data construction"""
         cls._data = data.load('capushe')
 
     @attr(win=False)
     def test_slope_heuristic(self):
-        """Test slope heuristic"""
         sh = core.SlopeHeuristic([pen.value for pen in self._data.pen.events], [-contrast.value for contrast in self._data.contrast.events])
         sh.plot()
 
     @classmethod
     def tearDownClass(cls):
-        """Test multivariate data deletion"""
         del cls._data

@@ -8,22 +8,28 @@ namespace autowig
     {
         public:
 
-
-        protected:
+            typedef class ::std::unordered_set< unsigned long int, struct ::std::hash< unsigned long int >, struct ::std::equal_to< unsigned long int >, class ::std::allocator< unsigned long int > >  return_type_c93b6deaf5ac5c9c8019576650d00ef6;
+            virtual return_type_c93b6deaf5ac5c9c8019576650d00ef6 children() const override { PYBIND11_OVERLOAD(return_type_c93b6deaf5ac5c9c8019576650d00ef6, class_type, children, ); };
             typedef double  return_type_9a2b587d8c785568a61d786f1bf14a8d;
             typedef struct ::statiskit::MultivariateConditionalDistribution const * param_9a2b587d8c785568a61d786f1bf14a8d_0_type;
             typedef class ::statiskit::MultivariateConditionalData const & param_9a2b587d8c785568a61d786f1bf14a8d_1_type;
             virtual return_type_9a2b587d8c785568a61d786f1bf14a8d scoring(param_9a2b587d8c785568a61d786f1bf14a8d_0_type param_0, param_9a2b587d8c785568a61d786f1bf14a8d_1_type param_1) const override { PYBIND11_OVERLOAD_PURE(return_type_9a2b587d8c785568a61d786f1bf14a8d, class_type, scoring, param_0, param_1); };
-
-        public:
+            typedef class ::std::unique_ptr< struct ::statiskit::MultivariateConditionalDistributionEstimation, struct ::std::default_delete< struct ::statiskit::MultivariateConditionalDistributionEstimation > >  return_type_7f7d8d4a95a053b7a1804b1f6d9aa937;
+            typedef class ::statiskit::MultivariateConditionalData const & param_7f7d8d4a95a053b7a1804b1f6d9aa937_0_type;
+            typedef bool const & param_7f7d8d4a95a053b7a1804b1f6d9aa937_1_type;
+            virtual return_type_7f7d8d4a95a053b7a1804b1f6d9aa937 operator()(param_7f7d8d4a95a053b7a1804b1f6d9aa937_0_type param_0, param_7f7d8d4a95a053b7a1804b1f6d9aa937_1_type param_1) const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_7f7d8d4a95a053b7a1804b1f6d9aa937, class_type, operator(), param_0, param_1); };
             typedef class ::std::unique_ptr< struct ::statiskit::MultivariateConditionalDistributionEstimation::Estimator, struct ::std::default_delete< struct ::statiskit::MultivariateConditionalDistributionEstimation::Estimator > >  return_type_59986b4f11705d0e8aa830dfb22c3798;
             virtual return_type_59986b4f11705d0e8aa830dfb22c3798 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_59986b4f11705d0e8aa830dfb22c3798, class_type, copy, ); };
+            typedef ::uintptr_t  return_type_ed723b56ee6d50838db979e102419f39;
+            virtual return_type_ed723b56ee6d50838db979e102419f39 identifier() const override { PYBIND11_OVERLOAD(return_type_ed723b56ee6d50838db979e102419f39, class_type, identifier, ); };
     };
 
     class Publicist : public class_type
     {
         public:
+            using class_type::children;
             using class_type::scoring;
+            using class_type::identifier;
     };
 }
 

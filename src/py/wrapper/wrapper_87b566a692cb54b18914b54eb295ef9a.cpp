@@ -9,8 +9,6 @@ namespace autowig
         public:
             using ::statiskit::UnivariateDispersionEstimation::UnivariateDispersionEstimation;
 
-
-        public:
             typedef double const & return_type_a18c7d90bacb538d9895cf5c0091b871;
             virtual return_type_a18c7d90bacb538d9895cf5c0091b871 get_dispersion() const override { PYBIND11_OVERLOAD_PURE(return_type_a18c7d90bacb538d9895cf5c0091b871, class_type, get_dispersion, ); };
     };

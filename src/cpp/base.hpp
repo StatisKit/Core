@@ -8,7 +8,7 @@
 namespace statiskit
 {
     template<class T, class D, class B>
-        PolymorphicCopy< T, D, B >::PolymorphicCopy() : B()
+        PolymorphicCopy< T, D, B >::PolymorphicCopy(void) : B()
         {}
 
     template<class T, class D, class B>
@@ -16,7 +16,7 @@ namespace statiskit
         {}
 
     template<class T, class D, class B>
-        std::unique_ptr< T > PolymorphicCopy< T, D, B >::copy() const
+        std::unique_ptr< T > PolymorphicCopy< T, D, B >::copy(void) const
         { return std::make_unique< D >(static_cast< const D& >(*this)); }
              
     namespace __impl
@@ -124,7 +124,7 @@ namespace statiskit
         {}
 
     template<typename T>
-        Optimization< T >::Optimization()
+        Optimization< T >::Optimization(void)
         {
             _mindiff = 1e-5;
             _minits = 1;
@@ -140,11 +140,11 @@ namespace statiskit
         }
 
     template<typename T>
-        Optimization< T >::~Optimization()
+        Optimization< T >::~Optimization(void)
         {}
 
     template<typename T>
-        const double& Optimization< T >::get_mindiff() const
+        const double& Optimization< T >::get_mindiff(void) const
         { return _mindiff; }
 
     template<typename T>
@@ -152,7 +152,7 @@ namespace statiskit
         { _mindiff = mindiff; }
 
     template<typename T>
-        unsigned int Optimization< T >::get_minits() const
+        unsigned int Optimization< T >::get_minits(void) const
         { return _minits; }
 
     template<typename T>
@@ -160,7 +160,7 @@ namespace statiskit
         { _minits = minits; }
 
     template<typename T>
-        unsigned int Optimization< T >::get_maxits() const
+        unsigned int Optimization< T >::get_maxits(void) const
         { return _maxits; }
 
     template<typename T>
@@ -182,7 +182,7 @@ namespace statiskit
         }
 
     template<typename T>
-        SimulatedAnnealing< T >::SimulatedAnnealing()
+        SimulatedAnnealing< T >::SimulatedAnnealing(void)
         {
             _schedule = new ExponentialSchedule(1.);
             _minits = 1;
@@ -201,7 +201,7 @@ namespace statiskit
         }
 
     template<typename T>
-        SimulatedAnnealing< T >::~SimulatedAnnealing()
+        SimulatedAnnealing< T >::~SimulatedAnnealing(void)
         {
             if(_schedule)
             {
@@ -211,7 +211,7 @@ namespace statiskit
         }
 
     template<typename T>
-        const Schedule* SimulatedAnnealing< T >::get_schedule() const
+        const Schedule* SimulatedAnnealing< T >::get_schedule(void) const
         { return _schedule; }
 
     template<typename T>
@@ -219,7 +219,7 @@ namespace statiskit
         { _schedule = schedule.copy().release(); }
 
     template<typename T>
-        unsigned int SimulatedAnnealing< T >::get_minits() const
+        unsigned int SimulatedAnnealing< T >::get_minits(void) const
         { return _minits; }
 
     template<typename T>
@@ -227,7 +227,7 @@ namespace statiskit
         { _minits = minits; }
 
     template<typename T>
-        unsigned int SimulatedAnnealing< T >::get_maxits() const
+        unsigned int SimulatedAnnealing< T >::get_maxits(void) const
         { return _maxits; }
 
     template<typename T>

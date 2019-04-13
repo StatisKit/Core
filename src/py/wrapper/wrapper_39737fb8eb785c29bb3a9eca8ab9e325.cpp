@@ -8,20 +8,12 @@ namespace autowig
     {
         public:
 
-
-        public:
             typedef double  return_type_1aba7220d8185b52a1202c2468b95edb;
             virtual return_type_1aba7220d8185b52a1202c2468b95edb weight() const override { PYBIND11_OVERLOAD_PURE(return_type_1aba7220d8185b52a1202c2468b95edb, class_type, weight, ); };
-
-        public:
             typedef struct ::statiskit::UnivariateEvent const * return_type_06724bc676b252b98a07b30de6e65bee;
             virtual return_type_06724bc676b252b98a07b30de6e65bee event() const override { PYBIND11_OVERLOAD_PURE(return_type_06724bc676b252b98a07b30de6e65bee, class_type, event, ); };
-
-        public:
             typedef struct ::statiskit::UnivariateData::Generator & return_type_de48c02aa8db50929f6a3f8784c2ec4d;
             virtual return_type_de48c02aa8db50929f6a3f8784c2ec4d operator++() override { PYBIND11_OVERLOAD_PURE(return_type_de48c02aa8db50929f6a3f8784c2ec4d, class_type, operator++, ); };
-
-        public:
             typedef bool  return_type_ef9b151802e1543cb7c98d1c40761fbe;
             virtual return_type_ef9b151802e1543cb7c98d1c40761fbe is_valid() const override { PYBIND11_OVERLOAD_PURE(return_type_ef9b151802e1543cb7c98d1c40761fbe, class_type, is_valid, ); };
     };

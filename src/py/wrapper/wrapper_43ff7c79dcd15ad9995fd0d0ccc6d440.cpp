@@ -9,12 +9,8 @@ namespace autowig
         public:
             using ::statiskit::MultivariateDistributionEstimation::MultivariateDistributionEstimation;
 
-
-        public:
             typedef class ::std::unique_ptr< struct ::statiskit::MultivariateDistributionEstimation, struct ::std::default_delete< struct ::statiskit::MultivariateDistributionEstimation > >  return_type_6b2ddebe29b356369027219f55c1bc79;
             virtual return_type_6b2ddebe29b356369027219f55c1bc79 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_6b2ddebe29b356369027219f55c1bc79, class_type, copy, ); };
-
-        public:
             typedef ::statiskit::MultivariateDistributionEstimation::estimated_type const * return_type_123ca6ff048a55c3916851be0f12a662;
             virtual return_type_123ca6ff048a55c3916851be0f12a662 get_estimated() const override { PYBIND11_OVERLOAD_PURE(return_type_123ca6ff048a55c3916851be0f12a662, class_type, get_estimated, ); };
     };

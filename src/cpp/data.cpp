@@ -352,15 +352,11 @@ namespace statiskit
 
     const UnivariateEvent* UnivariateDataFrame::Generator::event() const
     {
-        if(!_data)
-        { throw proxy_connection_error(); }
         return _data->get_event(_index);
     }
 
     double UnivariateDataFrame::Generator::weight() const
     {
-        if(!_data)
-        { throw proxy_connection_error(); }
         return 1;
     }
 

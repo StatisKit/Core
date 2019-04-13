@@ -20,17 +20,14 @@ class TestSampleSpace(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """Test multivariate data construction"""
         cls._data = data.load('capushe')
 
     def test_encode(self):
-        """Test sample space encoding of events"""
         for event in self._data.events:
             self._data.sample_space.encode(event)
             
     @classmethod
     def tearDownClass(cls):
-        """Test multivariate data deletion"""
         del cls._data
 
 @attr(linux=True,
@@ -41,22 +38,18 @@ class TestNominalSampleSpace(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """Test nominal sample space construction"""
         cls._space = core.NominalSampleSpace('C', 'B', 'A')
 
     def test_values(self):
-        """Test nominal values"""
         self.assertEqual(self._space.values, ['A', 'B', 'C']) # list of (lexicographically ordered) values
 
     def test_reference(self):
-        """Test get and set reference"""
         self.assertEqual(self._space.reference, 'C')
         self._space.reference = 'B'
         self.assertEqual(self._space.reference, 'B')
 
     @classmethod
     def tearDownClass(cls):
-        """Test nominal sample space deletion"""
         del cls._space
 
 @attr(linux=True,
@@ -67,11 +60,9 @@ class TestOrdinalSampleSpace(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """Test ordinal sample space construction"""
         cls._space = core.OrdinalSampleSpace('C', 'B', 'A')
 
     def test_values(self):
-        """Test ordinal values"""
         self.assertEqual(self._space.values, ['A', 'B', 'C']) # list of (lexicographically ordered) values
         self.assertEqual(list(self._space.ordered), ['C', 'B', 'A']) # list of ordered values
         self._space.ordered = ['A', 'B', 'C']
@@ -79,7 +70,6 @@ class TestOrdinalSampleSpace(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Test ordinal sample space deletion"""
         del cls._space
 
 @attr(linux=True,
@@ -94,11 +84,9 @@ class TestHierarchicalSampleSpace(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """Test hierarchical sample space construction"""
         cls._space = core.HierarchicalSampleSpace(cls._sample_space1)
 
     def test_partition(self):
-        """Test hierarchical sample space partition"""
         self.assertEqual(self._space.values, ['A', 'B', 'C'])  # list of (lexicographically ordered) values
         self._space.partition('B', self._sample_space2)
         self.assertEqual(self._space.values, ['A', 'Ba', 'Bb', 'Bc', 'C'])  # list of (lexicographically ordered) values after partition
@@ -107,5 +95,4 @@ class TestHierarchicalSampleSpace(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Test hierarchical sample space deletion"""
         del cls._space

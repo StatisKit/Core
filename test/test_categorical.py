@@ -16,12 +16,10 @@ class TestBinary(unittest.TestCase, AbstractTestUnivariateDistribution):
 
     @classmethod
     def setUpClass(cls):
-        """Test binary distribution construction"""
         cls._dist1 = core.BinaryDistribution('B', 'A')
         cls._dist2 = core.BinaryDistribution('B', 'A', 0.3)
 
     def test_pdf(self):
-        """Test pdf of binary distribution"""
         self.assertEqual(self._dist1.pdf('B'), 0.5)
         self.assertEqual(self._dist1.pdf('A'), 0.5)
         self.assertEqual(self._dist2.pdf('B'), 0.3)
@@ -29,7 +27,6 @@ class TestBinary(unittest.TestCase, AbstractTestUnivariateDistribution):
 
     @classmethod
     def tearDownClass(cls):
-        """Test binary distribution deletion"""
         del cls._dist1
         del cls._dist2
 
@@ -42,19 +39,16 @@ class TestNominal(unittest.TestCase, AbstractTestUnivariateDistribution):
 
     @classmethod
     def setUpClass(cls):
-        """Test nominal distribution construction"""
         cls._dist = core.NominalDistribution('A', 'B', 'C',
                                               pi = linalg.Vector([2., 1., 3.]))
 
     def test_mle(self):
-        """Test categorical ML estimation"""
         data = self._dist.simulation(10)
         mle = core.frequency_estimation(data)
         self.assertGreaterEqual(mle.estimated.loglikelihood(data), self._dist.loglikelihood(data))
 
     @classmethod
     def tearDownClass(cls):
-        """Test distribution deletion"""
         del cls._dist
 
 @attr(linux=True,
@@ -65,12 +59,10 @@ class TestOrdinal(TestNominal):
 
     @classmethod
     def setUpClass(cls):
-        """Test ordinal distribution construction"""
         cls._dist_unif = core.OrdinalDistribution('C', 'B', 'A')
         cls._dist = core.OrdinalDistribution('C', 'B', 'A', ordered_pi = linalg.Vector([2., 1., 3.]))
 
     def test_get_set(self):
-        """Test Ordinal distribution get and set ordered pi and oredered values"""
         self.assertEqual(self._dist_unif.pdf('B'), 1/3.)
         self.assertEqual(self._dist_unif.cdf('B'), 2/3.)
         self.assertEqual(self._dist_unif.ldf('B'), math.log(1/3.))
@@ -83,7 +75,6 @@ class TestOrdinal(TestNominal):
 
     @classmethod
     def tearDownClass(cls):
-        """Test ordinal distribution deletion"""
         del cls._dist_unif
         del cls._dist
 
@@ -101,16 +92,13 @@ class TestHierarchical(unittest.TestCase, AbstractTestUnivariateDistribution):
 
     @classmethod
     def setUpClass(cls):
-        """Test hierarchical distribution construction"""
         cls._dist = core.HierarchicalDistribution(cls._hierarchical_space)
 
     def test_internal_ldf(self):
-        """Test internal log pdf of hierarchical distribution"""
         self.assertAlmostEqual(self._dist.pdf('C'), float(1/3), places=self._places)
         self.assertAlmostEqual(self._dist.pdf('Ba'), float(1/9), places=self._places)
         self.assertAlmostEqual(self._dist.internal_pdf('B'), float(1/3), places=self._places)
 
     @classmethod
     def tearDownClass(cls):
-        """Test hierarchical distribution deletion"""
         del cls._dist

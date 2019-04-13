@@ -3,7 +3,7 @@
 
 namespace statiskit
 {
-    UnivariateSampleSpace::~UnivariateSampleSpace()
+    UnivariateSampleSpace::~UnivariateSampleSpace(void)
     {}
 
     CategoricalSampleSpace::CategoricalSampleSpace(const std::set< std::string >& values)
@@ -15,19 +15,19 @@ namespace statiskit
     	this->encoding = sample_space.encoding;
     }
 
-    CategoricalSampleSpace::~CategoricalSampleSpace() 
+    CategoricalSampleSpace::~CategoricalSampleSpace(void) 
     {}
 
-    const std::set< std::string >& CategoricalSampleSpace::get_values() const
+    const std::set< std::string >& CategoricalSampleSpace::get_values(void) const
     { return *(this->values.get()); }
     
-    encoding_type CategoricalSampleSpace::get_encoding() const
+    encoding_type CategoricalSampleSpace::get_encoding(void) const
     { return this->encoding; }
     
-    Index CategoricalSampleSpace::get_cardinality() const
+    Index CategoricalSampleSpace::get_cardinality(void) const
     { return this->values->size(); }
 
-    outcome_type CategoricalSampleSpace::get_outcome() const
+    outcome_type CategoricalSampleSpace::get_outcome(void) const
     { return CATEGORICAL; }
 
     bool CategoricalSampleSpace::is_compatible(const UnivariateEvent* event) const
@@ -76,13 +76,13 @@ namespace statiskit
         this->encoding = sample_space.encoding;
     }
 
-    NominalSampleSpace::~NominalSampleSpace()
+    NominalSampleSpace::~NominalSampleSpace(void)
     {}
 
-    ordering_type NominalSampleSpace::get_ordering() const
+    ordering_type NominalSampleSpace::get_ordering(void) const
     { return NONE; }
 
-    const std::string& NominalSampleSpace::get_reference() const
+    const std::string& NominalSampleSpace::get_reference(void) const
     { return *(this->reference); }
 
     void NominalSampleSpace::set_reference(const std::string& reference)
@@ -95,7 +95,7 @@ namespace statiskit
         }
     }
        
-    void NominalSampleSpace::randomize()
+    void NominalSampleSpace::randomize(void)
     {
         this->reference = this->values->cbegin();
         boost::random::uniform_int_distribution<> dist(0, this->get_cardinality()-1);
@@ -155,10 +155,10 @@ namespace statiskit
         return dummy;
     }
 
-    std::unique_ptr< OrdinalSampleSpace > NominalSampleSpace::as_ordinal() const
+    std::unique_ptr< OrdinalSampleSpace > NominalSampleSpace::as_ordinal(void) const
     { return std::make_unique< OrdinalSampleSpace >(std::vector< std::string >(this->values->cbegin(), this->values->cend())); }
 
-    std::unique_ptr< UnivariateSampleSpace > NominalSampleSpace::copy() const
+    std::unique_ptr< UnivariateSampleSpace > NominalSampleSpace::copy(void) const
     { return std::make_unique< NominalSampleSpace >(*this); }
 
     OrdinalSampleSpace::OrdinalSampleSpace(const std::vector< std::string >& values) : CategoricalSampleSpace(std::set< std::string >(values.cbegin(), values.cend()))
@@ -176,10 +176,10 @@ namespace statiskit
         this->encoding = sample_space.encoding;
     }
 
-    OrdinalSampleSpace::~OrdinalSampleSpace()
+    OrdinalSampleSpace::~OrdinalSampleSpace(void)
     {}
 
-    ordering_type OrdinalSampleSpace::get_ordering() const
+    ordering_type OrdinalSampleSpace::get_ordering(void) const
     { return TOTAL; }
 
     void OrdinalSampleSpace::set_encoding(const encoding_type& encoding)
@@ -228,8 +228,9 @@ namespace statiskit
         return dummy;
     }
 
-    std::vector< std::string > OrdinalSampleSpace::get_ordered() const
+    std::vector< std::string > OrdinalSampleSpace::get_ordered(void) const
     {
+        BREAKPOINT();
         std::vector< std::string > values(get_cardinality());
         for (std::set< std::string >::const_iterator it = this->values->cbegin(), ite = this->values->cend(); it != ite; ++it) {
             values[(*this->_rank)[distance(this->values->cbegin(), it)]] = *it;
@@ -257,7 +258,7 @@ namespace statiskit
         this->_rank = rank;
     }
     
-    const std::vector< Index >& OrdinalSampleSpace::get_rank() const
+    const std::vector< Index >& OrdinalSampleSpace::get_rank(void) const
     { return *this->_rank; }
 
     void OrdinalSampleSpace::set_rank(const std::vector< Index >& rank)
@@ -279,7 +280,7 @@ namespace statiskit
         this->_rank = std::make_shared< std::vector< Index > >(rank);
     }
 
-    void OrdinalSampleSpace::randomize()
+    void OrdinalSampleSpace::randomize(void)
     {
         detach();
         std::set< std::string >::iterator first_it = this->values->begin(), it_end = this->values->end();
@@ -297,13 +298,13 @@ namespace statiskit
         }
     }
 
-    std::unique_ptr< NominalSampleSpace > OrdinalSampleSpace::as_nominal() const
+    std::unique_ptr< NominalSampleSpace > OrdinalSampleSpace::as_nominal(void) const
     { return std::make_unique< NominalSampleSpace >(*(this->values.get())); }
 
-    std::unique_ptr< UnivariateSampleSpace > OrdinalSampleSpace::copy() const
+    std::unique_ptr< UnivariateSampleSpace > OrdinalSampleSpace::copy(void) const
     { return std::make_unique< OrdinalSampleSpace >(*this); }
 
-    void OrdinalSampleSpace::detach()
+    void OrdinalSampleSpace::detach(void)
     {
         if(this->_rank && !this->_rank.unique())
         { this->_rank = std::make_shared< std::vector< Index > >(*this->_rank);}
@@ -324,14 +325,14 @@ namespace statiskit
         _parents = p_sample_space._parents;
     }
 
-    HierarchicalSampleSpace::~HierarchicalSampleSpace()
+    HierarchicalSampleSpace::~HierarchicalSampleSpace(void)
     { 
         for(std::map< std::string, CategoricalSampleSpace* >::iterator it = _tree_sample_space.begin(), it_end = _tree_sample_space.end(); it != it_end; ++it)
         { delete it->second; }
         _tree_sample_space.clear();
     }
 
-    ordering_type HierarchicalSampleSpace::get_ordering() const
+    ordering_type HierarchicalSampleSpace::get_ordering(void) const
     {
         // std::map< std::string, CategoricalSampleSpace* >::const_iterator it = _tree_sample_space.cbegin(), it_end = _tree_sample_space.cend();
         // ordering_type ordering = it->second->get_ordering();
@@ -436,19 +437,19 @@ namespace statiskit
         { return ""; }
     }
 
-    std::unique_ptr< UnivariateSampleSpace > HierarchicalSampleSpace::copy() const
+    std::unique_ptr< UnivariateSampleSpace > HierarchicalSampleSpace::copy(void) const
     { return std::make_unique< HierarchicalSampleSpace >(*this); }
 
-    HierarchicalSampleSpace::const_iterator HierarchicalSampleSpace::cbegin() const
+    HierarchicalSampleSpace::const_iterator HierarchicalSampleSpace::cbegin(void) const
     { return _tree_sample_space.cbegin(); }
 
-    HierarchicalSampleSpace::const_iterator HierarchicalSampleSpace::cend() const
+    HierarchicalSampleSpace::const_iterator HierarchicalSampleSpace::cend(void) const
     { return _tree_sample_space.cend(); }
             
     const CategoricalSampleSpace* HierarchicalSampleSpace::get_sample_space(const std::string& value)
     { return _tree_sample_space[value]; }
 
-    std::map< std::string, std::string > HierarchicalSampleSpace::get_parents() const
+    std::map< std::string, std::string > HierarchicalSampleSpace::get_parents(void) const
     { return _parents; }
 
     // const std::string HierarchicalSampleSpace::get_parent(const std::string& value)
@@ -471,10 +472,15 @@ namespace statiskit
         return compatible;
     }
 
-    outcome_type DiscreteSampleSpace::get_outcome() const
+    void HierarchicalSampleSpace::detach(void)
+    {
+        NOT_IMPLEMENTED();
+    }
+
+    outcome_type DiscreteSampleSpace::get_outcome(void) const
     { return DISCRETE; }
 
-    ordering_type DiscreteSampleSpace::get_ordering() const
+    ordering_type DiscreteSampleSpace::get_ordering(void) const
     { return TOTAL; }
 
     IntegerSampleSpace::IntegerSampleSpace(const int& lower_bound, const int& upper_bound)
@@ -483,7 +489,7 @@ namespace statiskit
         _upper_bound = upper_bound;
     }
 
-    IntegerSampleSpace::~IntegerSampleSpace()
+    IntegerSampleSpace::~IntegerSampleSpace(void)
     {}
 
     bool IntegerSampleSpace::is_compatible(const UnivariateEvent* event) const
@@ -548,29 +554,29 @@ namespace statiskit
         return compatible;
     }
 
-    const int& IntegerSampleSpace::get_lower_bound() const
+    const int& IntegerSampleSpace::get_lower_bound(void) const
     { return _lower_bound; }
 
-    const int& IntegerSampleSpace::get_upper_bound() const
+    const int& IntegerSampleSpace::get_upper_bound(void) const
     { return _upper_bound; }
 
-    std::unique_ptr< UnivariateSampleSpace > IntegerSampleSpace::copy() const
+    std::unique_ptr< UnivariateSampleSpace > IntegerSampleSpace::copy(void) const
     { return std::make_unique< IntegerSampleSpace >(*this); }
 
     const IntegerSampleSpace NN = IntegerSampleSpace(0);
 
-    const IntegerSampleSpace& get_NN()
+    const IntegerSampleSpace& get_NN(void)
     { return NN; }
 
     const IntegerSampleSpace ZZ = IntegerSampleSpace();
 
-    const IntegerSampleSpace& get_ZZ()
+    const IntegerSampleSpace& get_ZZ(void)
     { return ZZ; }
 
-    outcome_type ContinuousSampleSpace::get_outcome() const
+    outcome_type ContinuousSampleSpace::get_outcome(void) const
     { return CONTINUOUS; }
 
-    ordering_type ContinuousSampleSpace::get_ordering() const
+    ordering_type ContinuousSampleSpace::get_ordering(void) const
     { return TOTAL; }
 
     RealSampleSpace::RealSampleSpace(const double& lhs, const double& rhs, const bool& left_closed, const bool& right_closed)
@@ -589,7 +595,7 @@ namespace statiskit
         _right_closed = right_closed && !boost::math::isinf(_upper_bound);
     }
 
-    RealSampleSpace::~RealSampleSpace()
+    RealSampleSpace::~RealSampleSpace(void)
     {}
 
     bool RealSampleSpace::is_compatible(const UnivariateEvent* event) const
@@ -682,34 +688,34 @@ namespace statiskit
         return compatible;
     }
 
-    const double& RealSampleSpace::get_lower_bound() const
+    const double& RealSampleSpace::get_lower_bound(void) const
     { return _lower_bound; }
 
-    const double& RealSampleSpace::get_upper_bound() const
+    const double& RealSampleSpace::get_upper_bound(void) const
     { return _upper_bound; }
 
-    const bool& RealSampleSpace::get_left_closed() const
+    const bool& RealSampleSpace::get_left_closed(void) const
     { return _left_closed; }
 
-    const bool& RealSampleSpace::get_right_closed() const
+    const bool& RealSampleSpace::get_right_closed(void) const
     { return _right_closed; }
     
-    std::unique_ptr< UnivariateSampleSpace > RealSampleSpace::copy() const
+    std::unique_ptr< UnivariateSampleSpace > RealSampleSpace::copy(void) const
     { return std::make_unique< RealSampleSpace >(*this); }
 
     const RealSampleSpace RR = RealSampleSpace();
 
-    const RealSampleSpace& get_RR()
+    const RealSampleSpace& get_RR(void)
     { return RR; }
 
     const RealSampleSpace PR = RealSampleSpace(0);
 
-    const RealSampleSpace& get_PR()
+    const RealSampleSpace& get_PR(void)
     { return PR; }
 
     const RealSampleSpace NR = RealSampleSpace(-1*std::numeric_limits< double >::infinity(), 0);
 
-    const RealSampleSpace& get_NR()
+    const RealSampleSpace& get_NR(void)
     { return NR; }
 
     /*Eigen::MatrixXd MultivariateSampleSpace::encode(const MultivariateEvent& event, const std::set< std::set<Index> >& interactions) const
@@ -808,7 +814,7 @@ namespace statiskit
         }
     }*/
 
-    MultivariateSampleSpace::~MultivariateSampleSpace()
+    MultivariateSampleSpace::~MultivariateSampleSpace(void)
     {}
 
     bool MultivariateSampleSpace::is_compatible(const MultivariateEvent* event) const
@@ -830,7 +836,7 @@ namespace statiskit
         return compatible;
     }
 
-    Index MultivariateSampleSpace::encode() const
+    Index MultivariateSampleSpace::encode(void) const
     {
         Index _size = 0;
         for(Index index = 0, max_index = size(); index < max_index; ++index)
@@ -919,7 +925,7 @@ namespace statiskit
         { _sample_spaces[index] = sample_space._sample_spaces[index]->copy().release(); }
     }
 
-    VectorSampleSpace::~VectorSampleSpace()
+    VectorSampleSpace::~VectorSampleSpace(void)
     {
         for(Index index = 0, max_index = _sample_spaces.size(); index < max_index; ++index)
         { 
@@ -929,7 +935,7 @@ namespace statiskit
         _sample_spaces.clear();
     }
 
-    Index VectorSampleSpace::size() const
+    Index VectorSampleSpace::size(void) const
     {return _sample_spaces.size(); }
 
     const UnivariateSampleSpace* VectorSampleSpace::get(const Index& index) const
@@ -941,7 +947,7 @@ namespace statiskit
         _sample_spaces[index] = sample_space.copy().release();
     }
     
-    std::unique_ptr< MultivariateSampleSpace > VectorSampleSpace::copy() const
+    std::unique_ptr< MultivariateSampleSpace > VectorSampleSpace::copy(void) const
     { return std::make_unique< VectorSampleSpace >(*this); }
 
 }
