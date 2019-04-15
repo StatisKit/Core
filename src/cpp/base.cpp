@@ -43,7 +43,7 @@ namespace statiskit
 
         boost::mt19937 _random_generator = boost::mt19937(0);
 
-        boost::mt19937& get_random_generator(void)
+        boost::mt19937& get_random_generator()
         { return _random_generator; }
 
         std::unordered_map< uintptr_t, unsigned int > iterations = std::unordered_map< uintptr_t, unsigned int >();
@@ -76,7 +76,7 @@ namespace statiskit
         }
     }
     
-    void set_seed(void)
+    void set_seed()
     { __impl::_random_generator.seed(); }
 
     void set_seed(const Index& seed)
@@ -97,7 +97,7 @@ namespace statiskit
     nullptr_error::nullptr_error(const std::string& parameter) : parameter_error(parameter, "cannot be set to nullptr")
     {}
 
-    Schedule::~Schedule(void)
+    Schedule::~Schedule()
     {}
 
     ExponentialSchedule::ExponentialSchedule(const double& theta)
@@ -106,13 +106,13 @@ namespace statiskit
     ExponentialSchedule::ExponentialSchedule(const ExponentialSchedule& schedule)
     { _theta = schedule._theta; }
 
-    ExponentialSchedule::~ExponentialSchedule(void)
+    ExponentialSchedule::~ExponentialSchedule()
     {}
 
     double ExponentialSchedule::operator() (const double& stage) const
     { return exp(- stage / _theta); }
 
-    const double& ExponentialSchedule::get_theta(void) const
+    const double& ExponentialSchedule::get_theta() const
     { return _theta; }
 
     void ExponentialSchedule::set_theta(const double& theta)

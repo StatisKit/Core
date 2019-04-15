@@ -350,10 +350,10 @@ namespace statiskit
                     _tree_distribution[it->first] = new NominalDistribution(it->second->get_values());
                     break;
                 case TOTAL:
-                    _tree_distribution[it->first] = new OrdinalDistribution(static_cast< OrdinalSampleSpace* >(it->second)->get_ordered());
+                    _tree_distribution[it->first] = new OrdinalDistribution(static_cast< OrdinalSampleSpace* >(it->second.get())->get_ordered());
                     break;
                 case PARTIAL:
-                    _tree_distribution[it->first] = new HierarchicalDistribution(*(static_cast< HierarchicalSampleSpace* >(it->second)));
+                    _tree_distribution[it->first] = new HierarchicalDistribution(*(static_cast< HierarchicalSampleSpace* >(it->second.get())));
                     break;
             }
             // for(std::set< std::string >::const_iterator it2 = it->second->get_values().cbegin(), it2_end = it->second->get_values().cend(); it2 != it2_end; ++it2)

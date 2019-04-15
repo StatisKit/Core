@@ -40,6 +40,8 @@
 
 #define NOT_IMPLEMENTED() _Pragma("message \"not implemented function\""); throw not_implemented_error(__PRETTY_FUNCTION__, __FILE__, __LINE__)
 
+#define INFOPOINT() std::cout << __PRETTY_FUNCTION__ << "in file '" << __FILE__ << "' at line " << __LINE__ << std::endl
+
 #ifdef NDEBUG
 #define BREAKPOINT() _Pragma("message \"breakpoint ignored\"")
 #else
@@ -52,11 +54,11 @@ namespace statiskit
 
     template<class T, class D, class B=T> struct PolymorphicCopy : public B
     {
-        PolymorphicCopy(void);
+        PolymorphicCopy();
         PolymorphicCopy(const PolymorphicCopy<T, D, B>& other);
-        virtual ~PolymorphicCopy(void) = default;
+        virtual ~PolymorphicCopy() = default;
          
-        virtual std::unique_ptr< T > copy(void) const;
+        virtual std::unique_ptr< T > copy() const;
     };
 
     namespace __impl
@@ -76,7 +78,7 @@ namespace statiskit
          * 
          * The random generator used is the <a href="http://www.boost.org/doc/libs/1_60_0/doc/html/boost/random/mt19937.html">Mersenne Twister</a> random generator of the Boost.Random library
          */
-        STATISKIT_CORE_API boost::mt19937& get_random_generator(void);
+        STATISKIT_CORE_API boost::mt19937& get_random_generator();
 
         STATISKIT_CORE_API unsigned int get_maxits(const uintptr_t& ptr, const unsigned int& maxits);
         STATISKIT_CORE_API void set_maxits(const uintptr_t& ptr, const unsigned int& maxits);
@@ -87,7 +89,7 @@ namespace statiskit
         template<class U, class V> std::set< U > keys(const std::map< U, V >& map);
     }
 
-    STATISKIT_CORE_API void set_seed(void);
+    STATISKIT_CORE_API void set_seed();
     STATISKIT_CORE_API void set_seed(const Index& seed);
 
     struct STATISKIT_CORE_API not_implemented_error : std::runtime_error
@@ -132,17 +134,17 @@ namespace statiskit
         class Optimization : public T
         {
             public:
-                Optimization(void);
+                Optimization();
                 Optimization(const Optimization< T >& optimization);
-                virtual ~Optimization(void);
+                virtual ~Optimization();
 
-                const double& get_mindiff(void) const;
+                const double& get_mindiff() const;
                 void set_mindiff(const double& mindiff);
                 
-                unsigned int get_minits(void) const;
+                unsigned int get_minits() const;
                 void set_minits(const unsigned int& maxits);
 
-                unsigned int get_maxits(void) const;
+                unsigned int get_maxits() const;
                 void set_maxits(const unsigned int& maxits);
 
             protected:
@@ -155,11 +157,11 @@ namespace statiskit
 
     struct STATISKIT_CORE_API Schedule
     {
-        virtual ~Schedule(void) = 0;
+        virtual ~Schedule() = 0;
 
         virtual double operator() (const double& stage) const = 0;
 
-        virtual std::unique_ptr< Schedule > copy(void) const = 0;
+        virtual std::unique_ptr< Schedule > copy() const = 0;
     };
 
     class STATISKIT_CORE_API ExponentialSchedule : public PolymorphicCopy< Schedule, ExponentialSchedule >
@@ -167,11 +169,11 @@ namespace statiskit
         public:
             ExponentialSchedule(const double& theta);
             ExponentialSchedule(const ExponentialSchedule& schedule);
-            virtual ~ExponentialSchedule(void);
+            virtual ~ExponentialSchedule();
 
             virtual double operator() (const double& stage) const;
 
-            const double& get_theta(void) const;
+            const double& get_theta() const;
             void set_theta(const double& theta);
 
         protected:
@@ -182,17 +184,17 @@ namespace statiskit
         class SimulatedAnnealing : public T
         {
             public:
-                SimulatedAnnealing(void);
+                SimulatedAnnealing();
                 SimulatedAnnealing(const SimulatedAnnealing< T >& simulated_annealing);
-                virtual ~SimulatedAnnealing(void);
+                virtual ~SimulatedAnnealing();
 
-                const Schedule* get_schedule(void) const;
+                const Schedule* get_schedule() const;
                 void set_schedule(const Schedule& schedule);
                 
-                unsigned int get_minits(void) const;
+                unsigned int get_minits() const;
                 void set_minits(const unsigned int& maxits);
 
-                unsigned int get_maxits(void) const;
+                unsigned int get_maxits() const;
                 void set_maxits(const unsigned int& maxits);
 
             protected:
