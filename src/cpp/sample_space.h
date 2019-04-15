@@ -262,7 +262,9 @@ namespace statiskit
             virtual std::unique_ptr< MultivariateSampleSpace > copy() const;       
 
         protected:
-            std::vector< UnivariateSampleSpace* > _sample_spaces;
+            std::shared_ptr< std::vector< std::unique_ptr< UnivariateSampleSpace > > > sample_spaces;
+
+            void detach();
     };
 
     typedef std::vector< UnivariateSampleSpace* > SampleSpaceVector;

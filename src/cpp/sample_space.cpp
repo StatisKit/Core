@@ -307,8 +307,9 @@ namespace statiskit
 
     void OrdinalSampleSpace::detach()
     {
-        if(this->rank && !this->rank.unique())
-        { this->rank = std::make_shared< std::vector< Index > >(*this->rank);}
+        if (this->rank && !this->rank.unique()) {
+            this->rank = std::make_shared< std::vector< Index > >(*this->rank);
+        }
     }
     HierarchicalSampleSpace::HierarchicalSampleSpace(const CategoricalSampleSpace& root_sample_space) : CategoricalSampleSpace(root_sample_space.get_values())
     {
@@ -463,15 +464,21 @@ namespace statiskit
 
     void HierarchicalSampleSpace::detach()
     {
-        std::shared_ptr< std::set< std::string > > values = std::make_shared< std::set< std::string > >(this->values->begin(), this->values->end());
-        this->values = values;
-        std::shared_ptr< std::map< std::string, std::unique_ptr< CategoricalSampleSpace > > > tree_sample_space =  std::make_shared< std::map< std::string, std::unique_ptr< CategoricalSampleSpace > > >();
-        for (HierarchicalSampleSpace::const_iterator it = this->cbegin(), it_end = this->cend(); it != it_end; ++it) {
-            (*tree_sample_space)[it->first] = std::unique_ptr< CategoricalSampleSpace >(static_cast< CategoricalSampleSpace* >(it->second->copy().release()));
+        if (this->values && !this->values.unique()) {
+            std::shared_ptr< std::set< std::string > > values = std::make_shared< std::set< std::string > >(this->values->begin(), this->values->end());
+            this->values = values;
         }
-        this->tree_sample_space = tree_sample_space;
-        std::shared_ptr< std::map< std::string, std::string > > parents =  std::make_shared< std::map< std::string, std::string > >(this->parents->cbegin(), this->parents->cend());
-        this->parents = parents;
+        if (this->tree_sample_space && !this->tree_sample_space.unique()) {
+            std::shared_ptr< std::map< std::string, std::unique_ptr< CategoricalSampleSpace > > > tree_sample_space =  std::make_shared< std::map< std::string, std::unique_ptr< CategoricalSampleSpace > > >();
+            for (HierarchicalSampleSpace::const_iterator it = this->cbegin(), it_end = this->cend(); it != it_end; ++it) {
+                (*tree_sample_space)[it->first] = std::unique_ptr< CategoricalSampleSpace >(static_cast< CategoricalSampleSpace* >(it->second->copy().release()));
+            }
+            this->tree_sample_space = tree_sample_space;
+        }
+        if (this->parents && !this->parents.unique()) {
+            std::shared_ptr< std::map< std::string, std::string > > parents =  std::make_shared< std::map< std::string, std::string > >(this->parents->cbegin(), this->parents->cend());
+            this->parents = parents;
+        }
     }
 
     outcome_type DiscreteSampleSpace::get_outcome() const
@@ -800,57 +807,49 @@ namespace statiskit
     bool MultivariateSampleSpace::is_compatible(const MultivariateEvent* event) const
     {
         bool compatible = !event || event->size() == size();
-        if(compatible)
-        {
+        if (compatible) {
             const UnivariateSampleSpace* sample_space;
-            Index index = 0, max_index = size();
-            while(compatible && index < max_index)
-            {
-                sample_space = get(index);
+            Index index = 0, max_index = this->size();
+            while (compatible && index < max_index) {
+                sample_space = this->get(index);
                 compatible = sample_space && sample_space->is_compatible(event->get(index));
                 ++index;
             }
+        } else {
+            compatible = event;
         }
-        else
-        { compatible = event; }
         return compatible;
     }
 
     Index MultivariateSampleSpace::encode() const
     {
-        Index _size = 0;
-        for(Index index = 0, max_index = size(); index < max_index; ++index)
-        {
-            const UnivariateSampleSpace* sample_space = get(index);
-            if(sample_space->get_outcome() == CATEGORICAL)
-            {
-                _size += static_cast< const CategoricalSampleSpace* >(sample_space)->get_cardinality();
-                _size -= 1;
+        Index size = 0;
+        for (Index index = 0, max_index = this->size(); index < max_index; ++index) {
+            const UnivariateSampleSpace* sample_space = this->get(index);
+            if (sample_space->get_outcome() == CATEGORICAL) {
+                size += static_cast< const CategoricalSampleSpace* >(sample_space)->get_cardinality();
+                size -= 1;
+            } else {
+                size += 1;
             }
-            else
-            { _size += 1; }
         }
-        return _size;
+        return size;
     }
 
     Eigen::RowVectorXd MultivariateSampleSpace::encode(const MultivariateEvent& event) const
     {
         Eigen::RowVectorXd dummy;
-        if(event.size() != size())
-        { dummy = std::numeric_limits< double >::quiet_NaN() * Eigen::RowVectorXd::Ones(encode()); }
-        else
-        {
+        if (event.size() != this->size()) {
+            dummy = std::numeric_limits< double >::quiet_NaN() * Eigen::RowVectorXd::Ones(encode());
+        } else {
             Index shift = 0;
             dummy = Eigen::RowVectorXd::Zero(encode());
             Eigen::RowVectorXd temp;
-            for(Index index = 0, max_index = size(); index< max_index; ++index)
-            {
+            for (Index index = 0, max_index = this->size(); index< max_index; ++index) {
                 const UnivariateEvent* uevent = event.get(index);
-                if(uevent->get_event() == ELEMENTARY)
-                {
-                    const UnivariateSampleSpace* sample_space = get(index);
-                    switch(sample_space->get_outcome())
-                    {
+                if (uevent->get_event() == ELEMENTARY) {
+                    const UnivariateSampleSpace* sample_space = this->get(index);
+                    switch (sample_space->get_outcome()) {
                         case CATEGORICAL:
                             {
                                 temp = (static_cast< const CategoricalSampleSpace* >(sample_space)->encode(static_cast< const CategoricalElementaryEvent* >(uevent)->get_value()));
@@ -866,21 +865,17 @@ namespace statiskit
                             dummy(index + shift) = static_cast< const ContinuousElementaryEvent* >(uevent)->get_value();
                             break;
                     }
-                }
-                else
-                {
+                } else {
                     const UnivariateSampleSpace* sample_space = get(index);
-                    if(sample_space->get_outcome() == CATEGORICAL)
-                    {
+                    if (sample_space->get_outcome() == CATEGORICAL) {
                         Index max_size = index + shift + static_cast< const CategoricalSampleSpace* >(sample_space)->get_cardinality();
-                        while(index + shift < max_size)
-                        {
+                        while(index + shift < max_size) {
                             dummy(index + shift) = std::numeric_limits< double >::quiet_NaN();
                             ++shift;
                         }
+                    } else {
+                        dummy(index + shift) = std::numeric_limits< double >::quiet_NaN();
                     }
-                    else
-                    { dummy(index + shift) = std::numeric_limits< double >::quiet_NaN(); }
                 }
             }
         }
@@ -889,45 +884,50 @@ namespace statiskit
 
     VectorSampleSpace::VectorSampleSpace(const std::vector< UnivariateSampleSpace* >& sample_spaces)
     {
-        _sample_spaces.resize(sample_spaces.size(), nullptr);
-        for(Index index = 0, max_index = sample_spaces.size(); index < max_index; ++index)
-        {
-            if(!sample_spaces[index])
-            { throw nullptr_error("sample_spaces"); }
-             _sample_spaces[index] = sample_spaces[index]->copy().release(); 
+        this->sample_spaces = std::make_shared< std::vector< std::unique_ptr< UnivariateSampleSpace > > >();
+        this->sample_spaces->resize(sample_spaces.size());
+        for (Index index = 0, max_index = sample_spaces.size(); index < max_index; ++index) {
+            if (!sample_spaces[index]) {
+                throw nullptr_error("sample_spaces");
+            }
+            (*this->sample_spaces)[index] = sample_spaces[index]->copy(); 
         }
     }
 
     VectorSampleSpace::VectorSampleSpace(const VectorSampleSpace& sample_space)
     {
-        _sample_spaces.resize(sample_space.size(), nullptr);
-        for(Index index = 0, max_index = sample_space.size(); index < max_index; ++index)
-        { _sample_spaces[index] = sample_space._sample_spaces[index]->copy().release(); }
+        this->sample_spaces = sample_space.sample_spaces;
     }
 
     VectorSampleSpace::~VectorSampleSpace()
     {
-        for(Index index = 0, max_index = _sample_spaces.size(); index < max_index; ++index)
-        { 
-            delete _sample_spaces[index];
-            _sample_spaces[index] = nullptr;
-        }
-        _sample_spaces.clear();
     }
 
     Index VectorSampleSpace::size() const
-    {return _sample_spaces.size(); }
+    {return this->sample_spaces->size(); }
 
     const UnivariateSampleSpace* VectorSampleSpace::get(const Index& index) const
-    { return _sample_spaces[index]; }
+    { return (*this->sample_spaces)[index].get(); }
 
     void VectorSampleSpace::set(const Index& index, const UnivariateSampleSpace& sample_space)
     { 
-        delete _sample_spaces[index];
-        _sample_spaces[index] = sample_space.copy().release();
+        detach();
+        (*this->sample_spaces)[index] = sample_space.copy();
     }
     
     std::unique_ptr< MultivariateSampleSpace > VectorSampleSpace::copy() const
     { return std::make_unique< VectorSampleSpace >(*this); }
+
+    void VectorSampleSpace::detach()
+    {
+        if (this->sample_spaces && !this->sample_spaces.unique()) {
+            sample_spaces = std::make_shared< std::vector< std::unique_ptr< UnivariateSampleSpace > > >();
+            sample_spaces->resize(this->sample_spaces->size());
+            for (Index index = 0, max_index = this->sample_spaces->size(); index < max_index; ++index) {
+                (*sample_spaces)[index] = (*this->sample_spaces)[index]->copy(); 
+            }
+            this->sample_spaces = sample_spaces;
+        }
+    }
 
 }
