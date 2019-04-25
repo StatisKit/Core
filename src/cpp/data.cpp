@@ -8,11 +8,10 @@ namespace statiskit
     Index UnivariateData::size() const
     {
         Index index = 0;
-        std::unique_ptr< UnivariateData::Generator > _generator = generator();
-        while(_generator->is_valid())
-        {
+        std::unique_ptr< UnivariateData::Generator > generator = this->generator();
+        while (generator->is_valid()) {
             ++index;
-            ++(*_generator);
+            ++(*generator);
         }
         return index;
     }
@@ -20,11 +19,10 @@ namespace statiskit
     double UnivariateData::compute_total() const
     {
         double total = 0.;
-        std::unique_ptr< UnivariateData::Generator > _generator = generator();
-        while(_generator->is_valid())
-        {
-            total += _generator->weight();
-            ++(*_generator);
+        std::unique_ptr< UnivariateData::Generator > generator = this->generator();
+        while (generator->is_valid()) {
+            total += generator->weight();
+            ++(*generator);
         }
         return total;
     }
@@ -32,17 +30,13 @@ namespace statiskit
     std::unique_ptr< UnivariateEvent > UnivariateData::compute_minimum() const
     {
         std::unique_ptr< UnivariateEvent > minimum;
-        const UnivariateSampleSpace* sample_space = get_sample_space();
-        std::unique_ptr< UnivariateData::Generator > _generator = generator();
-        if(sample_space->get_ordering() == TOTAL)
-        {
-            while(_generator->is_valid() && !minimum)
-            {
-                const UnivariateEvent* event = _generator->event();
-                if(event && event->get_event() == ELEMENTARY)
-                { 
-                    switch(sample_space->get_outcome())
-                    {
+        const UnivariateSampleSpace* sample_space = this->get_sample_space();
+        std::unique_ptr< UnivariateData::Generator > generator = this->generator();
+        if (sample_space->get_ordering() == TOTAL) {
+            while (generator->is_valid() && !minimum) {
+                const UnivariateEvent* event = generator->event();
+                if (event && event->get_event() == ELEMENTARY) { 
+                    switch (sample_space->get_outcome()) {
                         case CATEGORICAL:
                             minimum = std::make_unique< CategoricalElementaryEvent >(static_cast< const CategoricalElementaryEvent* >(event)->get_value());
                             break;
@@ -54,44 +48,40 @@ namespace statiskit
                             break;
                     }
                 }
-                ++(*_generator);
+                ++(*generator);
             }
-            switch(sample_space->get_outcome())
-            {
+            switch (sample_space->get_outcome()) {
                 case CATEGORICAL:
-                    while(_generator->is_valid())
-                    {
-                        const UnivariateEvent* event = _generator->event();
-                        if(event && event->get_event() == ELEMENTARY)
-                        {
-                            if(static_cast< const CategoricalElementaryEvent* >(event)->get_value() < static_cast< const CategoricalElementaryEvent* >(minimum.get())->get_value())
-                            { minimum = std::make_unique< CategoricalElementaryEvent >(static_cast< const CategoricalElementaryEvent* >(event)->get_value()); }    
+                    while (generator->is_valid()) {
+                        const UnivariateEvent* event = generator->event();
+                        if (event && event->get_event() == ELEMENTARY) {
+                            if (static_cast< const CategoricalElementaryEvent* >(event)->get_value() < static_cast< const CategoricalElementaryEvent* >(minimum.get())->get_value()) {
+                                minimum = std::make_unique< CategoricalElementaryEvent >(static_cast< const CategoricalElementaryEvent* >(event)->get_value());
+                            }    
                         }
-                        ++(*_generator);
+                        ++(*generator);
                     }
                     break;
                 case DISCRETE:
-                    while(_generator->is_valid())
-                    {
-                        const UnivariateEvent* event = _generator->event();
-                        if(event && event->get_event() == ELEMENTARY)
-                        {
-                            if(static_cast< const DiscreteElementaryEvent* >(event)->get_value() < static_cast< const DiscreteElementaryEvent* >(minimum.get())->get_value())
-                            { minimum = std::make_unique< DiscreteElementaryEvent >(static_cast< const DiscreteElementaryEvent* >(event)->get_value()); }    
+                    while (generator->is_valid()) {
+                        const UnivariateEvent* event = generator->event();
+                        if (event && event->get_event() == ELEMENTARY) {
+                            if (static_cast< const DiscreteElementaryEvent* >(event)->get_value() < static_cast< const DiscreteElementaryEvent* >(minimum.get())->get_value()) {
+                                minimum = std::make_unique< DiscreteElementaryEvent >(static_cast< const DiscreteElementaryEvent* >(event)->get_value());
+                            } 
                         }
-                        ++(*_generator);
+                        ++(*generator);
                     }
                     break;
                 case CONTINUOUS:
-                    while(_generator->is_valid())
-                    {
-                        const UnivariateEvent* event = _generator->event();
-                        if(event && event->get_event() == ELEMENTARY)
-                        {
-                            if(static_cast< const ContinuousElementaryEvent* >(event)->get_value() < static_cast< const ContinuousElementaryEvent* >(minimum.get())->get_value())
-                            { minimum = std::make_unique< ContinuousElementaryEvent >(static_cast< const ContinuousElementaryEvent* >(event)->get_value()); }    
+                    while (generator->is_valid()) {
+                        const UnivariateEvent* event = generator->event();
+                        if (event && event->get_event() == ELEMENTARY) {
+                            if (static_cast< const ContinuousElementaryEvent* >(event)->get_value() < static_cast< const ContinuousElementaryEvent* >(minimum.get())->get_value()) {
+                                minimum = std::make_unique< ContinuousElementaryEvent >(static_cast< const ContinuousElementaryEvent* >(event)->get_value());
+                            }    
                         }
-                        ++(*_generator);
+                        ++(*generator);
                     }
                     break;
             }
@@ -102,17 +92,13 @@ namespace statiskit
     std::unique_ptr< UnivariateEvent> UnivariateData::compute_maximum() const
     {
         std::unique_ptr< UnivariateEvent > maximum;
-        const UnivariateSampleSpace* sample_space = get_sample_space();
-        std::unique_ptr< UnivariateData::Generator > _generator = generator();
-        if(sample_space->get_ordering() == TOTAL)
-        {
-            while(_generator->is_valid() && !maximum)
-            {
-                const UnivariateEvent* event = _generator->event();
-                if(event && event->get_event() == ELEMENTARY)
-                { 
-                    switch(sample_space->get_outcome())
-                    {
+        const UnivariateSampleSpace* sample_space = this->get_sample_space();
+        std::unique_ptr< UnivariateData::Generator > generator = this->generator();
+        if (sample_space->get_ordering() == TOTAL) {
+            while (generator->is_valid() && !maximum) {
+                const UnivariateEvent* event = generator->event();
+                if (event && event->get_event() == ELEMENTARY) { 
+                    switch (sample_space->get_outcome()) {
                         case CATEGORICAL:
                             maximum = std::make_unique< CategoricalElementaryEvent >(static_cast< const CategoricalElementaryEvent* >(event)->get_value());
                             break;
@@ -124,44 +110,40 @@ namespace statiskit
                             break;
                     }
                 }
-                ++(*_generator);
+                ++(*generator);
             }
-            switch(sample_space->get_outcome())
-            {
+            switch (sample_space->get_outcome()) {
                 case CATEGORICAL:
-                    while(_generator->is_valid())
-                    {
-                        const UnivariateEvent* event = _generator->event();
-                        if(event && event->get_event() == ELEMENTARY)
-                        {
-                            if(static_cast< const CategoricalElementaryEvent* >(event)->get_value() > static_cast< const CategoricalElementaryEvent* >(maximum.get())->get_value())
-                            { maximum = std::make_unique< CategoricalElementaryEvent >(static_cast< const CategoricalElementaryEvent* >(event)->get_value()); }    
+                    while (generator->is_valid()) {
+                        const UnivariateEvent* event = generator->event();
+                        if (event && event->get_event() == ELEMENTARY) {
+                            if (static_cast< const CategoricalElementaryEvent* >(event)->get_value() > static_cast< const CategoricalElementaryEvent* >(maximum.get())->get_value()) {
+                                maximum = std::make_unique< CategoricalElementaryEvent >(static_cast< const CategoricalElementaryEvent* >(event)->get_value());
+                            }    
                         }
-                        ++(*_generator);
+                        ++(*generator);
                     }
                     break;
                 case DISCRETE:
-                    while(_generator->is_valid())
-                    {
-                        const UnivariateEvent* event = _generator->event();
-                        if(event && event->get_event() == ELEMENTARY)
-                        {
-                            if(static_cast< const DiscreteElementaryEvent* >(event)->get_value() > static_cast< const DiscreteElementaryEvent* >(maximum.get())->get_value())
-                            { maximum = std::make_unique< DiscreteElementaryEvent >(static_cast< const DiscreteElementaryEvent* >(event)->get_value()); }    
+                    while (generator->is_valid()) {
+                        const UnivariateEvent* event = generator->event();
+                        if (event && event->get_event() == ELEMENTARY) {
+                            if (static_cast< const DiscreteElementaryEvent* >(event)->get_value() > static_cast< const DiscreteElementaryEvent* >(maximum.get())->get_value()) {
+                                maximum = std::make_unique< DiscreteElementaryEvent >(static_cast< const DiscreteElementaryEvent* >(event)->get_value());
+                            }    
                         }
-                        ++(*_generator);
+                        ++(*generator);
                     }
                     break;
                 case CONTINUOUS:
-                    while(_generator->is_valid())
-                    {
-                        const UnivariateEvent* event = _generator->event();
-                        if(event && event->get_event() == ELEMENTARY)
-                        {
-                            if(static_cast< const ContinuousElementaryEvent* >(event)->get_value() > static_cast< const ContinuousElementaryEvent* >(maximum.get())->get_value())
-                            { maximum = std::make_unique< ContinuousElementaryEvent >(static_cast< const ContinuousElementaryEvent* >(event)->get_value()); }    
+                    while (generator->is_valid()) {
+                        const UnivariateEvent* event = generator->event();
+                        if (event && event->get_event() == ELEMENTARY) {
+                            if (static_cast< const ContinuousElementaryEvent* >(event)->get_value() > static_cast< const ContinuousElementaryEvent* >(maximum.get())->get_value()) {
+                                maximum = std::make_unique< ContinuousElementaryEvent >(static_cast< const ContinuousElementaryEvent* >(event)->get_value());
+                            }    
                         }
-                        ++(*_generator);
+                        ++(*generator);
                     }
                     break;
             }
@@ -172,187 +154,181 @@ namespace statiskit
     UnivariateData::Generator::~Generator()
     {}
 
-    unsigned int NamedData::__index = 0;
+    unsigned int NamedData::INDEX = 0;
 
     NamedData::NamedData()
     { 
-        _name = "V" + __impl::to_string(__index); 
-        ++__index;
+        this->name = "V" + __impl::to_string(this->INDEX); 
+        ++(this->INDEX);
     }
 
     NamedData::NamedData(const std::string& name)
-    { _name = name; }
+    { this->name = name; }
 
-    NamedData::NamedData(const NamedData& named_data)
-    { _name = named_data._name; }
+    NamedData::NamedData(const NamedData& data)
+    { this->name = data.name; }
 
     NamedData::~NamedData()
     {}
 
     const std::string& NamedData::get_name() const
-    { return _name; }
+    { return this->name; }
 
     void NamedData::set_name(const std::string& name)
-    { _name = name; }
+    { this->name = name; }
 
     UnivariateDataFrame::UnivariateDataFrame(const UnivariateSampleSpace& sample_space) : NamedData()
     {
-        _sample_space = sample_space.copy().release();
-        _events.clear();
+        this->sample_space = sample_space.copy();
+        this->events = std::make_shared< std::vector< std::unique_ptr< UnivariateEvent > > >();
     }
 
     UnivariateDataFrame::UnivariateDataFrame(const UnivariateDataFrame& data) : NamedData(data)
     {
-        _sample_space = data._sample_space->copy().release();
-        _events.resize(data.get_nb_events());
-        for(Index index = 0, max_index = get_nb_events(); index < max_index; ++index)
-        {
-            if(data._events[index])
-            { _events[index] = data._events[index]->copy().release(); }
-        }
+        this->sample_space = data.sample_space;
+        this->events = data.events;
     }
 
     UnivariateDataFrame::~UnivariateDataFrame()
-    {
-        if(_sample_space)
-        { delete _sample_space; }
-        _sample_space = nullptr;
-        for(Index index = 0, max_index = get_nb_events(); index < max_index; ++index)
-        {
-            if(_events[index])
-            { delete _events[index]; }
-            _events[index] = nullptr;
-        }
-        _events.clear();
-    }
+    {}
 
     Index UnivariateDataFrame::size() const
-    { return _events.size(); }
+    { return this->events->size(); }
 
     std::unique_ptr< UnivariateData::Generator > UnivariateDataFrame::generator() const
-    { return std::make_unique< UnivariateDataFrame::Generator >(this); }
+    { return std::make_unique< UnivariateDataFrame::Generator >(*this); }
 
     const UnivariateSampleSpace* UnivariateDataFrame::get_sample_space() const
-    { return _sample_space; }
+    { return this->sample_space.get(); }
    
     void UnivariateDataFrame::set_sample_space(const UnivariateSampleSpace& sample_space)
     {
         bool compatible =  true;
-        Index index = 0, max_index = get_nb_events();
-        while(compatible && index < max_index)
-        {
-            compatible = sample_space.is_compatible(_events[index]);
+        Index index = 0, max_index = this->get_nb_events();
+        while (compatible && index < max_index) {
+            compatible = sample_space.is_compatible((*this->events)[index].get());
             ++index;
         }
-        if(compatible)
-        { 
-            delete _sample_space;
-            _sample_space = sample_space.copy().release();
+        if (compatible) { 
+            this->sample_space = sample_space.copy();
+        } else {
+            throw statiskit::parameter_error("sample_space", "incompatible");
         }
-        else
-        { throw statiskit::parameter_error("sample_space", "incompatible"); }
     }
 
     Index UnivariateDataFrame::get_nb_events() const
-    { return _events.size(); }
+    { return this->events->size(); }
     
     const UnivariateEvent* UnivariateDataFrame::get_event(const Index& index) const 
     {
-        if(index > get_nb_events())
-        { throw size_error("index", get_nb_events(), size_error::inferior); }
-        return _events[index];
+        if (index > this->get_nb_events()) {
+            throw size_error("index", this->get_nb_events(), size_error::inferior);
+        }
+        return (*this->events)[index].get();
     }
 
     void UnivariateDataFrame::set_event(const Index& index, const UnivariateEvent* event)
     {
-        if(event)
-        {
-            if(_sample_space->is_compatible(event))
-            {
-                delete _events[index];
-                _events[index] = event->copy().release();
-            }
-            else
-            { throw statiskit::parameter_error("event", "incompatible"); } 
-        }
-        else
-        {
-            delete _events[index];
-            _events[index] = nullptr; 
+        if (event) {
+            if (this->sample_space->is_compatible(event)) {
+                this->detach();
+                (*this->events)[index] = event->copy();
+            } else {
+                throw statiskit::parameter_error("event", "incompatible");
+            } 
+        } else {
+            (*this->events)[index] = std::unique_ptr< UnivariateEvent >(); 
         }
     }
     
     void UnivariateDataFrame::add_event(const UnivariateEvent* event)
     {
-        if(event)
-        {
-            if(_sample_space->is_compatible(event))
-            { _events.push_back(event->copy().release()); }
-            else
-            { throw parameter_error("event", "incompatible"); }
+        if (event) {
+            if (this->sample_space->is_compatible(event)) {
+                this->detach();
+                this->events->push_back(event->copy());
+            } else {
+                throw parameter_error("event", "incompatible");
+            }
+        } else {
+            this->detach();
+            this->events->push_back(std::unique_ptr< UnivariateEvent >());
         }
-        else
-        { _events.push_back(nullptr); }
     }
 
     std::unique_ptr< UnivariateEvent > UnivariateDataFrame::pop_event()
     {
-        std::unique_ptr< UnivariateEvent > event(_events.back());
-        _events.pop_back();
-        return event;
+        if (this->get_nb_events() > 0) {
+            this->detach();
+            std::unique_ptr< UnivariateEvent > event = std::move(this->events->back());
+            this->events->pop_back();
+            return event;
+        } else {
+            return std::unique_ptr< UnivariateEvent >();
+        }
     }
 
     void UnivariateDataFrame::insert_event(const Index& index, const UnivariateEvent* event)
     {
-        if(event)
-        {
-            if(_sample_space->is_compatible(event))
-            {
-                std::vector< UnivariateEvent* >::iterator it = _events.begin();
+        if (index >= this->get_nb_events()) {
+            throw size_error("index", this->get_nb_events(), size_error::inferior);
+        } else {
+            if (event) {
+                if (this->sample_space->is_compatible(event)) {
+                    this->detach();
+                    std::vector< std::unique_ptr< UnivariateEvent > >::iterator it = this->events->begin();
+                    advance(it, index);
+                    this->events->insert(it, event->copy());
+                } else {
+                    throw parameter_error("event", "incompatible");
+                } 
+            } else {
+                this->detach();
+                std::vector< std::unique_ptr< UnivariateEvent > >::iterator it = this->events->begin();
                 advance(it, index);
-                _events.insert(it, event->copy().release());    
+                this->events->insert(it, std::unique_ptr< UnivariateEvent >());
             }
-            else
-            { throw parameter_error("event", "incompatible"); } 
-        }
-        else
-        {
-            std::vector< UnivariateEvent* >::iterator it = _events.begin();
-            advance(it, index);
-            _events.insert(it, nullptr);
         }
     }
     
     void UnivariateDataFrame::remove_event(const Index& index)
     {
-        std::vector< UnivariateEvent* >::iterator it = _events.begin();
+        this->detach();
+        std::vector< std::unique_ptr< UnivariateEvent > >::iterator it = this->events->begin();
         advance(it, index);
-        delete *it;
-        *it = nullptr;
-        _events.erase(it);
+        this->events->erase(it);
     }
 
-    UnivariateDataFrame::Generator::Generator(const UnivariateDataFrame* data)
+    void UnivariateDataFrame::detach()
     {
-        _data = data;
-        _index = 0;
+        std::shared_ptr< std::vector< std::unique_ptr< UnivariateEvent > > > events = std::make_shared< std::vector< std::unique_ptr< UnivariateEvent > > >(this->get_nb_events());
+        for (Index index = 0, max_index = this->get_nb_events(); index < max_index; ++index) {
+            (*events)[index] = (*this->events)[index]->copy();
+        }
+        this->events = events;
+    }
+
+    UnivariateDataFrame::Generator::Generator(const UnivariateDataFrame& data)
+    {
+        this->data = std::make_unique< UnivariateDataFrame >(data);
+        this->index = 0;
     }
 
     UnivariateDataFrame::Generator::~Generator()
     {}
 
     bool UnivariateDataFrame::Generator::is_valid() const
-    { return _data && _index < _data->get_nb_events(); }
+    { return this->index < this->data->get_nb_events(); }
 
     UnivariateData::Generator& UnivariateDataFrame::Generator::operator++()
     {
-       ++_index;
+       ++this->index;
        return *this;
     }
 
     const UnivariateEvent* UnivariateDataFrame::Generator::event() const
     {
-        return _data->get_event(_index);
+        return this->data->get_event(this->index);
     }
 
     double UnivariateDataFrame::Generator::weight() const

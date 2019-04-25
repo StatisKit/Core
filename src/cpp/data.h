@@ -49,18 +49,18 @@ namespace statiskit
         public:
             NamedData();
             NamedData(const std::string& name);
-            NamedData(const NamedData& named_data);
+            NamedData(const NamedData& data);
             virtual ~NamedData();
 
             const std::string& get_name() const;
             void set_name(const std::string& name);
 
         protected:
-            std::string _name;
+            std::string name;
 
 
         private:
-            static unsigned int __index;
+            static unsigned int INDEX;
     };
 
     class STATISKIT_CORE_API UnivariateDataFrame : public PolymorphicCopy< UnivariateData, UnivariateDataFrame >, public NamedData
@@ -89,13 +89,15 @@ namespace statiskit
             void remove_event(const Index& index);
 
         protected:
-            UnivariateSampleSpace* _sample_space;
-            std::vector< UnivariateEvent* > _events;
+            std::shared_ptr< UnivariateSampleSpace > sample_space;
+            std::shared_ptr< std::vector< std::unique_ptr< UnivariateEvent > > > events;
+
+            void detach();
 
             class STATISKIT_CORE_API Generator : public UnivariateData::Generator
             {
                 public:
-                    Generator(const UnivariateDataFrame* data);
+                    Generator(const UnivariateDataFrame& data);
                     virtual ~Generator();
 
                     virtual bool is_valid() const;
@@ -106,8 +108,8 @@ namespace statiskit
                     virtual double weight() const;
 
                 protected:
-                    const UnivariateDataFrame* _data;
-                    Index _index;
+                    std::unique_ptr< UnivariateDataFrame > data;
+                    Index index;
             };            
     };
 
