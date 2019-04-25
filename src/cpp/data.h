@@ -141,14 +141,36 @@ namespace statiskit
 
         virtual const MultivariateSampleSpace* get_sample_space() const = 0;
 
-        virtual std::unique_ptr< UnivariateData > extract(const Index& index) const = 0;
-        virtual std::unique_ptr< MultivariateData > extract(const Indices& indices) const = 0;
+        virtual std::unique_ptr< UnivariateData > select(const Index& index) const;
+        virtual std::unique_ptr< MultivariateData > select(const Indices& indices) const;
 
         virtual std::unique_ptr< MultivariateData > copy() const = 0;
 
         double compute_total() const;
-        //virtual std::unique_ptr< MultivariateEvent > compute_minimum() const = 0;
-        //virtual std::unique_ptr< MultivariateEvent > compute_maximum() const = 0;
+    };
+
+    class STATISKIT_CORE_API IndexSelectedData : public UnivariateData
+    {
+        public:
+            IndexSelectedData(const MultivariateData& data, const Index& index);
+            IndexSelectedData(const IndexSelectedData& data);
+            virtual ~IndexSelectedData();
+
+            const MultivariateData* origin() const;
+
+            virtual std::unique_ptr< UnivariateData::Generator > generator() const;
+
+            virtual const UnivariateSampleSpace* get_sample_space() const;
+
+            virtual std::unique_ptr< UnivariateData > copy() const;
+
+        protected:
+            MultivariateData* data;
+            Index index;
+
+            class Generator : public UnivariateData::Generator
+            {
+            };
     };
 
     class STATISKIT_CORE_API MultivariateDataFrame : public PolymorphicCopy< MultivariateData, MultivariateDataFrame >
@@ -164,8 +186,7 @@ namespace statiskit
             virtual const MultivariateSampleSpace* get_sample_space() const;
             void set_sample_space(const MultivariateSampleSpace& sample_space);
             
-            virtual std::unique_ptr< UnivariateData > extract(const Index& index) const;
-            virtual std::unique_ptr< MultivariateData > extract(const Indices& indices) const;
+            virtual std::unique_ptr< UnivariateData > select(const Index& index) const;
 
             Index get_nb_components() const;
 
@@ -190,10 +211,8 @@ namespace statiskit
             void remove_event(const Index& index);
 
         protected:
-            class SampleSpace;
-
-            SampleSpace* _sample_space;
-            std::vector< UnivariateDataFrame* > _components;
+            std::shared_ptr< VectorSampleSpace > sample_space;
+            std::shared_ptr< std::vector< std::unique_ptr< UnivariateDataFrame > > > components;
 
             class STATISKIT_CORE_API SampleSpace : public PolymorphicCopy< MultivariateSampleSpace, SampleSpace >
             {
