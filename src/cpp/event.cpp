@@ -38,7 +38,7 @@ namespace statiskit
     {
         _events.resize(event.size(), nullptr);
         for(Index index = 0, max_index = event.size(); index < max_index; ++index)
-        { _events[index] = event.get(index)->copy().release(); }
+        { _events[index] = event.get_event(index)->copy().release(); }
     }
 
     VectorEvent::VectorEvent(const Eigen::VectorXd& event)
@@ -62,14 +62,14 @@ namespace statiskit
     Index VectorEvent::size() const
     { return _events.size(); }
 
-    const UnivariateEvent* VectorEvent::get(const Index& index) const
+    const UnivariateEvent* VectorEvent::get_event(const Index& index) const
     {
         if(index > size())
         { throw size_error("index", size(), size_error::inferior); }
         return _events[index];
     }
 
-    void VectorEvent::set(const Index& index, const UnivariateEvent& event)
+    void VectorEvent::set_event(const Index& index, const UnivariateEvent& event)
     {
         if(index > size())
         { throw size_error("index", size(), size_error::inferior); }

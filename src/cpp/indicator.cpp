@@ -51,18 +51,18 @@ namespace statiskit
                 case DISCRETE:
                     while(generator->is_valid())
                     {
-                        const UnivariateEvent* event = generator->event();
-                        if(event && event->get_event() == ELEMENTARY)
-                        { location += generator->weight() * static_cast< const DiscreteElementaryEvent* >(event)->get_value() / total; }
+                        const UnivariateEvent* event = generator->get_event();
+                        if(event && event->get_censoring() == censoring_type::NONE)
+                        { location += generator->get_weight() * static_cast< const DiscreteElementaryEvent* >(event)->get_value() / total; }
                         ++(*generator);
                     }
                     break;
                 case CONTINUOUS:
                     while(generator->is_valid())
                     {
-                        const UnivariateEvent* event = generator->event();
-                        if(event && event->get_event() == ELEMENTARY)
-                        { location += generator->weight() * static_cast< const ContinuousElementaryEvent* >(event)->get_value() / total; }
+                        const UnivariateEvent* event = generator->get_event();
+                        if(event && event->get_censoring() == censoring_type::NONE)
+                        { location += generator->get_weight() * static_cast< const ContinuousElementaryEvent* >(event)->get_value() / total; }
                         ++(*generator);
                     }
                     break;
@@ -193,11 +193,11 @@ namespace statiskit
                 case DISCRETE:
                     while(generator->is_valid())
                     {
-                        const UnivariateEvent* event = generator->event();
-                        if(event && event->get_event() == ELEMENTARY)
+                        const UnivariateEvent* event = generator->get_event();
+                        if(event && event->get_censoring() == censoring_type::NONE)
                         { 
-                            dispersion += generator->weight() * pow(static_cast< const DiscreteElementaryEvent* >(event)->get_value() - location, 2) / total;
-                            total_square += pow(generator->weight(), 2);
+                            dispersion += generator->get_weight() * pow(static_cast< const DiscreteElementaryEvent* >(event)->get_value() - location, 2) / total;
+                            total_square += pow(generator->get_weight(), 2);
                         }
                         ++(*generator);
                     }
@@ -205,11 +205,11 @@ namespace statiskit
                 case CONTINUOUS:
                     while(generator->is_valid())
                     {
-                        const UnivariateEvent* event = generator->event();
-                        if(event && event->get_event() == ELEMENTARY)
+                        const UnivariateEvent* event = generator->get_event();
+                        if(event && event->get_censoring() == censoring_type::NONE)
                         {
-                            dispersion += generator->weight() * pow(static_cast< const ContinuousElementaryEvent* >(event)->get_value() - location, 2)/ total;
-                            total_square += pow(generator->weight(), 2);
+                            dispersion += generator->get_weight() * pow(static_cast< const ContinuousElementaryEvent* >(event)->get_value() - location, 2)/ total;
+                            total_square += pow(generator->get_weight(), 2);
                         }
                         ++(*generator);
                     }
@@ -301,13 +301,13 @@ namespace statiskit
     double MultivariateVarianceEstimation::Estimator::compute(const MultivariateData& data, const Eigen::VectorXd& location, const Index& i, const Index& j) const
     {
         double codispersion = 0., total = 0., total_square = 0.;
-        switch(data.get_sample_space()->get(i)->get_outcome())
+        switch(data.get_sample_space(i)->get_outcome())
         {
             case CATEGORICAL:
                 codispersion = std::numeric_limits< double >::quiet_NaN();
                 break;
             case DISCRETE:
-                switch(data.get_sample_space()->get(j)->get_outcome())
+                switch(data.get_sample_space(j)->get_outcome())
                 {
                     case CATEGORICAL:
                         codispersion = std::numeric_limits< double >::quiet_NaN();
@@ -318,17 +318,17 @@ namespace statiskit
                             while(generator->is_valid())
                             {
                                 double _codispersion = 0;
-                                const UnivariateEvent* event = generator->event()->get(i);
-                                if(event && event->get_event() == ELEMENTARY)
+                                const UnivariateEvent* event = generator->get_event(i);
+                                if(event && event->get_censoring() == censoring_type::NONE)
                                 { 
                                     _codispersion = static_cast< const DiscreteElementaryEvent* >(event)->get_value() - location(i);
-                                    event = generator->event()->get(j);
-                                    if(event && event->get_event() == ELEMENTARY)
+                                    event = generator->get_event(j);
+                                    if(event && event->get_censoring() == censoring_type::NONE)
                                     {
                                         _codispersion *= static_cast< const DiscreteElementaryEvent* >(event)->get_value() - location(j);
-                                        codispersion += _codispersion * generator->weight();
-                                        total += generator->weight();
-                                        total_square += pow(generator->weight(), 2);
+                                        codispersion += _codispersion * generator->get_weight();
+                                        total += generator->get_weight();
+                                        total_square += pow(generator->get_weight(), 2);
                                     }
                                 }
                                 ++(*generator);
@@ -341,17 +341,17 @@ namespace statiskit
                             while(generator->is_valid())
                             {
                                 double _codispersion = 0;
-                                const UnivariateEvent* event = generator->event()->get(i);
-                                if(event && event->get_event() == ELEMENTARY)
+                                const UnivariateEvent* event = generator->get_event(i);
+                                if(event && event->get_censoring() == censoring_type::NONE)
                                 { 
                                     _codispersion = static_cast< const DiscreteElementaryEvent* >(event)->get_value() - location(i);
-                                    event = generator->event()->get(j);
-                                    if(event && event->get_event() == ELEMENTARY)
+                                    event = generator->get_event(j);
+                                    if(event && event->get_censoring() == censoring_type::NONE)
                                     {
                                         _codispersion *= static_cast< const ContinuousElementaryEvent* >(event)->get_value() - location(j);
-                                        codispersion += _codispersion * generator->weight();
-                                        total += generator->weight();
-                                        total_square += pow(generator->weight(), 2);
+                                        codispersion += _codispersion * generator->get_weight();
+                                        total += generator->get_weight();
+                                        total_square += pow(generator->get_weight(), 2);
                                     }
                                 }
                                 ++(*generator);
@@ -361,7 +361,7 @@ namespace statiskit
                 }
                 break;
             case CONTINUOUS:
-                switch(data.get_sample_space()->get(j)->get_outcome())
+                switch(data.get_sample_space(j)->get_outcome())
                 {
                     case CATEGORICAL:
                         codispersion = std::numeric_limits< double >::quiet_NaN();
@@ -372,17 +372,17 @@ namespace statiskit
                             while(generator->is_valid())
                             {
                                 double _codispersion = 0;
-                                const UnivariateEvent* event = generator->event()->get(i);
-                                if(event && event->get_event() == ELEMENTARY)
+                                const UnivariateEvent* event = generator->get_event(i);
+                                if(event && event->get_censoring() == censoring_type::NONE)
                                 { 
                                     _codispersion = static_cast< const ContinuousElementaryEvent* >(event)->get_value() - location(i);
-                                    event = generator->event()->get(j);
-                                    if(event && event->get_event() == ELEMENTARY)
+                                    event = generator->get_event(j);
+                                    if(event && event->get_censoring() == censoring_type::NONE)
                                     {
                                         _codispersion *= static_cast< const DiscreteElementaryEvent* >(event)->get_value() - location(j);
-                                        codispersion += _codispersion * generator->weight();
-                                        total += generator->weight();
-                                        total_square += pow(generator->weight(), 2);
+                                        codispersion += _codispersion * generator->get_weight();
+                                        total += generator->get_weight();
+                                        total_square += pow(generator->get_weight(), 2);
                                     }
                                 }
                                 ++(*generator);
@@ -395,17 +395,17 @@ namespace statiskit
                             while(generator->is_valid())
                             {
                                 double _codispersion = 0;
-                                const UnivariateEvent* event = generator->event()->get(i);
-                                if(event && event->get_event() == ELEMENTARY)
+                                const UnivariateEvent* event = generator->get_event(i);
+                                if(event && event->get_censoring() == censoring_type::NONE)
                                 { 
                                     _codispersion = static_cast< const ContinuousElementaryEvent* >(event)->get_value() - location(i);
-                                    event = generator->event()->get(j);
-                                    if(event && event->get_event() == ELEMENTARY)
+                                    event = generator->get_event(j);
+                                    if(event && event->get_censoring() == censoring_type::NONE)
                                     {
                                         _codispersion *= static_cast< const ContinuousElementaryEvent* >(event)->get_value() - location(j);
-                                        codispersion += _codispersion * generator->weight();
-                                        total += generator->weight();
-                                        total_square += pow(generator->weight(), 2);
+                                        codispersion += _codispersion * generator->get_weight();
+                                        total += generator->get_weight();
+                                        total_square += pow(generator->get_weight(), 2);
                                     }
                                 }
                                 ++(*generator);

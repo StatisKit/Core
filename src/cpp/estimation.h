@@ -23,12 +23,6 @@ namespace statiskit
 
     class STATISKIT_CORE_API Estimator
     {
-        protected:
-            static std::unordered_set< uintptr_t > compute_children(const Estimator& estimator);
-            virtual std::unordered_set< uintptr_t > children() const;
-
-            static uintptr_t compute_identifier(const Estimator& estimator);
-            virtual uintptr_t identifier() const;
     };
 
     struct STATISKIT_CORE_API UnivariateDistributionEstimation
@@ -124,8 +118,6 @@ namespace statiskit
 
                     void init();
                     void init(const Estimator& estimator);
-
-                    virtual std::unordered_set< uintptr_t > children() const;
             };
 
             class CriterionEstimator : public PolymorphicCopy< typename B::Estimator::estimation_type::Estimator, CriterionEstimator, Estimator >

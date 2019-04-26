@@ -12,9 +12,9 @@ namespace statiskit
         std::unique_ptr< UnivariateData::Generator > generator = data.generator();
         while(generator->is_valid() && boost::math::isfinite(llh))
         { 
-            double weight = generator->weight();
+            double weight = generator->get_weight();
             if(weight > 0.)
-            { llh += weight * probability(generator->event(), true); }
+            { llh += weight * probability(generator->get_event(), true); }
             ++(*generator);
         }
         return llh;
@@ -25,11 +25,11 @@ namespace statiskit
         double p;
         if(event)
         {
-            if(event->get_outcome() == CATEGORICAL)
+            if(event->get_outcome() == outcome_type::CATEGORICAL)
             {
-                switch(event->get_event())
+                switch(event->get_censoring())
                 {
-                    case ELEMENTARY:
+                    case censoring_type::NONE:
                         {
                             const std::string& value = static_cast< const CategoricalElementaryEvent* >(event)->get_value();
                             if(logarithm)
@@ -38,7 +38,7 @@ namespace statiskit
                             { p = pdf(value); }
                         }
                         break;
-                    case CENSORED:
+                    case censoring_type::CENSORED:
                         {
                             const std::vector< std::string >& values = static_cast< const CategoricalCensoredEvent* >(event)->get_values();
                             p = 0.;
@@ -546,11 +546,11 @@ namespace statiskit
         double p;
         if(event)
         {
-            if(event->get_outcome() == DISCRETE)
+            if(event->get_outcome() == outcome_type::DISCRETE)
             {
-                switch(event->get_event())
+                switch(event->get_censoring())
                 {
-                    case ELEMENTARY:
+                    case censoring_type::NONE:
                         {
                             const int& value = static_cast< const DiscreteElementaryEvent* >(event)->get_value();
                             if(logarithm)
@@ -559,7 +559,7 @@ namespace statiskit
                             { p = pdf(value); }
                         }
                         break;
-                    case CENSORED:
+                    case censoring_type::CENSORED:
                         {
                             const std::vector< int >& values = static_cast< const DiscreteCensoredEvent* >(event)->get_values();
                             p = 0.;
@@ -569,7 +569,7 @@ namespace statiskit
                             { p = log(p); }
                         }
                         break;
-                    case LEFT:
+                    case censoring_type::LEFT:
                         {
                             const int& upper_bound = static_cast< const DiscreteLeftCensoredEvent* >(event)->get_upper_bound();
                             p = cdf(upper_bound);
@@ -577,7 +577,7 @@ namespace statiskit
                             { p = log(p); }
                         }
                         break;
-                    case RIGHT:
+                    case censoring_type::RIGHT:
                         {
                             const int& lower_bound = static_cast< const DiscreteRightCensoredEvent* >(event)->get_lower_bound();
                             p = 1 - cdf(lower_bound - 1);
@@ -585,7 +585,7 @@ namespace statiskit
                             { p = log(p); }
                         }
                         break;
-                    case INTERVAL:
+                    case censoring_type::INTERVAL:
                         {
                             const DiscreteIntervalCensoredEvent* devent = static_cast< const DiscreteIntervalCensoredEvent* >(event);
                             const int& lower_bound = devent->get_lower_bound(), upper_bound = devent->get_lower_bound();
@@ -1264,11 +1264,11 @@ namespace statiskit
         double p;
         if(event)
         {
-            if(event->get_outcome() == CONTINUOUS)
+            if(event->get_outcome() == outcome_type::CONTINUOUS)
             {
-                switch(event->get_event())
+                switch(event->get_censoring())
                 {
-                    case ELEMENTARY:
+                    case censoring_type::NONE:
                         {
                             const double& value = static_cast< const ContinuousElementaryEvent* >(event)->get_value();
                             if(logarithm)
@@ -1277,7 +1277,7 @@ namespace statiskit
                             { p = pdf(value); }
                         }
                         break;
-                    case CENSORED:
+                    case censoring_type::CENSORED:
                         {
                             const std::vector< double >& values = static_cast< const ContinuousCensoredEvent* >(event)->get_values();
                             p = 0.;
@@ -1287,7 +1287,7 @@ namespace statiskit
                             { p = log(p); }
                         }
                         break;
-                    case LEFT:
+                    case censoring_type::LEFT:
                         {
                             const double& upper_bound = static_cast< const ContinuousLeftCensoredEvent* >(event)->get_upper_bound();
                             p = cdf(upper_bound);
@@ -1295,7 +1295,7 @@ namespace statiskit
                             { p = log(p); }
                         }
                         break;
-                    case RIGHT:
+                    case censoring_type::RIGHT:
                         {
                             const double& lower_bound = static_cast< const ContinuousRightCensoredEvent* >(event)->get_lower_bound();
                             p = 1 - cdf(lower_bound);
@@ -1303,7 +1303,7 @@ namespace statiskit
                             { p = log(p); }
                         }
                         break;
-                    case INTERVAL:
+                    case censoring_type::INTERVAL:
                         {
                             const ContinuousIntervalCensoredEvent* cevent = static_cast< const ContinuousIntervalCensoredEvent* >(event);
                             const double& lower_bound = cevent->get_lower_bound(), upper_bound = cevent->get_lower_bound();
@@ -2499,26 +2499,26 @@ namespace statiskit
     { return pow(_beta - _alpha, 2)/12.; }
     
 
-    double UnivariateConditionalDistribution::loglikelihood(const UnivariateConditionalData& data) const
-    {
-        double llh = 0.;
-        Index index = 0;
-        std::unique_ptr< UnivariateConditionalData::Generator > generator = data.generator();
-        while(generator->is_valid() && boost::math::isfinite(llh))
-        {
-            ++index;
-            double weight = generator->weight();
-            if(weight > 0.)
-            {
-                const UnivariateDistribution* distribution = this->operator() (*(generator->explanatories()));
-                llh += weight * distribution->probability(generator->response(), true);
-                //std::cout << "weight = " << weight << std::endl;
-                //std::cout << "proba = " << distribution->probability(generator->response(), true) << std::endl;
-            }
-            ++(*generator);
-        }
-        return llh;        
-    }
+    // double UnivariateConditionalDistribution::loglikelihood(const UnivariateConditionalData& data) const
+    // {
+    //     double llh = 0.;
+    //     Index index = 0;
+    //     std::unique_ptr< UnivariateConditionalData::Generator > generator = data.generator();
+    //     while(generator->is_valid() && boost::math::isfinite(llh))
+    //     {
+    //         ++index;
+    //         double weight = generator->weight();
+    //         if(weight > 0.)
+    //         {
+    //             const UnivariateDistribution* distribution = this->operator() (*(generator->explanatories()));
+    //             llh += weight * distribution->probability(generator->response(), true);
+    //             //std::cout << "weight = " << weight << std::endl;
+    //             //std::cout << "proba = " << distribution->probability(generator->response(), true) << std::endl;
+    //         }
+    //         ++(*generator);
+    //     }
+    //     return llh;        
+    // }
 
     UnivariateConditionalDistribution::~UnivariateConditionalDistribution()
     {}
@@ -2532,9 +2532,9 @@ namespace statiskit
         std::unique_ptr< MultivariateData::Generator > generator = data.generator();
         while(generator->is_valid() && boost::math::isfinite(llh))
         { 
-            double weight = generator->weight();
+            double weight = generator->get_weight();
             if(weight > 0.)
-            { llh += weight * probability(generator->event(), true); }
+            { llh += weight * probability(generator.get(), true); }
             ++(*generator);
         }
         return llh;
@@ -2618,10 +2618,10 @@ namespace statiskit
                 int sum = 0;
                 for(Index component = 0, max_component = get_nb_components(); component < max_component; ++component)
                 {
-                    const UnivariateEvent* uevent = event->get(component);
+                    const UnivariateEvent* uevent = event->get_event(component);
                     if(uevent)
                     {
-                        if(uevent->get_outcome() == DISCRETE && uevent->get_event() == ELEMENTARY)
+                        if(uevent->get_outcome() == outcome_type::DISCRETE && uevent->get_censoring() == censoring_type::NONE)
                         { sum += static_cast< const DiscreteElementaryEvent* >(uevent)->get_value(); }
                         else
                         { throw std::exception(); }
@@ -2801,8 +2801,8 @@ namespace statiskit
                 double sum = 0.;
                 for(Index index = 0, max_index = event->size(); index < max_index; ++index)
                 {
-                    const UnivariateEvent* uevent = event->get(index);
-                    if(uevent && uevent->get_outcome() == CONTINUOUS && uevent->get_event() == ELEMENTARY)
+                    const UnivariateEvent* uevent = event->get_event(index);
+                    if(uevent && uevent->get_outcome() == outcome_type::CONTINUOUS && uevent->get_censoring() == censoring_type::NONE)
                     {
                         const double& value = static_cast< const ContinuousElementaryEvent* >(uevent)->get_value();
                         if(value < 1. && value > 0)
@@ -2836,22 +2836,22 @@ namespace statiskit
     MultivariateConditionalDistribution::~MultivariateConditionalDistribution()
     {}
     
-    double MultivariateConditionalDistribution::loglikelihood(const MultivariateConditionalData& data) const
-    {
-        double llh = 0.;
-        std::unique_ptr< MultivariateConditionalData::Generator > generator = data.generator();
-        while(generator->is_valid() && boost::math::isfinite(llh))
-        { 
-            double weight = generator->weight();
-            if(weight > 0.)
-            {
-                const MultivariateDistribution* distribution = this->operator() (*(generator->explanatories()));
-                llh += weight * distribution->probability(generator->responses(), true);
-            }
-            ++(*generator);
-        }
-        return llh;        
-    }
+    // double MultivariateConditionalDistribution::loglikelihood(const MultivariateConditionalData& data) const
+    // {
+    //     double llh = 0.;
+    //     std::unique_ptr< MultivariateConditionalData::Generator > generator = data.generator();
+    //     while(generator->is_valid() && boost::math::isfinite(llh))
+    //     { 
+    //         double weight = generator->weight();
+    //         if(weight > 0.)
+    //         {
+    //             const MultivariateDistribution* distribution = this->operator() (*(generator->explanatories()));
+    //             llh += weight * distribution->probability(generator->responses(), true);
+    //         }
+    //         ++(*generator);
+    //     }
+    //     return llh;        
+    // }
 
     DiscreteUnivariateMixtureDistribution::DiscreteUnivariateMixtureDistribution(const std::vector< DiscreteUnivariateDistribution* > observations, const Eigen::VectorXd& pi)
     { init(observations, pi); }

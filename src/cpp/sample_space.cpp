@@ -811,7 +811,7 @@ namespace statiskit
             const UnivariateSampleSpace* sample_space;
             Index index = 0, max_index = this->size();
             while (compatible && index < max_index) {
-                sample_space = this->get(index);
+                sample_space = this->get_sample_space(index);
                 compatible = sample_space && sample_space->is_compatible(event->get(index));
                 ++index;
             }
@@ -825,7 +825,7 @@ namespace statiskit
     {
         Index size = 0;
         for (Index index = 0, max_index = this->size(); index < max_index; ++index) {
-            const UnivariateSampleSpace* sample_space = this->get(index);
+            const UnivariateSampleSpace* sample_space = this->get_sample_space(index);
             if (sample_space->get_outcome() == CATEGORICAL) {
                 size += static_cast< const CategoricalSampleSpace* >(sample_space)->get_cardinality();
                 size -= 1;
@@ -846,9 +846,9 @@ namespace statiskit
             dummy = Eigen::RowVectorXd::Zero(encode());
             Eigen::RowVectorXd temp;
             for (Index index = 0, max_index = this->size(); index< max_index; ++index) {
-                const UnivariateEvent* uevent = event.get(index);
+                const UnivariateEvent* uevent = event.get_event(index);
                 if (uevent->get_event() == ELEMENTARY) {
-                    const UnivariateSampleSpace* sample_space = this->get(index);
+                    const UnivariateSampleSpace* sample_space = this->get_event(index);
                     switch (sample_space->get_outcome()) {
                         case CATEGORICAL:
                             {
@@ -866,7 +866,7 @@ namespace statiskit
                             break;
                     }
                 } else {
-                    const UnivariateSampleSpace* sample_space = get(index);
+                    const UnivariateSampleSpace* sample_space = get_sample_space(index);
                     if (sample_space->get_outcome() == CATEGORICAL) {
                         Index max_size = index + shift + static_cast< const CategoricalSampleSpace* >(sample_space)->get_cardinality();
                         while(index + shift < max_size) {
@@ -906,10 +906,10 @@ namespace statiskit
     Index VectorSampleSpace::size() const
     {return this->sample_spaces->size(); }
 
-    const UnivariateSampleSpace* VectorSampleSpace::get(const Index& index) const
+    const UnivariateSampleSpace* VectorSampleSpace::get_sample_space(const Index& index) const
     { return (*this->sample_spaces)[index].get(); }
 
-    void VectorSampleSpace::set(const Index& index, const UnivariateSampleSpace& sample_space)
+    void VectorSampleSpace::set_sample_space(const Index& index, const UnivariateSampleSpace& sample_space)
     { 
         detach();
         (*this->sample_spaces)[index] = sample_space.copy();

@@ -9,7 +9,7 @@
 
 namespace statiskit
 {
-    enum outcome_type 
+    enum class outcome_type 
     {
         CATEGORICAL,
         DISCRETE,
@@ -17,14 +17,13 @@ namespace statiskit
         MIXED,
     };
 
-    enum event_type
+    enum class censoring_type
     {
-        ELEMENTARY,
+        NONE,
         CENSORED,
         LEFT,
         RIGHT,
         INTERVAL,
-        COMPOUND
     };
 
     struct STATISKIT_CORE_API UnivariateEvent
@@ -33,7 +32,7 @@ namespace statiskit
         
         virtual outcome_type get_outcome() const = 0;
 
-        virtual event_type get_event() const = 0;
+        virtual censoring_type get_censoring() const = 0;
 
         virtual std::unique_ptr< UnivariateEvent > copy() const = 0;
     };
@@ -45,7 +44,7 @@ namespace statiskit
             ElementaryEvent(const ElementaryEvent< E >& event);
             virtual ~ElementaryEvent();
         
-            virtual event_type get_event() const;
+            virtual censoring_type get_censoring() const;
 
             const typename E::value_type& get_value() const;
 
@@ -61,7 +60,7 @@ namespace statiskit
             CensoredEvent(const std::vector< typename E::value_type >& values);
             CensoredEvent(const CensoredEvent< E >& event);
 
-            virtual event_type get_event() const;
+            virtual censoring_type get_censoring() const;
 
             const std::vector< typename E::value_type >& get_values() const;
 
@@ -77,7 +76,7 @@ namespace statiskit
             LeftCensoredEvent(const typename E::value_type& upper_bound);
             LeftCensoredEvent(const LeftCensoredEvent< E >& event);
 
-            virtual event_type get_event() const;
+            virtual censoring_type get_censoring() const;
 
             const typename E::value_type& get_upper_bound() const;
 
@@ -93,7 +92,7 @@ namespace statiskit
             RightCensoredEvent(const typename E::value_type& lower_bound);
             RightCensoredEvent(const RightCensoredEvent< E >& event);
 
-            virtual event_type get_event() const;
+            virtual censoring_type get_censoring() const;
 
             const typename E::value_type& get_lower_bound() const;
 
@@ -109,7 +108,7 @@ namespace statiskit
             IntervalCensoredEvent(const typename E::value_type& lhs, const typename E::value_type& rhs);
             IntervalCensoredEvent(const IntervalCensoredEvent< E >& event);
 
-            virtual event_type get_event() const;
+            virtual censoring_type get_censoring() const;
 
             const typename E::value_type& get_lower_bound() const;
             const typename E::value_type& get_upper_bound() const;
@@ -175,7 +174,7 @@ namespace statiskit
 
         virtual Index size() const = 0;
                 
-        virtual const UnivariateEvent* get(const Index& index) const = 0;
+        virtual const UnivariateEvent* get_event(const Index& index) const = 0;
 
         virtual std::unique_ptr< MultivariateEvent > copy() const = 0;
     };
@@ -190,8 +189,8 @@ namespace statiskit
 
             virtual Index size() const;
                     
-            virtual const UnivariateEvent* get(const Index& index) const;
-            void set(const Index& index, const UnivariateEvent& event);
+            virtual const UnivariateEvent* get_event(const Index& index) const;
+            void set_event(const Index& index, const UnivariateEvent* event);
 
             virtual std::unique_ptr< MultivariateEvent > copy() const;
 

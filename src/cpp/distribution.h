@@ -2393,7 +2393,7 @@ namespace statiskit
 
         virtual const MultivariateDistribution* operator() (const MultivariateEvent& event) const = 0;
 
-        double loglikelihood(const MultivariateConditionalData& data) const;
+        // double loglikelihood(const MultivariateConditionalData& data) const;
 
         virtual const MultivariateSampleSpace* get_explanatory_space() const = 0;
 

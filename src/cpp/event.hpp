@@ -17,8 +17,8 @@ namespace statiskit
         {}
 
     template<class E>
-        event_type ElementaryEvent< E >::get_event() const
-        { return ELEMENTARY; } 
+        censoring_type ElementaryEvent< E >::get_censoring() const
+        { return censoring_type::NONE; } 
 
     template<class E>
         const typename E::value_type& ElementaryEvent< E >::get_value() const
@@ -37,8 +37,8 @@ namespace statiskit
         { _values = event._values; }
 
     template<class E>
-        event_type CensoredEvent< E >::get_event() const
-        { return CENSORED; }
+        censoring_type CensoredEvent< E >::get_censoring() const
+        { return censoring_type::CENSORED; }
 
     template<class E>
         const std::vector< typename E::value_type >& CensoredEvent< E >::get_values() const
@@ -57,8 +57,8 @@ namespace statiskit
         { _upper_bound = event._upper_bound; }
 
     template<class E>
-        event_type LeftCensoredEvent< E >::get_event() const
-        { return LEFT; }
+        censoring_type LeftCensoredEvent< E >::get_censoring() const
+        { return censoring_type::LEFT; }
     
     template<class E>
         const typename E::value_type& LeftCensoredEvent< E >::get_upper_bound() const
@@ -77,8 +77,8 @@ namespace statiskit
         { _lower_bound = event._lower_bound; }
 
     template<class E>
-        event_type RightCensoredEvent< E >::get_event() const
-        { return RIGHT; }
+        censoring_type RightCensoredEvent< E >::get_censoring() const
+        { return censoring_type::RIGHT; }
     
     template<class E>
         const typename E::value_type& RightCensoredEvent< E >::get_lower_bound() const
@@ -102,8 +102,8 @@ namespace statiskit
         { _bounds = event._bounds; }
 
     template<class E>
-        event_type IntervalCensoredEvent< E >::get_event() const
-        { return INTERVAL; }
+        censoring_type IntervalCensoredEvent< E >::get_censoring() const
+        { return censoring_type::INTERVAL; }
     
     template<class E>
         const typename E::value_type& IntervalCensoredEvent< E >::get_lower_bound() const

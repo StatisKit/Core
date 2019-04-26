@@ -19,29 +19,30 @@ namespace statiskit
 
         virtual ~UnivariateData() = 0;
 
-        struct STATISKIT_CORE_API Generator
+        struct STATISKIT_CORE_API Generator : public UnivariateEvent
         {
             virtual ~Generator() = 0;
             
+            virtual const UnivariateEvent* get_event() const = 0;
+            virtual double get_weight() const = 0;
+
             virtual bool is_valid() const = 0;
 
             virtual Generator& operator++() = 0;
-
-            virtual const UnivariateEvent* event() const = 0;
-            virtual double weight() const = 0;
         };
 
-		virtual Index size() const;
-		
         virtual std::unique_ptr< UnivariateData::Generator > generator() const = 0;
+
+		virtual Index get_nb_events() const;
+		
+        double compute_total() const;
+
+        std::unique_ptr< UnivariateEvent > compute_minimum() const;
+        std::unique_ptr< UnivariateEvent > compute_maximum() const;
 
         virtual const UnivariateSampleSpace* get_sample_space() const = 0;
     
         virtual std::unique_ptr< UnivariateData > copy() const = 0;
-        
-        double compute_total() const;
-        std::unique_ptr< UnivariateEvent > compute_minimum() const;
-        std::unique_ptr< UnivariateEvent > compute_maximum() const;
     };
 
     class STATISKIT_CORE_API NamedData
@@ -70,14 +71,12 @@ namespace statiskit
             UnivariateDataFrame(const UnivariateDataFrame& data);
             virtual ~UnivariateDataFrame();
 
-            virtual Index size() const;
-
             virtual std::unique_ptr< UnivariateData::Generator > generator() const;
+
+            virtual Index get_nb_events() const;
 
             virtual const UnivariateSampleSpace* get_sample_space() const;
             void set_sample_space(const UnivariateSampleSpace& sample_space);
-
-            Index get_nb_events() const;
 
             const UnivariateEvent* get_event(const Index& index) const;
             void set_event(const Index& index, const UnivariateEvent* event);
@@ -94,21 +93,26 @@ namespace statiskit
 
             void detach();
 
-            class STATISKIT_CORE_API Generator : public UnivariateData::Generator
+            class STATISKIT_CORE_API Generator : public PolymorphicCopy<UnivariateEvent, Generator, UnivariateData::Generator >
             {
                 public:
                     Generator(const UnivariateDataFrame& data);
+                    Generator(const Generator& generator);
                     virtual ~Generator();
+
+                    virtual outcome_type get_outcome() const;
+
+                    virtual censoring_type get_censoring() const;
+
+                    virtual const UnivariateEvent* get_event() const;
+                    virtual double get_weight() const;
 
                     virtual bool is_valid() const;
 
                     virtual UnivariateData::Generator& operator++();
 
-                    virtual const UnivariateEvent* event() const;
-                    virtual double weight() const;
-
                 protected:
-                    std::unique_ptr< UnivariateDataFrame > data;
+                    UnivariateDataFrame* data;
                     Index index;
             };            
     };
@@ -123,33 +127,32 @@ namespace statiskit
 
         virtual ~MultivariateData() = 0;
 
-        struct STATISKIT_CORE_API Generator
+        struct STATISKIT_CORE_API Generator : public MultivariateEvent
         {
-            virtual ~Generator() = 0;
+            virtual double get_weight() const = 0;
 
             virtual bool is_valid() const = 0;
 
             virtual Generator& operator++() = 0;
-
-            virtual const MultivariateEvent* event() const = 0;
-            virtual double weight() const = 0;
         };
 
-		virtual Index size() const;
-		
         virtual std::unique_ptr< MultivariateData::Generator > generator() const = 0;
 
-        virtual const MultivariateSampleSpace* get_sample_space() const = 0;
+        virtual Index get_nb_events() const;
+
+        double compute_total() const;
+
+		virtual Index get_nb_components() const = 0;
+		
+        virtual const UnivariateSampleSpace* get_sample_space(const Index& index) const = 0;
 
         virtual std::unique_ptr< UnivariateData > select(const Index& index) const;
         virtual std::unique_ptr< MultivariateData > select(const Indices& indices) const;
 
         virtual std::unique_ptr< MultivariateData > copy() const = 0;
-
-        double compute_total() const;
     };
 
-    class STATISKIT_CORE_API IndexSelectedData : public UnivariateData
+    class STATISKIT_CORE_API IndexSelectedData : public PolymorphicCopy<UnivariateData, IndexSelectedData>
     {
         public:
             IndexSelectedData(const MultivariateData& data, const Index& index);
@@ -162,33 +165,92 @@ namespace statiskit
 
             virtual const UnivariateSampleSpace* get_sample_space() const;
 
-            virtual std::unique_ptr< UnivariateData > copy() const;
+            Index get_index() const;
 
         protected:
             MultivariateData* data;
             Index index;
 
-            class Generator : public UnivariateData::Generator
+            class STATISKIT_CORE_API Generator : public PolymorphicCopy<UnivariateEvent, Generator, UnivariateData::Generator>
             {
-            };
+                public:
+                    Generator(const IndexSelectedData& data);
+                    Generator(const Generator& generator);
+                    virtual ~Generator();
+
+                    virtual outcome_type get_outcome() const;
+
+                    virtual censoring_type get_censoring() const;
+
+                    virtual const UnivariateEvent* get_event() const;
+                    virtual double get_weight() const;
+
+                    virtual bool is_valid() const;
+
+                    virtual UnivariateData::Generator& operator++();
+
+                protected:
+                    MultivariateData::Generator* generator;
+                    Index index;
+            }; 
+    };
+
+    class STATISKIT_CORE_API IndicesSelectedData : public PolymorphicCopy<MultivariateData, IndicesSelectedData>
+    {
+        public:
+            IndicesSelectedData(const MultivariateData& data, const Indices& indices);
+            IndicesSelectedData(const IndicesSelectedData& data);
+            virtual ~IndicesSelectedData();
+
+            const MultivariateData* origin() const;
+
+            virtual std::unique_ptr< MultivariateData::Generator > generator() const;
+
+            virtual Index get_nb_components() const;
+
+            virtual const UnivariateSampleSpace* get_sample_space(const Index& index) const;
+
+            const std::vector< Index >& get_indices() const;
+
+        protected:
+            MultivariateData* data;
+            std::shared_ptr< std::vector< Index > > indices;
+
+            class STATISKIT_CORE_API Generator : public PolymorphicCopy<MultivariateEvent, Generator, MultivariateData::Generator>
+            {
+                public:
+                    Generator(const IndicesSelectedData& data);
+                    Generator(const Generator& generator);
+                    virtual ~Generator();
+
+                    virtual Index size() const;
+
+                    virtual const UnivariateEvent* get_event(const Index& index) const;
+                    virtual double get_weight() const;
+                    
+                    virtual bool is_valid() const;
+
+                    virtual MultivariateData::Generator& operator++();
+
+                protected:
+                    MultivariateData::Generator* generator;
+                    std::shared_ptr< std::vector< Index > > indices;
+            }; 
     };
 
     class STATISKIT_CORE_API MultivariateDataFrame : public PolymorphicCopy< MultivariateData, MultivariateDataFrame >
     {
         public:
             MultivariateDataFrame();
-            MultivariateDataFrame(const MultivariateSampleSpace& sample_space);
             MultivariateDataFrame(const MultivariateDataFrame& data);
             virtual ~MultivariateDataFrame();
 
             virtual std::unique_ptr< MultivariateData::Generator > generator() const;
-
-            virtual const MultivariateSampleSpace* get_sample_space() const;
-            void set_sample_space(const MultivariateSampleSpace& sample_space);
             
-            virtual std::unique_ptr< UnivariateData > select(const Index& index) const;
-
             Index get_nb_components() const;
+
+            virtual const UnivariateSampleSpace* get_sample_space(const Index& index) const;
+            void set_sample_space(const Index& index, const UnivariateSampleSpace& sample_space);
 
             const UnivariateDataFrame* get_component(const Index& index) const;
             void set_component(const Index& index, const UnivariateDataFrame& component);
@@ -201,445 +263,159 @@ namespace statiskit
 
             Index get_nb_events() const;
 
-            std::unique_ptr< MultivariateEvent > get_event(const Index& index) const;
-            void set_event(const Index& index, const MultivariateEvent* event);
-
-            void add_event(const MultivariateEvent* event);
-            std::unique_ptr< MultivariateEvent > pop_event();
-
-            void insert_event(const Index& index, const MultivariateEvent* event);
-            void remove_event(const Index& index);
-
         protected:
-            std::shared_ptr< VectorSampleSpace > sample_space;
             std::shared_ptr< std::vector< std::unique_ptr< UnivariateDataFrame > > > components;
 
-            class STATISKIT_CORE_API SampleSpace : public PolymorphicCopy< MultivariateSampleSpace, SampleSpace >
+            void detach();
+
+            class STATISKIT_CORE_API Generator : public PolymorphicCopy<MultivariateEvent, Generator, MultivariateData::Generator>
             {
                 public:
-                    SampleSpace(const MultivariateDataFrame* data);
-                    SampleSpace(const SampleSpace& sample_space);
-                    virtual ~SampleSpace();
+                    Generator(const MultivariateDataFrame& data);
+                    Generator(const Generator& generator);
+                    virtual ~Generator();
 
                     virtual Index size() const;
+
+                    virtual const UnivariateEvent* get_event(const Index& index) const;
+                    virtual double get_weight() const;
                     
-                    virtual const UnivariateSampleSpace* get(const Index& index) const;
-                                                            
-                protected:
-                    const MultivariateDataFrame* _data;
-            };
-
-            class STATISKIT_CORE_API Event : public PolymorphicCopy< MultivariateEvent, Event >
-            {
-                public:
-                    Event(const MultivariateDataFrame* data, const Index& index);
-                    Event(const Event& event);
-                    virtual ~Event();
-
-                    virtual Index size() const;
-                            
-                    virtual const UnivariateEvent* get(const Index& index) const;
-
-                    class STATISKIT_CORE_API Generator : public MultivariateData::Generator
-                    {
-                        public:
-                            Generator(const MultivariateDataFrame* data);
-                            virtual ~Generator();
-
-                            virtual bool is_valid() const;
-
-                            virtual MultivariateData::Generator& operator++();
-
-                            virtual const MultivariateEvent* event() const;
-                            virtual double weight() const;
-
-                        protected:
-                            Event* _event;
-                    };     
-
-                protected:
-                    const MultivariateDataFrame* _data;
-                    Index _index;
-            };
-
-            class STATISKIT_CORE_API UnivariateDataExtraction : public PolymorphicCopy< UnivariateData, UnivariateDataExtraction >
-            {
-                public:
-                    UnivariateDataExtraction(const MultivariateDataFrame* data, const Index& index);
-                    UnivariateDataExtraction(const UnivariateDataExtraction& data);
-                    virtual ~UnivariateDataExtraction();
-
-                    virtual std::unique_ptr< UnivariateData::Generator > generator() const;
-
-                    virtual const UnivariateSampleSpace* get_sample_space() const;
-                
-                protected:
-                    const UnivariateDataFrame* _data;
-            };
-
-            class STATISKIT_CORE_API MultivariateDataExtraction : public PolymorphicCopy< MultivariateData, MultivariateDataExtraction >
-            {
-                public:
-                    MultivariateDataExtraction(const MultivariateDataFrame* data, const Indices& index);
-                    MultivariateDataExtraction(const MultivariateDataExtraction& data);
-                    virtual ~MultivariateDataExtraction();
-
-                    virtual std::unique_ptr< MultivariateData::Generator > generator() const;
-
-                    virtual const MultivariateSampleSpace* get_sample_space() const;
-
-                    virtual std::unique_ptr< UnivariateData > extract(const Index& index) const;
-
-                    virtual std::unique_ptr< MultivariateData > extract(const Indices& indices) const;
-
-                protected:
-                    const MultivariateDataFrame* _data;
-                    const MultivariateSampleSpace* _sample_space;
-                    std::vector< Index > _indices;
-
-                    class STATISKIT_CORE_API SampleSpace : public PolymorphicCopy< MultivariateSampleSpace, SampleSpace >
-                    {
-                        public:
-                            SampleSpace(const MultivariateDataExtraction* data);
-                            SampleSpace(const SampleSpace& sample_space);
-                            virtual ~SampleSpace();
-
-                            virtual Index size() const;
-                            
-                            virtual const UnivariateSampleSpace* get(const Index& index) const;
-                                                                    
-                        protected:
-                            const MultivariateDataExtraction* _data;
-                    };
-
-                    class STATISKIT_CORE_API Event : public PolymorphicCopy< MultivariateEvent, Event >
-                    {
-                        public:
-                            Event(const MultivariateDataExtraction* data, const Index& index);
-                            virtual ~Event();
-
-                            virtual Index size() const;
-                                    
-                            virtual const UnivariateEvent* get(const Index& index) const;
-
-                            class STATISKIT_CORE_API Generator : public MultivariateData::Generator
-                            {
-                                public:
-                                    Generator(const MultivariateDataExtraction* data);
-                                    virtual ~Generator();
-
-                                    virtual bool is_valid() const;
-
-                                    virtual MultivariateData::Generator& operator++();
-
-                                    virtual const MultivariateEvent* event() const;
-                                    virtual double weight() const;
-
-                                protected:
-                                    Event* _event;
-                                    Index _max_index;
-                            };
-
-                        protected:
-                            const MultivariateDataExtraction* _data;
-                            Index _index;
-                    };
-            };
-    };
-
-    template<class D>
-    class WeightedData : public D
-    {
-        public:
-            WeightedData();
-            virtual ~WeightedData();
-
-            virtual const typename D::sample_space_type* get_sample_space() const;
-
-            virtual std::unique_ptr< typename D::Generator > generator() const;
-
-            const D* get_data() const;
-
-            Index get_nb_weights() const;
-
-            virtual double get_weight(const Index& index) const;     
-            void set_weight(const Index& index, const double& weight);       
-
-            class Generator : public D::Generator
-            {
-                public:
-                    Generator(WeightedData< D >* data);
-                    virtual ~Generator();
-
                     virtual bool is_valid() const;
 
-                    virtual typename D::Generator& operator++();
-
-                    virtual const typename D::event_type* event() const;
-                    virtual double weight() const;
-                    void weight(const double& weigth);
+                    virtual MultivariateData::Generator& operator++();
 
                 protected:
-                    WeightedData< D >* _data;
-                    typename D::Generator* _generator;
-                    Index _index;
-            };   
-
-        protected:
-            const D* _data;
-            std::vector< double > _weights;
-
-            void init(const D* data);
-            void init(const WeightedData< D >& data);
-            void init(const D* data, const std::vector< double >& weights);
+                    MultivariateDataFrame* data;
+                    Index index;
+            }; 
     };
 
-    class STATISKIT_CORE_API WeightedUnivariateData : public PolymorphicCopy< UnivariateData, WeightedUnivariateData, WeightedData< UnivariateData > >
-    {
-        public:
-            WeightedUnivariateData(const UnivariateData* data);
-            WeightedUnivariateData(const UnivariateData* data, const std::vector< double >& weights);
-            WeightedUnivariateData(const WeightedUnivariateData& data);
-            virtual ~WeightedUnivariateData();
+    template<class D, class B>
+        class WeightedData : public PolymorphicCopy< D, WeightedData< D, B >, B >
+        {
+            public:
+                WeightedData(const D& data);
+                WeightedData(const WeightedData< D, B >& data);
+                virtual ~WeightedData();
 
-        protected:
-            WeightedUnivariateData();
-    };
+                virtual std::unique_ptr< typename D::Generator > generator() const;
 
-    class STATISKIT_CORE_API WeightedMultivariateData : public PolymorphicCopy< MultivariateData, WeightedMultivariateData, WeightedData< MultivariateData > >
-    {
-        public:
-            WeightedMultivariateData(const MultivariateData* data);
-            WeightedMultivariateData(const MultivariateData* data, const std::vector< double >& weights);
-            WeightedMultivariateData(const WeightedMultivariateData& data);
-            virtual ~WeightedMultivariateData();
+                const D* origin() const;
 
-            virtual std::unique_ptr< UnivariateData > extract(const Index& index) const;
-            virtual std::unique_ptr< MultivariateData > extract(const Indices& indices) const;
+                Index get_nb_weights() const;
 
-        protected:       
+                virtual double get_weight(const Index& index) const;     
+                void set_weight(const Index& index, const double& weight);       
 
-            template<class D>
-            class DataExtraction : public D
-            {
-                public:
-                    DataExtraction();
-                    virtual ~DataExtraction();
+            protected:
+                D* data;
+                std::shared_ptr< std::vector< double > > weights;
 
-                    virtual std::unique_ptr< typename D::Generator > generator() const;
+                void detach();
 
-                    virtual const typename D::sample_space_type* get_sample_space() const;
-                
-                protected:
-                    const WeightedMultivariateData* _weights;
-                    const D* _data;
+                class Generator : public PolymorphicCopy< typename D::Generator, Generator, typename B::Generator >
+                {
+                    public:
+                        Generator(const WeightedData< D, B >& data);
+                        Generator(const Generator& generator);
+                        virtual ~Generator();
 
-                    class Generator : public D::Generator
-                    {
-                        public:
-                            Generator(const DataExtraction< D >* data);
-                            virtual ~Generator();
+                        virtual double get_weight() const = 0;
 
-                            virtual bool is_valid() const;
+                        virtual typename D::Generator& operator++();
 
-                            virtual typename D::Generator& operator++();
+                    protected:
+                        WeightedData<D, B>* data;
+                        Index index;
+                };
+        };
 
-                            virtual const typename D::event_type* event() const;
-                            virtual double weight() const;
+    // class STATISKIT_CORE_API UnivariateConditionalData
+    // {
+    //     public:
+    //         class STATISKIT_CORE_API Generator
+    //         {
+    //             public:
+    //                 Generator(const UnivariateConditionalData* data);
+    //                 virtual ~Generator();
 
-                        protected:
-                            const DataExtraction< D >* _data;
-                            typename D::Generator* _generator;
-                            Index _index;
-                    };   
+    //                 virtual bool is_valid() const;
 
-                    void init(const WeightedMultivariateData* weights, const D* data);
-                    void init(const DataExtraction< D >& data);
-            };
+    //                 virtual Generator& operator++();
 
-            struct STATISKIT_CORE_API UnivariateDataExtraction : PolymorphicCopy< UnivariateData, UnivariateDataExtraction, DataExtraction< UnivariateData > >
-            { 
-                UnivariateDataExtraction(const WeightedMultivariateData* weights, const Index& index);
-                UnivariateDataExtraction(const UnivariateDataExtraction& data);
-                virtual ~UnivariateDataExtraction();
-            };
+    //                 virtual const UnivariateEvent* response() const;
+    //                 virtual const MultivariateEvent* explanatories() const;
 
+    //                 virtual double weight() const;
 
-            class STATISKIT_CORE_API MultivariateDataExtraction : public PolymorphicCopy< MultivariateData, MultivariateDataExtraction, DataExtraction< MultivariateData > >
-            { 
-                public:
-                    MultivariateDataExtraction(const WeightedMultivariateData* weights, const Indices& indices);
-                    MultivariateDataExtraction(const MultivariateDataExtraction& data);
-                    virtual ~MultivariateDataExtraction();
+    //             protected:
+    //                 UnivariateData::Generator* _rgenerator;
+    //                 MultivariateData::Generator* _egenerator;
+    //         };
 
-                    virtual std::unique_ptr< UnivariateData > extract(const Index& index) const;
-                    virtual std::unique_ptr< MultivariateData > extract(const Indices& indices) const;
+    //         UnivariateConditionalData(const MultivariateData& data, const Index& response, const Indices& explanatories);
+    //         // UnivariateConditionalData(const UnivariateData& response_data, const MultivariateData& explanatories_data);
+    //         UnivariateConditionalData(const UnivariateConditionalData& data);
+    //         virtual ~UnivariateConditionalData();
 
-                protected:
-                    std::vector< Index > _indices;
-            };
-    };
-
-    class STATISKIT_CORE_API UnivariateConditionalData
-    {
-        public:
-            class STATISKIT_CORE_API Generator
-            {
-                public:
-                    Generator(const UnivariateConditionalData* data);
-                    virtual ~Generator();
-
-                    virtual bool is_valid() const;
-
-                    virtual Generator& operator++();
-
-                    virtual const UnivariateEvent* response() const;
-                    virtual const MultivariateEvent* explanatories() const;
-
-                    virtual double weight() const;
-
-                protected:
-                    UnivariateData::Generator* _rgenerator;
-                    MultivariateData::Generator* _egenerator;
-            };
-
-            UnivariateConditionalData(const MultivariateData& data, const Index& response, const Indices& explanatories);
-            UnivariateConditionalData(const UnivariateData& response_data, const MultivariateData& explanatories_data);
-            UnivariateConditionalData(const UnivariateConditionalData& data);
-            virtual ~UnivariateConditionalData();
-
-            virtual Index size() const;
+    //         virtual Index size() const;
             
-            virtual std::unique_ptr< UnivariateConditionalData::Generator > generator() const;
+    //         virtual std::unique_ptr< UnivariateConditionalData::Generator > generator() const;
 
-            virtual const UnivariateData* get_response() const;
-            virtual const MultivariateData* get_explanatories() const;
+    //         virtual const UnivariateData* get_response() const;
+    //         virtual const MultivariateData* get_explanatories() const;
         
-            virtual std::unique_ptr< UnivariateConditionalData > copy() const;
+    //         virtual std::unique_ptr< UnivariateConditionalData > copy() const;
             
-            double compute_total() const;
+    //         double compute_total() const;
 
-        protected:
-            UnivariateData* _response;
-            MultivariateData* _explanatories;
-    };
+    //     protected:
+    //         UnivariateData* _response;
+    //         MultivariateData* _explanatories;
+    // };
 
-    class STATISKIT_CORE_API MultivariateConditionalData
-    {
-        public:
-            class STATISKIT_CORE_API Generator
-            {
-                public:
-                    Generator(const MultivariateConditionalData* data);
-                    virtual ~Generator();
+    // class STATISKIT_CORE_API MultivariateConditionalData
+    // {
+    //     public:
+    //         class STATISKIT_CORE_API Generator
+    //         {
+    //             public:
+    //                 Generator(const MultivariateConditionalData* data);
+    //                 virtual ~Generator();
 
-                    virtual bool is_valid() const;
+    //                 virtual bool is_valid() const;
 
-                    virtual Generator& operator++();
+    //                 virtual Generator& operator++();
 
-                    virtual const MultivariateEvent* responses() const;
-                    virtual const MultivariateEvent* explanatories() const;
+    //                 virtual const MultivariateEvent* responses() const;
+    //                 virtual const MultivariateEvent* explanatories() const;
 
-                    virtual double weight() const;
+    //                 virtual double weight() const;
 
-                protected:
-                    MultivariateData::Generator* _rgenerator;
-                    MultivariateData::Generator* _egenerator;
-            };
+    //             protected:
+    //                 MultivariateData::Generator* _rgenerator;
+    //                 MultivariateData::Generator* _egenerator;
+    //         };
 
-            MultivariateConditionalData(const MultivariateData& data, const Indices& responses, const Indices& explanatories);
-            MultivariateConditionalData(const MultivariateConditionalData& data);
-            virtual ~MultivariateConditionalData();
+    //         MultivariateConditionalData(const MultivariateData& data, const Indices& responses, const Indices& explanatories);
+    //         MultivariateConditionalData(const MultivariateConditionalData& data);
+    //         virtual ~MultivariateConditionalData();
 
-            virtual Index size() const;
+    //         virtual Index size() const;
             
-            virtual std::unique_ptr< MultivariateConditionalData::Generator > generator() const;
+    //         virtual std::unique_ptr< MultivariateConditionalData::Generator > generator() const;
 
-            virtual const MultivariateData* get_responses() const;
-            virtual const MultivariateData* get_explanatories() const;
+    //         virtual const MultivariateData* get_responses() const;
+    //         virtual const MultivariateData* get_explanatories() const;
         
-            virtual std::unique_ptr< MultivariateConditionalData > copy() const;
+    //         virtual std::unique_ptr< MultivariateConditionalData > copy() const;
             
-            double compute_total() const;
+    //         double compute_total() const;
 
-        protected:
-            MultivariateData* _responses;
-            MultivariateData* _explanatories;
-    };
-
-    /*template<class D>
-    class DataMask : public D
-    {
-        public:
-            DataMask(const std::shared_ptr< D >& masked);
-            DataMask(const DataMask< D >& data);
-
-            const std::shared_ptr< D >& get_masked() const;
-
-            virtual const typename D::sample_space_type* get_sample_space() const;
-                         
-            virtual const typename D::event_type * get_event(const Index& index) const;
-            virtual void set_event(const Index& index, const typename D::event_type* event);
-           
-            virtual bool is_weighted() const;
-
-            virtual double get_weight(const Index& index) const;
-            
-            virtual void lock();
-            virtual void unlock();
-            virtual const bool& is_locked() const;
-            
-        protected:
-            std::shared_ptr< D > _masked;
-            
-            virtual Index compute_index(const Index& index) const = 0;
-    };
-
-    template<class D>
-    class RandomizedData : public DataMask< D >
-    {
-        public:
-            RandomizedData(const std::shared_ptr< D >& randomized);
-            RandomizedData(const RandomizedData< D >& data);
-            
-            virtual Index size() const;
-
-            const std::shared_ptr< D >& get_randomized() const;
-
-            const std::vector< Index >& get_randomization() const;
-
-            void randomize();
-
-            virtual std::unique_ptr< D > copy() const;
-
-        protected:
-            std::vector< Index > _randomization;
-            
-            virtual Index compute_index(const Index& index) const;       
-    };
-
-  
-    template<class D>
-    class DataIntervalMask : public DataMask< D >
-    {
-        public:
-            DataIntervalMask(const std::shared_ptr< D >& masked, const Index& lower, const Index& upper, const bool& inside);
-            DataIntervalMask(const DataIntervalMask< D >& data);
-            
-            virtual Index size() const;
-            
-            const bool& get_inside() const;
-            void set_inside(const bool& inside);
-
-            virtual std::unique_ptr< D > copy() const;
-
-        protected:
-            Index _lower;
-            Index _upper;
-            bool _inside;
-            
-            virtual Index compute_index(const Index& index) const;                    
-    };*/
+    //     protected:
+    //         MultivariateData* _responses;
+    //         MultivariateData* _explanatories;
+    // };
 }
 
 #ifndef AUTOWIG

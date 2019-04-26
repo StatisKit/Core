@@ -236,14 +236,14 @@ namespace statiskit
 
         virtual Index size() const = 0;
         
-        virtual const UnivariateSampleSpace* get(const Index& index) const = 0;
+        virtual const UnivariateSampleSpace* get_event(const Index& index) const = 0;
 
         virtual bool is_compatible(const MultivariateEvent* event) const;
         
         virtual Index encode() const;
         
         virtual Eigen::RowVectorXd encode(const MultivariateEvent& event) const;
-        
+
         virtual std::unique_ptr< MultivariateSampleSpace > copy() const = 0;
     };
 
@@ -256,8 +256,8 @@ namespace statiskit
 
             virtual Index size() const;
             
-            virtual const UnivariateSampleSpace* get(const Index& index) const;
-            virtual void set(const Index& index, const UnivariateSampleSpace& sample_space);
+            virtual const UnivariateSampleSpace* get_event(const Index& index) const;
+            virtual void set_event(const Index& index, const UnivariateSampleSpace& sample_space);
             
             virtual std::unique_ptr< MultivariateSampleSpace > copy() const;       
 
