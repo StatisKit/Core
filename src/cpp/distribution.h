@@ -1,5 +1,4 @@
-#ifndef STATISKIT_CORE_DISTRIBUTION_H
-#define STATISKIT_CORE_DISTRIBUTION_H
+#pragma once
 
 #include "base.h"
 #include "data.h"
@@ -29,7 +28,7 @@ namespace statiskit
     /// \brief This virtual class UnivariateDistribution represents the distribution of a random univariate component \f$ X \f$. The support of this distribution is a set \f$ \mathcal{X} \f$ with one dimension.
     struct STATISKIT_CORE_API UnivariateDistribution
     {	
-        typedef UnivariateData data_type;
+        using data_type = UnivariateData;
 
         virtual ~UnivariateDistribution() = 0;
 

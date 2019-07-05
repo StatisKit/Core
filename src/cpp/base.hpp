@@ -1,7 +1,6 @@
-#ifndef AUTOWIG
-#ifndef STATISKIT_CORE_BASE_HPP
-#define STATISKIT_CORE_BASE_HPP
+#pragma once
 
+#ifndef AUTOWIG
 #include <iomanip>
 #include <boost/lexical_cast.hpp>
 
@@ -253,5 +252,4 @@ namespace statiskit
         }
 }
 
-#endif
 #endif

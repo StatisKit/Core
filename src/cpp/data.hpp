@@ -1,6 +1,6 @@
+#pragma once
+
 #ifndef AUTOWIG
-#ifndef STATISKIT_CORE_DATA_HPP
-#define STATISKIT_CORE_DATA_HPP
 
 namespace statiskit
 {
@@ -98,7 +98,86 @@ namespace statiskit
             ++index;
             return *this;
         }
+
+    // template<class I>
+    //     PairedData< I >::PairedData(const typename I::indexing_type first, const Indices& second, const MultivariateData& data)
+    //     {
+    //         this->first = data.select(first).release();
+    //         this->second = data.select(second).release();
+    //     }
+
+    // template<class I>
+    //     PairedData< I >::PairedData(const PairedData< I >& data)
+    //     {
+    //         this->first = data.first.copy().release();
+    //         this->second = data.second.copy().release();
+    //     }
+
+    // template<class I>
+    //     PairedData< I >::~PairedData()
+    //     {
+    //         delete this->first;
+    //         delete this->second;
+    //     }
+
+    // template<class I>
+    //     PairedData< I >::Generator::Generator(const PairedData< I >& data)
+    //     {
+    //         this->first = data.first->generator().release();
+    //         this->second = data.second->generator().release();
+    //     }
+
+    // template<class I>
+    //     PairedData< I >::Generator::Generator(const Generator& generator)
+    //     {
+    //         this->first = generator.first->copy().release();
+    //         this->second = generator.second->copy().release();
+    //     }
+
+    // template<class I>
+    //     PairedData< I >::Generator::~Generator()
+    //     {
+    //         if (this->first) {
+    //             delete this->first;
+    //             this->first = nullptr;
+    //         }
+    //         if (this->second) {
+    //             delete this->second;
+    //             this->second = nullptr;
+    //         }
+    //     }
+
+    // template<class I>
+    //     const typename I::event_type* PairedData< I >::Generator::get_first() const
+    //     {
+    //         return this->first->get_event();
+    //     }
+
+    // template<class I>
+    //     const MultivariateEvent* PairedData< I >::Generator::get_second() const
+    //     {
+    //         return this->second->get_event();
+    //     }
+
+    // template<class I>
+    //     double PairedData< I >::Generator::get_weight() const
+    //     {
+    //         return this->first->get_weight();
+    //     }
+
+    // template<class I>
+    //     bool PairedData< I >::Generator::is_valid() const
+    //     {
+    //         return this->first->is_valid() && this->second->is_valid();
+    //     }
+
+    // template<class I>
+    //     PairedData< I >::Generator& PairedData< I >::Generator::get_first() const
+    //     {
+    //         ++(*this->first);
+    //         ++(*this->second);
+    //         return *this;
+    //     }
 }
 
-#endif
 #endif

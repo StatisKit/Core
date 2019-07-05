@@ -1,5 +1,4 @@
-#ifndef STATISKIT_CORE_DATA_H
-#define STATISKIT_CORE_DATA_H
+#pragma once
 
 #include "base.h"
 #include "sample_space.h"
@@ -112,7 +111,7 @@ namespace statiskit
                     virtual UnivariateData::Generator& operator++();
 
                 protected:
-                    UnivariateDataFrame* data;
+                    UnivariateDataFrame* data = nullptr;
                     Index index;
             };            
     };
@@ -155,6 +154,8 @@ namespace statiskit
     class STATISKIT_CORE_API IndexSelectedData : public PolymorphicCopy<UnivariateData, IndexSelectedData>
     {
         public:
+            using indexing_type=Index;
+
             IndexSelectedData(const MultivariateData& data, const Index& index);
             IndexSelectedData(const IndexSelectedData& data);
             virtual ~IndexSelectedData();
@@ -190,7 +191,7 @@ namespace statiskit
                     virtual UnivariateData::Generator& operator++();
 
                 protected:
-                    MultivariateData::Generator* generator;
+                    MultivariateData::Generator* generator = nullptr;
                     Index index;
             }; 
     };
@@ -198,6 +199,8 @@ namespace statiskit
     class STATISKIT_CORE_API IndicesSelectedData : public PolymorphicCopy<MultivariateData, IndicesSelectedData>
     {
         public:
+            using indexing_type=Indices;
+
             IndicesSelectedData(const MultivariateData& data, const Indices& indices);
             IndicesSelectedData(const IndicesSelectedData& data);
             virtual ~IndicesSelectedData();
@@ -233,7 +236,7 @@ namespace statiskit
                     virtual MultivariateData::Generator& operator++();
 
                 protected:
-                    MultivariateData::Generator* generator;
+                    MultivariateData::Generator* generator = nullptr;
                     std::shared_ptr< std::vector< Index > > indices;
             }; 
     };
@@ -285,7 +288,7 @@ namespace statiskit
                     virtual MultivariateData::Generator& operator++();
 
                 protected:
-                    MultivariateDataFrame* data;
+                    MultivariateDataFrame* data = nullptr;
                     Index index;
             }; 
     };
@@ -330,95 +333,51 @@ namespace statiskit
                 };
         };
 
-    // class STATISKIT_CORE_API UnivariateConditionalData
-    // {
-    //     public:
-    //         class STATISKIT_CORE_API Generator
-    //         {
-    //             public:
-    //                 Generator(const UnivariateConditionalData* data);
-    //                 virtual ~Generator();
+    // template<class I>
+    //     class PairedData
+    //     {
+    //         public:
+    //             using paired_type = I;
 
-    //                 virtual bool is_valid() const;
+    //             PairedData(const typename I::indexing_type& first, const Indices& second, const MultivariateData& data);
+    //             PairedData(const PairedData< I >& data);
+    //             ~PairedData();
 
-    //                 virtual Generator& operator++();
+    //             class Generator
+    //             {
+    //                 public:
+    //                     Generator(const PairedData< I >& data);
+    //                     Generator(const Generator& generator);
+    //                     virtual ~Generator();
+                        
+    //                     const typename I::event_type* get_first() const;
+    //                     const MultivariateEvent* get_second() const;
 
-    //                 virtual const UnivariateEvent* response() const;
-    //                 virtual const MultivariateEvent* explanatories() const;
+    //                     virtual double get_weight() const = 0;
 
-    //                 virtual double weight() const;
+    //                     virtual bool is_valid() const = 0;
 
-    //             protected:
-    //                 UnivariateData::Generator* _rgenerator;
-    //                 MultivariateData::Generator* _egenerator;
-    //         };
+    //                     virtual Generator& operator++() = 0;
 
-    //         UnivariateConditionalData(const MultivariateData& data, const Index& response, const Indices& explanatories);
-    //         // UnivariateConditionalData(const UnivariateData& response_data, const MultivariateData& explanatories_data);
-    //         UnivariateConditionalData(const UnivariateConditionalData& data);
-    //         virtual ~UnivariateConditionalData();
+    //                 protected:
+    //                     typename I::Generator* first;
+    //                     MultivariateData::Generator* second;
+    //             };
 
-    //         virtual Index size() const;
-            
-    //         virtual std::unique_ptr< UnivariateConditionalData::Generator > generator() const;
+    //             virtual std::unique_ptr< Generator > generator() const;
 
-    //         virtual const UnivariateData* get_response() const;
-    //         virtual const MultivariateData* get_explanatories() const;
-        
-    //         virtual std::unique_ptr< UnivariateConditionalData > copy() const;
-            
-    //         double compute_total() const;
+    //             const I* get_first() const;
+    //             const MultivariateData* get_second() const;
 
-    //     protected:
-    //         UnivariateData* _response;
-    //         MultivariateData* _explanatories;
-    // };
+    //         protected:
+    //             I* first = nullptr;
+    //             MultivariateData* second = nullptr;
+    //     };
 
-    // class STATISKIT_CORE_API MultivariateConditionalData
-    // {
-    //     public:
-    //         class STATISKIT_CORE_API Generator
-    //         {
-    //             public:
-    //                 Generator(const MultivariateConditionalData* data);
-    //                 virtual ~Generator();
-
-    //                 virtual bool is_valid() const;
-
-    //                 virtual Generator& operator++();
-
-    //                 virtual const MultivariateEvent* responses() const;
-    //                 virtual const MultivariateEvent* explanatories() const;
-
-    //                 virtual double weight() const;
-
-    //             protected:
-    //                 MultivariateData::Generator* _rgenerator;
-    //                 MultivariateData::Generator* _egenerator;
-    //         };
-
-    //         MultivariateConditionalData(const MultivariateData& data, const Indices& responses, const Indices& explanatories);
-    //         MultivariateConditionalData(const MultivariateConditionalData& data);
-    //         virtual ~MultivariateConditionalData();
-
-    //         virtual Index size() const;
-            
-    //         virtual std::unique_ptr< MultivariateConditionalData::Generator > generator() const;
-
-    //         virtual const MultivariateData* get_responses() const;
-    //         virtual const MultivariateData* get_explanatories() const;
-        
-    //         virtual std::unique_ptr< MultivariateConditionalData > copy() const;
-            
-    //         double compute_total() const;
-
-    //     protected:
-    //         MultivariateData* _responses;
-    //         MultivariateData* _explanatories;
-    // };
+    // using UnivariatePairedData = PairedData< UnivariateData >;
+    // using MultivariatePairedData = PairedData< UnivariateData >;
 }
 
 #ifndef AUTOWIG
 #include "data.hpp"
-#endif
 #endif

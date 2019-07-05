@@ -1,5 +1,4 @@
-#ifndef STATISKIT_CORE_BASE_H
-#define STATISKIT_CORE_BASE_H
+#pragma once
 
 #include <statiskit/linalg/Eigen.h>
 #include <statiskit/stl/STL.h>
@@ -208,5 +207,4 @@ namespace statiskit
 
 #ifndef AUTOWIG
 #include "base.hpp"
-#endif
 #endif
