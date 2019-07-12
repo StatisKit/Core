@@ -1,8 +1,8 @@
-#ifndef STATISKIT_CORE_EVENT_H
-#define STATISKIT_CORE_EVENT_H
+#pragma once
 
-#include <vector>
 #include <set>
+#include <vector>
+
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #include "base.h"
@@ -16,6 +16,8 @@ namespace statiskit
         CONTINUOUS,
         MIXED,
     };
+
+    inline std::ostream& operator<<(std::ostream & os, const outcome_type& outcome);
 
     enum class censoring_type
     {
@@ -199,7 +201,4 @@ namespace statiskit
     };
 }
 
-#ifndef AUTOWIG
 #include "event.hpp"
-#endif
-#endif

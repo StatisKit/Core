@@ -1,6 +1,5 @@
-#pragma once
-
 #ifndef AUTOWIG
+#pragma once
 
 namespace statiskit
 {

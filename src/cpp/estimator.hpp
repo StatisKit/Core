@@ -1,6 +1,5 @@
 #ifndef AUTOWIG
-#ifndef STATISKIT_CORE_ESTIMATOR_HPP
-#define STATISKIT_CORE_ESTIMATOR_HPP
+#pragma once
 
 namespace statiskit
 {    
@@ -735,5 +734,4 @@ namespace statiskit
         }
 }
 
-#endif
 #endif

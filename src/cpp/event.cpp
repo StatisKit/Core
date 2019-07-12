@@ -2,6 +2,22 @@
 
 namespace statiskit
 {
+    std::ostream& operator<<(std::ostream& os, const outcome_type& outcome)
+    {
+        switch (outcome) {
+            case CATEGORICAL:
+                os << "categorical";
+                break;
+            case DISCRETE:
+                os << "discrete";
+                break;
+            case CONTINUOUS:
+                os << "continuous";
+                break;
+        }
+        return os;
+    }
+
     UnivariateEvent::~UnivariateEvent()
     {}
 

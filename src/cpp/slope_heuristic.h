@@ -1,13 +1,12 @@
-#ifndef STATISKIT_CORE_SLOPE_HEURISTIC_H
-#define STATISKIT_CORE_SLOPE_HEURISTIC_H
+#pragma once
 
-#include "base.h"
+#include <map>
+#include <memory>
+#include <set>
 
 #include <statiskit/linalg/Eigen.h>
 
-#include <set>
-#include <map>
-#include <memory>
+#include "base.h"
 
 namespace statiskit
 {
@@ -195,7 +194,4 @@ namespace statiskit
     };
 }
 
-#ifndef AUTOWIG
 #include "slope_heuristic.hpp"
-#endif
-#endif

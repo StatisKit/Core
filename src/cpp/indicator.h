@@ -1,5 +1,4 @@
-#ifndef STATISKIT_CORE_INDICATOR_H
-#define STATISKIT_CORE_INDICATOR_H
+#pragma once
 
 #include "data.h"
 #include "estimation.h"
@@ -313,5 +312,3 @@ namespace statiskit
             template<class E> double get_value(const UnivariateEvent* event, const double& completion, const bool& na_omit=true) const;
     };*/
 }
-
-#endif

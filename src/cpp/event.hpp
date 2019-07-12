@@ -1,6 +1,5 @@
 #ifndef AUTOWIG
-#ifndef STATISKIT_CORE_EVENT_HPP
-#define STATISKIT_CORE_EVENT_HPP
+#pragma once
 
 namespace statiskit
 {
@@ -126,5 +125,4 @@ namespace statiskit
         { return std::make_unique< IntervalCensoredEvent< E > >(*this); }
 }
 
-#endif
 #endif

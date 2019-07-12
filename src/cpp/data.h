@@ -1,10 +1,10 @@
 #pragma once
 
-#include "base.h"
-#include "sample_space.h"
-
 #include <boost/random/uniform_int.hpp>
 #include <boost/random/variate_generator.hpp>
+
+#include "base.h"
+#include "sample_space.h"
 
 namespace statiskit
 {
@@ -378,6 +378,4 @@ namespace statiskit
     // using MultivariatePairedData = PairedData< UnivariateData >;
 }
 
-#ifndef AUTOWIG
 #include "data.hpp"
-#endif

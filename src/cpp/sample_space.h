@@ -1,15 +1,15 @@
-#ifndef STATISKIT_CORE_SAMPLE_SPACE_H
-#define STATISKIT_CORE_SAMPLE_SPACE_H
+#pragma once
 
-#include "base.h"
-#include "event.h"
+#include <algorithm>
+#include <map>
+
+#include <boost/random/uniform_int.hpp>
+#include <boost/random/variate_generator.hpp>
 
 #include <statiskit/linalg/Eigen.h>
 
-#include <algorithm>
-#include <boost/random/uniform_int.hpp>
-#include <boost/random/variate_generator.hpp>
-#include <map>
+#include "base.h"
+#include "event.h"
 
 namespace statiskit
 {    
@@ -269,5 +269,3 @@ namespace statiskit
 
     typedef std::vector< UnivariateSampleSpace* > SampleSpaceVector;
 }
-
-#endif

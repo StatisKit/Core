@@ -14,83 +14,23 @@ namespace statiskit
     underdispersion_error::underdispersion_error() : parameter_error("data", " is underdispersed")
     {}
 
-    UnivariateDistributionEstimation::~UnivariateDistributionEstimation()
-    {}
-
-    UnivariateDistributionEstimation::Estimator::~Estimator()
-    {}
-
-    std::unique_ptr< estimation_type > UnivariateDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Index& variable, const bool& lazy=true) const
+    std::unique_ptr< UnivariateDistributionEstimation::Estimator::estimation_type > UnivariateDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Index& variable, const bool& lazy) const
     {
-        return (*this)(data.select(variable), lazy);
+        return this->operator()(*data.select(variable), lazy);
     }
 
-    CategoricalUnivariateDistributionEstimation::Estimator::Estimator()
-    {}
-
-    CategoricalUnivariateDistributionEstimation::Estimator::Estimator(const Estimator& estimator)
-    {}
-
-    CategoricalUnivariateDistributionEstimation::Estimator::~Estimator()
-    {}
-
-    std::unique_ptr< UnivariateDistributionEstimation > CategoricalUnivariateDistributionEstimation::Estimator::operator() (const UnivariateData& data, const bool& lazy) const
+    std::unique_ptr< MultivariateDistributionEstimation::Estimator::estimation_type > MultivariateDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Indices& variables, const bool& lazy) const
     {
-        if(data.get_sample_space()->get_outcome() != CATEGORICAL)
-        { throw statiskit::sample_space_error(CATEGORICAL); }
-        std::unique_ptr< UnivariateDistributionEstimation > estimation;
-        std::set< std::string > values;
-        double total = data.compute_total();
-        if(total > 0. && boost::math::isfinite(total))
-        {
-            const CategoricalSampleSpace* sample_space = static_cast< const CategoricalSampleSpace* >(data.get_sample_space());
-            values = sample_space->get_values();
-            Eigen::VectorXd masses = Eigen::VectorXd::Zero(values.size());
-            std::unique_ptr< UnivariateData::Generator > generator = data.generator();
-            while(generator->is_valid())
-            {
-                auto event = generator->event();
-                if(event)
-                {
-                    if(event->get_event() == ELEMENTARY)
-                    {
-                        std::set< std::string >::iterator it = values.find(static_cast< const CategoricalElementaryEvent* >(event)->get_value());
-                        masses[distance(values.begin(), it)] += generator->weight() / total;
-                    }
-                }
-                ++(*generator);
-            }
-            CategoricalUnivariateDistribution* distribution;
-            switch(sample_space->get_ordering())
-            {
-                case NONE:
-                case PARTIAL:
-                    distribution = new NominalDistribution(values, masses);
-                    break;
-                case TOTAL:
-                    distribution = new OrdinalDistribution(static_cast< const OrdinalSampleSpace* >(sample_space)->get_ordered(), masses);
-                    break;
-            }
-            if(lazy)
-            { estimation = std::make_unique< CategoricalUnivariateDistributionLazyEstimation >(distribution); }
-            else
-            { estimation = std::make_unique< CategoricalUnivariateDistributionActiveEstimation >(distribution, &data); }
-        }
-        return estimation;
+        return this->operator()(*data.select(variables), lazy);
     }
 
-    std::unique_ptr< UnivariateDistributionEstimation::Estimator > CategoricalUnivariateDistributionEstimation::Estimator::copy() const
-    { return std::make_unique< Estimator >(*this); }
+    std::unique_ptr< UnivariateConditionalDistributionEstimation::Estimator::estimation_type > UnivariateConditionalDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Index& response, const Indices& explanatories, const bool& lazy) const
+    {
+        return this->operator()(*data.select(response), *data.select(explanatories), lazy);
+    }
 
-    MultivariateDistributionEstimation::~MultivariateDistributionEstimation()
-    {}
-
-    MultivariateDistributionEstimation::Estimator::~Estimator()
-    {}
-
-    UnivariateConditionalDistributionEstimation::~UnivariateConditionalDistributionEstimation()
-    {}
-
-    MultivariateConditionalDistributionEstimation::~MultivariateConditionalDistributionEstimation()
-    {}
+    std::unique_ptr< MultivariateConditionalDistributionEstimation::Estimator::estimation_type > MultivariateConditionalDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Indices& responses, const Indices& explanatories, const bool& lazy) const
+    {
+        return this->operator()(*data.select(responses), *data.select(explanatories), lazy);
+    }
 }

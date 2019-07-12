@@ -1,6 +1,5 @@
 #ifndef AUTOWIG
-#ifndef STATISKIT_CORE_SLOPE_HEURISTIC_HPP
-#define STATISKIT_CORE_SLOPE_HEURISTIC_HPP
+#pragma once
 
 namespace statiskit
 {
@@ -92,5 +91,4 @@ namespace statiskit
         }
 }
 
-#endif
 #endif

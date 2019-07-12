@@ -1,9 +1,9 @@
-#ifndef STATISKIT_CORE_SINGULAR_H
-#define STATISKIT_CORE_SINGULAR_H
+#pragma once
+
+#include <statiskit/linalg/Eigen.h>
 
 #include "base.h"
 #include "data.h"
-#include <statiskit/linalg/Eigen.h>
 
 namespace statiskit
 {
@@ -70,5 +70,3 @@ namespace statiskit
             Eigen::VectorXd _alpha;
     };
 }
-
-#endif

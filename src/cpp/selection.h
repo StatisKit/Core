@@ -1,3 +1,5 @@
+#pragma once
+
     template<class B> class Selection : public B
     {
         public:

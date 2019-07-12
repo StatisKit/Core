@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "base.h"
+#include "sample_space.h"
 
 namespace statiskit
 {

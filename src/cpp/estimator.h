@@ -1,11 +1,10 @@
-#ifndef STATISKIT_CORE_ESTIMATOR_H
-#define STATISKIT_CORE_ESTIMATOR_H
+#pragma once
 
 #include "base.h"
 #include "distribution.h"
+#include "estimation.h"
 #include "indicator.h"
 #include "slope_heuristic.h"
-#include "estimation.h"
 
 namespace statiskit
 {
@@ -598,7 +597,4 @@ namespace statiskit
     typedef MixtureSingularDistributionEMEstimation::Estimator MixtureSingularDistributionEMEstimator;
 }
 
-#ifndef AUTOWIG
 #include "estimator.hpp"
-#endif
-#endif
