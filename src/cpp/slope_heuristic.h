@@ -25,7 +25,7 @@ namespace statiskit
             virtual std::unique_ptr< SlopeHeuristicSolver > copy() const = 0;
 
         protected:
-            linalg::solver_type _solver;
+            linalg::solver_type solver;
     };
 
     struct STATISKIT_CORE_API SlopeHeuristicOLSSolver : SlopeHeuristicSolver
@@ -53,8 +53,8 @@ namespace statiskit
             void set_maxits(const unsigned int& maxits);
 
         protected:
-            double _epsilon;
-            unsigned int _maxits;
+            double epsilon;
+            unsigned int maxits;
 
             virtual void update(const Eigen::VectorXd& beta, Eigen::MatrixXd& W, const Eigen::MatrixXd& X, const Eigen::VectorXd& y) const = 0;
     };
@@ -71,7 +71,7 @@ namespace statiskit
             void set_k(const double& k);
 
         protected:
-            double _k;
+            double k;
 
             virtual void update(const Eigen::VectorXd& beta, Eigen::MatrixXd& W, const Eigen::MatrixXd& X, const Eigen::VectorXd& y) const;
     };
@@ -88,7 +88,7 @@ namespace statiskit
             void set_k(const double& k);
          
          protected:
-            double _k;
+            double k;
 
             virtual void update(const Eigen::VectorXd& beta, Eigen::MatrixXd& W, const Eigen::MatrixXd& X, const Eigen::VectorXd& y) const;
     };
@@ -97,38 +97,34 @@ namespace statiskit
 
     struct STATISKIT_CORE_API SlopeHeuristicSelector
     { 
+        using copy_type = SlopeHeuristicSelector;
+
         virtual ~SlopeHeuristicSelector();
 
         virtual Index operator() (const SlopeHeuristic& sh) const = 0;
 
-        virtual std::unique_ptr< SlopeHeuristicSelector > copy() const = 0; 
+        virtual std::unique_ptr< copy_type > copy() const = 0; 
     };
 
-    struct STATISKIT_CORE_API SlopeHeuristicMaximalSelector : SlopeHeuristicSelector
+    struct STATISKIT_CORE_API SlopeHeuristicMaximalSelector : PolymorphicCopy<SlopeHeuristicMaximalSelector, SlopeHeuristicSelector>
     { 
-        SlopeHeuristicMaximalSelector();
-        SlopeHeuristicMaximalSelector(const SlopeHeuristicMaximalSelector& selector);
+        using PolymorphicCopy<SlopeHeuristicMaximalSelector, SlopeHeuristicSelector>::PolymorphicCopy;
 
         virtual Index operator() (const SlopeHeuristic& sh) const; 
-
-        virtual std::unique_ptr< SlopeHeuristicSelector > copy() const; 
     };
 
-    class STATISKIT_CORE_API SlopeHeuristicSuperiorSelector : public SlopeHeuristicSelector
+    class STATISKIT_CORE_API SlopeHeuristicSuperiorSelector : public PolymorphicCopy<SlopeHeuristicSuperiorSelector, SlopeHeuristicSelector>
     {
         public:
-            SlopeHeuristicSuperiorSelector();
-            SlopeHeuristicSuperiorSelector(const SlopeHeuristicSuperiorSelector& selector);
+            using PolymorphicCopy<SlopeHeuristicSuperiorSelector, SlopeHeuristicSelector>::PolymorphicCopy;
 
             virtual Index operator() (const SlopeHeuristic& sh) const;
-
-            virtual std::unique_ptr< SlopeHeuristicSelector > copy() const; 
 
             const double& get_threshold() const;
             void set_threshold(const double& threshold);
 
         protected:
-            double _threshold;
+            double threshold;
     };
 
     class STATISKIT_CORE_API SlopeHeuristic
@@ -161,37 +157,14 @@ namespace statiskit
             void set_selector(const SlopeHeuristicSelector& _selector);
             
         protected:
-            std::vector< double > _penshapes;
-            std::vector< double > _scores;
-            std::vector< double > _intercepts;
-            std::vector< double > _slopes;
-            std::vector< Index > _selected;
-            SlopeHeuristicSolver* _solver;
-            SlopeHeuristicSelector* _selector;
+            std::vector< double > penshapes;
+            std::vector< double > scores;
+            std::vector< double > intercepts;
+            std::vector< double > slopes;
+            std::vector< Index > selected;
+            SlopeHeuristicSolver* solver;
+            SlopeHeuristicSelector* selector;
 
             void finalize();
     };
-
-    template<class E> class SlopeHeuristicSelection : public SlopeHeuristic, public E
-    {
-        public:
-            SlopeHeuristicSelection(const typename E::data_type* data);
-            SlopeHeuristicSelection(const SlopeHeuristicSelection< E >& she);
-            virtual ~SlopeHeuristicSelection();
-
-            virtual typename E::estimated_type const * get_estimated() const;
-
-            const typename E::estimated_type* get_proposal(const Index& index) const;
-
-            const typename E::data_type* get_data() const;
-
-            
-        protected:
-            typename E::data_type* _data;
-            std::vector< typename E::estimated_type* > _proposals;
-
-            void add(const double& penshape, const double& score, typename E::estimated_type* model);
-    };
 }
-
-#include "slope_heuristic.hpp"

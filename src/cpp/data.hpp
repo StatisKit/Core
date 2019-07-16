@@ -3,41 +3,41 @@
 
 namespace statiskit
 {
-    template<class D, class B>
-        WeightedData< D, B >::WeightedData(const D& data)
+    template<class B>
+        WeightedData<B>::WeightedData(const B& data)
         {
             this->data = data.copy().release();
             this->weights = std::make_shared< std::vector< double > >(data.get_nb_events(), 1.);
         }
 
-    template<class D, class B>
-        WeightedData< D, B >::WeightedData(const WeightedData< D, B >& data)
+    template<class B>
+        WeightedData<B>::WeightedData(const WeightedData<B>& data)
         {
             this->data = data.data->copy().release();
             this->weights = data.weights;
         }
 
 
-    template<class D, class B>
-        WeightedData< D, B >::~WeightedData()
+    template<class B>
+        WeightedData<B>::~WeightedData()
         {
             delete this->data;
         }
 
-    template<class D, class B>
-        std::unique_ptr< typename D::Generator > WeightedData< D, B >::generator() const
+    template<class B>
+        std::unique_ptr< typename B::Generator > WeightedData<B>::generator() const
         { return std::make_unique< Generator >(*this); }
 
-    template<class D, class B>
-        const D* WeightedData< D, B >::origin() const
+    template<class B>
+        const B* WeightedData<B>::origin() const
         { return this->data; }
 
-    template<class D, class B>
-        Index WeightedData< D, B >::get_nb_weights() const
+    template<class B>
+        Index WeightedData<B>::get_nb_weights() const
         { return this->weights->size(); }
 
-    template<class D, class B>
-        double WeightedData< D, B >::get_weight(const Index& index) const
+    template<class B>
+        double WeightedData<B>::get_weight(const Index& index) const
         {
             if (index > this->get_nb_weights()) {
                 throw size_error("index", this->get_nb_weights(), size_error::inferior);
@@ -45,8 +45,8 @@ namespace statiskit
             return (*this->weights)[index];
         }
 
-    template<class D, class B>
-        void WeightedData< D, B >::set_weight(const Index& index, const double& weight)
+    template<class B>
+        void WeightedData<B>::set_weight(const Index& index, const double& weight)
         {
             if (index > this->get_nb_weights()) {
                 throw size_error("index", this->get_nb_weights(), size_error::inferior);
@@ -57,8 +57,8 @@ namespace statiskit
             (*this->weights)[index] = weight;
         }
 
-    template<class D, class B>
-        void WeightedData< D, B >::detach()
+    template<class B>
+        void WeightedData<B>::detach()
         {
             if (this->weights.use_count() > 1) {
                 std::shared_ptr< std::vector< double > > weights = std::make_shared< std::vector< double > >(this->weights->cbegin(), this->weights->cend());
@@ -66,32 +66,32 @@ namespace statiskit
             }
         }
 
-    template<class D, class B>
-        WeightedData< D, B >::Generator::Generator(const WeightedData< D, B >& data) :  PolymorphicCopy< typename D::Generator, Generator, typename B::Generator >(data)
+    template<class B>
+        WeightedData<B>::Generator::Generator(const WeightedData<B>& data) :  PolymorphicCopy< Generator, typename B::Generator >(data)
         {
             this->data = data.copy().release();
             this->index = 0;
         }
 
-    template<class D, class B>
-        WeightedData< D, B >::Generator::Generator(const Generator& generator) :  PolymorphicCopy< typename D::Generator, Generator, typename B::Generator >(generator)
+    template<class B>
+        WeightedData<B>::Generator::Generator(const Generator& generator) :  PolymorphicCopy< Generator, typename B::Generator >(generator)
         {
-            this->data = static_cast< WeightedData< D, B >* >(generator.data->copy().release());
+            this->data = static_cast< WeightedData<B>* >(generator.data->copy().release());
             this->index = generator.index;
         }
 
-    template<class D, class B>
-        WeightedData< D, B >::Generator::~Generator()
+    template<class B>
+        WeightedData<B>::Generator::~Generator()
         {
             delete this->data;
         }
 
-    template<class D, class B>
-        double WeightedData< D, B >::Generator::get_weight() const
+    template<class B>
+        double WeightedData<B>::Generator::get_weight() const
         { return this->data->get_weight(this->index); }
 
-    template<class D, class B>
-        typename D::Generator& WeightedData< D, B >::Generator::operator++()
+    template<class B>
+        typename B::Generator& WeightedData<B>::Generator::operator++()
         {
             B::Generator::operator++();
             ++index;

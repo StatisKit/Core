@@ -8,13 +8,55 @@
 
 namespace statiskit
 {
-    class WeightedUnivariateData;
+
+    template<class B>
+        class WeightedData : public PolymorphicCopy<WeightedData< B >, B >
+        {
+            public:
+                WeightedData(const B& data);
+                WeightedData(const WeightedData<B>& data);
+                virtual ~WeightedData();
+
+                virtual std::unique_ptr< typename B::Generator > generator() const;
+
+                virtual const typename B::sample_space_type* get_sample_space() const;
+
+                const B* origin() const;
+
+                Index get_nb_weights() const;
+
+                virtual double get_weight(const Index& index) const;     
+                void set_weight(const Index& index, const double& weight);       
+
+            protected:
+                B* data;
+                std::shared_ptr< std::vector< double > > weights;
+
+                void detach();
+
+                class Generator : public PolymorphicCopy<Generator, typename B::Generator >
+                {
+                    public:
+                        Generator(const WeightedData<B>& data);
+                        Generator(const Generator& generator);
+                        virtual ~Generator();
+
+                        virtual double get_weight() const = 0;
+
+                        virtual typename B::Generator& operator++();
+
+                    protected:
+                        WeightedData<B>* data;
+                        Index index;
+                };
+        };
 
     struct STATISKIT_CORE_API UnivariateData
     {
-        typedef UnivariateSampleSpace sample_space_type;
-        typedef UnivariateEvent event_type;
-        typedef WeightedUnivariateData weighted_type;
+        using copy_type = UnivariateData;
+        using sample_space_type = UnivariateSampleSpace;
+        using event_type = UnivariateEvent;
+        using weighted_type = WeightedData< UnivariateData >;
 
         virtual ~UnivariateData() = 0;
 
@@ -41,8 +83,10 @@ namespace statiskit
 
         virtual const UnivariateSampleSpace* get_sample_space() const = 0;
     
-        virtual std::unique_ptr< UnivariateData > copy() const = 0;
+        virtual std::unique_ptr< copy_type > copy() const = 0;
     };
+
+    using WeightedUnivariateData = UnivariateData::weighted_type;
 
     class STATISKIT_CORE_API NamedData
     {
@@ -63,7 +107,7 @@ namespace statiskit
             static unsigned int INDEX;
     };
 
-    class STATISKIT_CORE_API UnivariateDataFrame : public PolymorphicCopy< UnivariateData, UnivariateDataFrame >, public NamedData
+    class STATISKIT_CORE_API UnivariateDataFrame : public PolymorphicCopy< UnivariateDataFrame, UnivariateData >, public NamedData
     {
         public:
             UnivariateDataFrame(const UnivariateSampleSpace& sample_space);
@@ -92,7 +136,7 @@ namespace statiskit
 
             void detach();
 
-            class STATISKIT_CORE_API Generator : public PolymorphicCopy<UnivariateEvent, Generator, UnivariateData::Generator >
+            class STATISKIT_CORE_API Generator : public PolymorphicCopy< Generator, UnivariateData::Generator >
             {
                 public:
                     Generator(const UnivariateDataFrame& data);
@@ -116,13 +160,12 @@ namespace statiskit
             };            
     };
 
-    class WeightedMultivariateData;
-
     struct STATISKIT_CORE_API MultivariateData
     {
-        typedef MultivariateSampleSpace sample_space_type;
-        typedef MultivariateEvent event_type;
-        typedef WeightedMultivariateData weighted_type;
+        using copy_type = MultivariateData;
+        using sample_space_type = MultivariateSampleSpace;
+        using event_type = MultivariateEvent;
+        using weighted_type = WeightedData< MultivariateData >;
 
         virtual ~MultivariateData() = 0;
 
@@ -151,7 +194,9 @@ namespace statiskit
         virtual std::unique_ptr< MultivariateData > copy() const = 0;
     };
 
-    class STATISKIT_CORE_API IndexSelectedData : public PolymorphicCopy<UnivariateData, IndexSelectedData>
+    using WeightedMultivariateData = MultivariateData::weighted_type;
+
+    class STATISKIT_CORE_API IndexSelectedData : public PolymorphicCopy<IndexSelectedData, UnivariateData>
     {
         public:
             using indexing_type=Index;
@@ -172,7 +217,7 @@ namespace statiskit
             MultivariateData* data;
             Index index;
 
-            class STATISKIT_CORE_API Generator : public PolymorphicCopy<UnivariateEvent, Generator, UnivariateData::Generator>
+            class STATISKIT_CORE_API Generator : public PolymorphicCopy<Generator, UnivariateData::Generator>
             {
                 public:
                     Generator(const IndexSelectedData& data);
@@ -196,7 +241,7 @@ namespace statiskit
             }; 
     };
 
-    class STATISKIT_CORE_API IndicesSelectedData : public PolymorphicCopy<MultivariateData, IndicesSelectedData>
+    class STATISKIT_CORE_API IndicesSelectedData : public PolymorphicCopy<IndicesSelectedData, MultivariateData>
     {
         public:
             using indexing_type=Indices;
@@ -219,7 +264,7 @@ namespace statiskit
             MultivariateData* data;
             std::shared_ptr< std::vector< Index > > indices;
 
-            class STATISKIT_CORE_API Generator : public PolymorphicCopy<MultivariateEvent, Generator, MultivariateData::Generator>
+            class STATISKIT_CORE_API Generator : public PolymorphicCopy<Generator, MultivariateData::Generator>
             {
                 public:
                     Generator(const IndicesSelectedData& data);
@@ -241,7 +286,7 @@ namespace statiskit
             }; 
     };
 
-    class STATISKIT_CORE_API MultivariateDataFrame : public PolymorphicCopy< MultivariateData, MultivariateDataFrame >
+    class STATISKIT_CORE_API MultivariateDataFrame : public PolymorphicCopy<MultivariateDataFrame, MultivariateData>
     {
         public:
             MultivariateDataFrame();
@@ -271,7 +316,7 @@ namespace statiskit
 
             void detach();
 
-            class STATISKIT_CORE_API Generator : public PolymorphicCopy<MultivariateEvent, Generator, MultivariateData::Generator>
+            class STATISKIT_CORE_API Generator : public PolymorphicCopy<Generator, MultivariateData::Generator>
             {
                 public:
                     Generator(const MultivariateDataFrame& data);
@@ -292,90 +337,6 @@ namespace statiskit
                     Index index;
             }; 
     };
-
-    template<class D, class B>
-        class WeightedData : public PolymorphicCopy< D, WeightedData< D, B >, B >
-        {
-            public:
-                WeightedData(const D& data);
-                WeightedData(const WeightedData< D, B >& data);
-                virtual ~WeightedData();
-
-                virtual std::unique_ptr< typename D::Generator > generator() const;
-
-                const D* origin() const;
-
-                Index get_nb_weights() const;
-
-                virtual double get_weight(const Index& index) const;     
-                void set_weight(const Index& index, const double& weight);       
-
-            protected:
-                D* data;
-                std::shared_ptr< std::vector< double > > weights;
-
-                void detach();
-
-                class Generator : public PolymorphicCopy< typename D::Generator, Generator, typename B::Generator >
-                {
-                    public:
-                        Generator(const WeightedData< D, B >& data);
-                        Generator(const Generator& generator);
-                        virtual ~Generator();
-
-                        virtual double get_weight() const = 0;
-
-                        virtual typename D::Generator& operator++();
-
-                    protected:
-                        WeightedData<D, B>* data;
-                        Index index;
-                };
-        };
-
-    // template<class I>
-    //     class PairedData
-    //     {
-    //         public:
-    //             using paired_type = I;
-
-    //             PairedData(const typename I::indexing_type& first, const Indices& second, const MultivariateData& data);
-    //             PairedData(const PairedData< I >& data);
-    //             ~PairedData();
-
-    //             class Generator
-    //             {
-    //                 public:
-    //                     Generator(const PairedData< I >& data);
-    //                     Generator(const Generator& generator);
-    //                     virtual ~Generator();
-                        
-    //                     const typename I::event_type* get_first() const;
-    //                     const MultivariateEvent* get_second() const;
-
-    //                     virtual double get_weight() const = 0;
-
-    //                     virtual bool is_valid() const = 0;
-
-    //                     virtual Generator& operator++() = 0;
-
-    //                 protected:
-    //                     typename I::Generator* first;
-    //                     MultivariateData::Generator* second;
-    //             };
-
-    //             virtual std::unique_ptr< Generator > generator() const;
-
-    //             const I* get_first() const;
-    //             const MultivariateData* get_second() const;
-
-    //         protected:
-    //             I* first = nullptr;
-    //             MultivariateData* second = nullptr;
-    //     };
-
-    // using UnivariatePairedData = PairedData< UnivariateData >;
-    // using MultivariatePairedData = PairedData< UnivariateData >;
 }
 
 #include "data.hpp"

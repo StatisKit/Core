@@ -1,4 +1,7 @@
+#include "optimization.h"
 
+namespace statiskit
+{
     Schedule::~Schedule()
     {}
 
@@ -29,3 +32,4 @@
     {
         this->theta = theta;
     }
+}

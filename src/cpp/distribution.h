@@ -20,13 +20,13 @@
 
 #include "base.h"
 #include "data.h"
-#include "singular.h"
 
 namespace statiskit
 {
     /// \brief This virtual class UnivariateDistribution represents the distribution of a random univariate component \f$ X \f$. The support of this distribution is a set \f$ \mathcal{X} \f$ with one dimension.
     struct STATISKIT_CORE_API UnivariateDistribution
     {	
+        using copy_type = UnivariateDistribution;
         using data_type = UnivariateData;
 
         virtual ~UnivariateDistribution() = 0;
@@ -87,7 +87,7 @@ namespace statiskit
      * */
     struct STATISKIT_CORE_API CategoricalUnivariateDistribution : UnivariateDistribution
     {
-        typedef CategoricalEvent event_type;
+        using event_type = CategoricalEvent;
         
 		/** \brief Compute the probability of a set of values.
          *
@@ -124,7 +124,7 @@ namespace statiskit
     };
     
 
-    struct STATISKIT_CORE_API BinaryDistribution : public PolymorphicCopy< UnivariateDistribution, BinaryDistribution, CategoricalUnivariateDistribution >
+    struct STATISKIT_CORE_API BinaryDistribution : public PolymorphicCopy< BinaryDistribution, CategoricalUnivariateDistribution >
     {
         public:
             BinaryDistribution();
@@ -177,7 +177,7 @@ namespace statiskit
     /** \brief This class NominalDistribution represents the distribution of a random nominal component \f$ S\f$. The support is a finite non-ordered set of categories (string) \f$ \mathcal{S} \f$ and we have \f$ \sum_{s\in \mathcal{S}} P(S=s) = 1\f$.
      * 
      * */
-    struct STATISKIT_CORE_API NominalDistribution : PolymorphicCopy< UnivariateDistribution, NominalDistribution, UnivariateFrequencyDistribution< CategoricalUnivariateDistribution > >
+    struct STATISKIT_CORE_API NominalDistribution : PolymorphicCopy< NominalDistribution, UnivariateFrequencyDistribution< CategoricalUnivariateDistribution > >
     { 
         NominalDistribution(const std::set< std::string >& values);
         NominalDistribution(const std::set< std::string >& values, const Eigen::VectorXd& pi);
@@ -189,7 +189,7 @@ namespace statiskit
     /** \brief This class OrdinalDistribution represents the distribution of a random ordinal component \f$ S\f$. The support is a finite ordered set of categories (string) \f$ \mathcal{S} =\left\lbrace s_1, \ldots, s_J \right\rbrace \f$ and we have \f$ \sum_{j=1}^J P(S=s_j) = 1 \f$.
      * 
      * */
-    class STATISKIT_CORE_API  OrdinalDistribution : public PolymorphicCopy< UnivariateDistribution, OrdinalDistribution, UnivariateFrequencyDistribution< CategoricalUnivariateDistribution > >
+    class STATISKIT_CORE_API  OrdinalDistribution : public PolymorphicCopy< OrdinalDistribution, UnivariateFrequencyDistribution< CategoricalUnivariateDistribution > >
     {
         public:
              /** \brief An alternative constructor
@@ -258,10 +258,10 @@ namespace statiskit
             std::vector< Index > rank;
     };
 
-    class STATISKIT_CORE_API HierarchicalDistribution : public PolymorphicCopy< UnivariateDistribution, HierarchicalDistribution, CategoricalUnivariateDistribution >
+    class STATISKIT_CORE_API HierarchicalDistribution : public PolymorphicCopy< HierarchicalDistribution, CategoricalUnivariateDistribution >
     {
         public:
-            typedef std::map< std::string, CategoricalUnivariateDistribution* >::const_iterator const_iterator;
+            using const_iterator = std::map< std::string, CategoricalUnivariateDistribution* >::const_iterator;
 
             HierarchicalDistribution();
             HierarchicalDistribution(const HierarchicalSampleSpace& hss);
@@ -298,13 +298,9 @@ namespace statiskit
             std::set< std::string > values;
 
             void check_internal(const std::string& value) const;
-
-            // typedef std::map< std::string, CategoricalUnivariateDistribution* >::iterator iterator;
-            // iterator begin();
-            // iterator end();
     };    
  
-    template<class T> struct QuantitativeUnivariateFrequencyDistribution : PolymorphicCopy< UnivariateDistribution, QuantitativeUnivariateFrequencyDistribution< T >, UnivariateFrequencyDistribution< T > >
+    template<class T> struct QuantitativeUnivariateFrequencyDistribution : PolymorphicCopy< QuantitativeUnivariateFrequencyDistribution< T >, UnivariateFrequencyDistribution< T > >
     {
         // using UnivariateFrequencyDistribution< T >::UnivariateFrequencyDistribution;
         QuantitativeUnivariateFrequencyDistribution(const std::set< typename T::event_type::value_type >& values);
@@ -320,7 +316,7 @@ namespace statiskit
         virtual double get_variance() const;
     };
     
-    template<class T> class ShiftedDistribution : public PolymorphicCopy< UnivariateDistribution, ShiftedDistribution< T >, T >
+    template<class T> class ShiftedDistribution : public PolymorphicCopy< ShiftedDistribution< T >, T >
     {
         public:
             ShiftedDistribution(const T& distribution, const typename T::event_type::value_type& shift);
@@ -357,7 +353,7 @@ namespace statiskit
      * */
     struct STATISKIT_CORE_API DiscreteUnivariateDistribution : UnivariateDistribution
     {
-        typedef DiscreteEvent event_type;
+        using event_type = DiscreteEvent;
         
 		/** \brief Compute the probability of a set of values.
          *
@@ -405,14 +401,14 @@ namespace statiskit
         virtual double get_variance() const = 0;
     };
 
-    typedef QuantitativeUnivariateFrequencyDistribution< DiscreteUnivariateDistribution > DiscreteUnivariateFrequencyDistribution;
-    typedef ShiftedDistribution< DiscreteUnivariateDistribution > ShiftedDiscreteUnivariateDistribution;
+    using DiscreteUnivariateFrequencyDistribution = QuantitativeUnivariateFrequencyDistribution< DiscreteUnivariateDistribution >;
+    using ShiftedDiscreteUnivariateDistribution = ShiftedDistribution< DiscreteUnivariateDistribution >;
 
     /** \brief This class PoissonDistribution represents a [Poisson distribution](https://en.wikipedia.org/wiki/Poisson_distribution)
      * 
      * \details The Poisson distribution is an univariate discrete distribution that expresses the probability of a given number of events occurring in a fixed interval of time and/or space if these events occur with a known average rate \f$\theta  \in \mathbb{R}_+^*  \f$ and independently of the time since the last event. The support of the Poisson distribution is the set of non-negative integer \f$ \mathbb{N} \f$.
      * */
-    class STATISKIT_CORE_API PoissonDistribution : public PolymorphicCopy< UnivariateDistribution, PoissonDistribution, DiscreteUnivariateDistribution >
+    class STATISKIT_CORE_API PoissonDistribution : public PolymorphicCopy< PoissonDistribution, DiscreteUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -509,7 +505,7 @@ namespace statiskit
      *          The support of the binomial distribution is the set all intergers betwwen $0$ and \f$ \kappa \f$.
      *          In the particular case of \f$ \kappa = 1\f$ the binomial distribution is the [Bernouilli distribution](https://en.wikipedia.org/wiki/Bernoulli_distribution). 
      * */
-    class STATISKIT_CORE_API BinomialDistribution : public PolymorphicCopy< UnivariateDistribution, BinomialDistribution, DiscreteUnivariateDistribution >
+    class STATISKIT_CORE_API BinomialDistribution : public PolymorphicCopy< BinomialDistribution, DiscreteUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -618,7 +614,7 @@ namespace statiskit
             double pi;
     };
 
-    class STATISKIT_CORE_API LogarithmicDistribution : public PolymorphicCopy< UnivariateDistribution, LogarithmicDistribution, DiscreteUnivariateDistribution >
+    class STATISKIT_CORE_API LogarithmicDistribution : public PolymorphicCopy< LogarithmicDistribution, DiscreteUnivariateDistribution >
     {
         public:
             LogarithmicDistribution();
@@ -645,7 +641,7 @@ namespace statiskit
             double theta;
     };
     
-    class STATISKIT_CORE_API GeometricDistribution : public PolymorphicCopy< UnivariateDistribution, GeometricDistribution, DiscreteUnivariateDistribution >
+    class STATISKIT_CORE_API GeometricDistribution : public PolymorphicCopy< GeometricDistribution, DiscreteUnivariateDistribution >
     {
         public:
             GeometricDistribution();
@@ -684,7 +680,7 @@ namespace statiskit
      *         The support of the negative binomial distribution is the set of non-negative integer \f$\mathbb{N}\f$.
      *         In the particular case of \f$\kappa = 1.\f$ the negative binomial distribution represents a [geometric distribution](https://en.wikipedia.org/wiki/Geometric_distribution) with \f$\mathbb{N}\f$ as support.
      * */
-    class STATISKIT_CORE_API NegativeBinomialDistribution : public PolymorphicCopy< UnivariateDistribution, NegativeBinomialDistribution, DiscreteUnivariateDistribution >
+    class STATISKIT_CORE_API NegativeBinomialDistribution : public PolymorphicCopy< NegativeBinomialDistribution, DiscreteUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -798,7 +794,7 @@ namespace statiskit
             double gamma;
     };
 
-    class STATISKIT_CORE_API BetaBinomialDistribution : public PolymorphicCopy< UnivariateDistribution, BetaBinomialDistribution, BetaCompoundDiscreteUnivariateDistribution >
+    class STATISKIT_CORE_API BetaBinomialDistribution : public PolymorphicCopy< BetaBinomialDistribution, BetaCompoundDiscreteUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -857,7 +853,7 @@ namespace statiskit
             unsigned int kappa;
     };
 
-    class STATISKIT_CORE_API BetaNegativeBinomialDistribution : public PolymorphicCopy< UnivariateDistribution, BetaNegativeBinomialDistribution, BetaCompoundDiscreteUnivariateDistribution >
+    class STATISKIT_CORE_API BetaNegativeBinomialDistribution : public PolymorphicCopy< BetaNegativeBinomialDistribution, BetaCompoundDiscreteUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -920,7 +916,7 @@ namespace statiskit
      * */
     struct STATISKIT_CORE_API ContinuousUnivariateDistribution : UnivariateDistribution
     { 
-        typedef ContinuousEvent event_type;
+        using event_type = ContinuousEvent;
         
 		/** \brief Compute the probability of a set of values.
          *
@@ -963,14 +959,15 @@ namespace statiskit
         virtual double get_variance() const = 0;    
     };
 
-    typedef QuantitativeUnivariateFrequencyDistribution< ContinuousUnivariateDistribution > ContinuousUnivariateFrequencyDistribution;
+    using ShiftedContinuousUnivariateDistribution = ShiftedDistribution< ContinuousUnivariateDistribution >;
+    using ContinuousUnivariateFrequencyDistribution = QuantitativeUnivariateFrequencyDistribution< ContinuousUnivariateDistribution >;
 
     /** \brief This class NormalDistribution represents a [normal distribution](https://en.wikipedia.org/wiki/Normal_distribution).
      * 
      * \details The normal distribution is an univariate continuous distribution.
      *         The support is the set of real values \f$\mathbb{R}\f$.
      * */
-    class STATISKIT_CORE_API NormalDistribution : public PolymorphicCopy< UnivariateDistribution, NormalDistribution, ContinuousUnivariateDistribution >
+    class STATISKIT_CORE_API NormalDistribution : public PolymorphicCopy< NormalDistribution, ContinuousUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -1059,7 +1056,7 @@ namespace statiskit
             double sigma;
     };
     
-    class STATISKIT_CORE_API UnivariateHistogramDistribution : public PolymorphicCopy< UnivariateDistribution, UnivariateHistogramDistribution, ContinuousUnivariateDistribution >
+    class STATISKIT_CORE_API UnivariateHistogramDistribution : public PolymorphicCopy< UnivariateHistogramDistribution, ContinuousUnivariateDistribution >
     {
         public: 
             UnivariateHistogramDistribution(const std::set<double>& bins, const std::vector<double>& densities);
@@ -1096,7 +1093,7 @@ namespace statiskit
      * \details The logistic distribution is an univariate continuous distribution.
      *         The support is the set of real values \f$\mathbb{R}\f$.
      * */                
-    class STATISKIT_CORE_API LogisticDistribution : public PolymorphicCopy< UnivariateDistribution, LogisticDistribution, ContinuousUnivariateDistribution >
+    class STATISKIT_CORE_API LogisticDistribution : public PolymorphicCopy< LogisticDistribution, ContinuousUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -1191,7 +1188,7 @@ namespace statiskit
      * \details The Laplace distribution is an univariate continuous distribution.
      *         The support is the set of real values \f$\mathbb{R}\f$.
      * */                
-    class STATISKIT_CORE_API LaplaceDistribution : public PolymorphicCopy< UnivariateDistribution, LaplaceDistribution, ContinuousUnivariateDistribution >
+    class STATISKIT_CORE_API LaplaceDistribution : public PolymorphicCopy< LaplaceDistribution, ContinuousUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -1299,7 +1296,7 @@ namespace statiskit
      * \details The Cauchy distribution is an univariate continuous distribution.
      *         The support is the set of real values \f$\mathbb{R}\f$.
      * */   
-    class STATISKIT_CORE_API CauchyDistribution : public PolymorphicCopy< UnivariateDistribution, CauchyDistribution, ContinuousUnivariateDistribution >
+    class STATISKIT_CORE_API CauchyDistribution : public PolymorphicCopy< CauchyDistribution, ContinuousUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -1397,7 +1394,7 @@ namespace statiskit
      * \details The Student distribution is an univariate continuous distribution.
      *         The support is the set of real values \f$\mathbb{R}\f$.
      * */   
-    class STATISKIT_CORE_API StudentDistribution : public PolymorphicCopy< UnivariateDistribution, StudentDistribution, ContinuousUnivariateDistribution >
+    class STATISKIT_CORE_API StudentDistribution : public PolymorphicCopy< StudentDistribution, ContinuousUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -1590,7 +1587,7 @@ namespace statiskit
      * 		   It is also called extreme value type I distribution (maximum).
      *         The support is the set of real values \f$\mathbb{R}\f$.
      * */                
-    class STATISKIT_CORE_API GumbelDistribution : public PolymorphicCopy< UnivariateDistribution, GumbelDistribution, ContinuousUnivariateDistribution >
+    class STATISKIT_CORE_API GumbelDistribution : public PolymorphicCopy< GumbelDistribution, ContinuousUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -1688,7 +1685,7 @@ namespace statiskit
      *         The support is the set of real values \f$\mathbb{R}\f$.
      * @see statiskit::GumbelMaxDistribution
      * */                
-    class STATISKIT_CORE_API GompertzDistribution : public PolymorphicCopy< UnivariateDistribution, GompertzDistribution, ContinuousUnivariateDistribution >
+    class STATISKIT_CORE_API GompertzDistribution : public PolymorphicCopy< GompertzDistribution, ContinuousUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -1784,7 +1781,7 @@ namespace statiskit
      * \details The exponential distribution is an univariate continuous distribution.
      *          The support is the set of positive real values \f$\mathbb{R}_+^*\f$.
      * */                
-    class STATISKIT_CORE_API ExponentialDistribution : public PolymorphicCopy< UnivariateDistribution, ExponentialDistribution, ContinuousUnivariateDistribution >
+    class STATISKIT_CORE_API ExponentialDistribution : public PolymorphicCopy< ExponentialDistribution, ContinuousUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -1878,7 +1875,7 @@ namespace statiskit
      * \details The Gamma distribution is an univariate continuous distribution.
      *          The support is the set of positive real values \f$\mathbb{R}_+^*\f$.
      * */                
-    class STATISKIT_CORE_API GammaDistribution : public PolymorphicCopy< UnivariateDistribution, GammaDistribution, ContinuousUnivariateDistribution >
+    class STATISKIT_CORE_API GammaDistribution : public PolymorphicCopy< GammaDistribution, ContinuousUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -1983,7 +1980,7 @@ namespace statiskit
      * \details The beta distribution is an univariate continuous distribution.
      *          The support is the set of positive real values \f$\mathbb{R}_+^*\f$.
      * */                
-    class STATISKIT_CORE_API BetaDistribution : public PolymorphicCopy< UnivariateDistribution, BetaDistribution, ContinuousUnivariateDistribution >
+    class STATISKIT_CORE_API BetaDistribution : public PolymorphicCopy< BetaDistribution, ContinuousUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -2090,7 +2087,7 @@ namespace statiskit
      * \details The uniform distribution is an univariate continuous distribution.
      *          The support is the interval \f$[\alpha,\beta]\f$ where \f$\alpha\f$ and \f$\beta\f$ are two real values such that \f$\alpha<\beta\f$.
      * */                
-    class STATISKIT_CORE_API UniformDistribution : public PolymorphicCopy< UnivariateDistribution, UniformDistribution, ContinuousUnivariateDistribution >
+    class STATISKIT_CORE_API UniformDistribution : public PolymorphicCopy< UniformDistribution, ContinuousUnivariateDistribution >
     {
         public:
             /** \brief The default constructor
@@ -2194,7 +2191,7 @@ namespace statiskit
      */
     struct STATISKIT_CORE_API UnivariateConditionalDistribution
     {
-        typedef UnivariateDistribution response_type;
+        using response_type = UnivariateDistribution;
                 
         virtual ~UnivariateConditionalDistribution() = 0;
 
@@ -2217,26 +2214,23 @@ namespace statiskit
     
     struct STATISKIT_CORE_API CategoricalUnivariateConditionalDistribution : UnivariateConditionalDistribution
     {
-        typedef CategoricalEvent event_type;
-        typedef CategoricalUnivariateDistribution response_type; 
+        using event_type = CategoricalEvent;
     };
     
     struct STATISKIT_CORE_API DiscreteUnivariateConditionalDistribution : UnivariateConditionalDistribution
     {
-        typedef DiscreteEvent event_type;
-        typedef DiscreteUnivariateDistribution response_type; 
+        using event_type = DiscreteEvent;
     };        
     
     struct STATISKIT_CORE_API ContinuousUnivariateConditionalDistribution : UnivariateConditionalDistribution
     {
-        typedef ContinuousEvent event_type;
-        typedef ContinuousUnivariateDistribution response_type; 
+        using event_type = ContinuousEvent;
     };      
 
     struct STATISKIT_CORE_API MultivariateDistribution
     {
-        typedef MultivariateData data_type;
-        typedef UnivariateDistribution marginal_type;
+        using copy_type = MultivariateDistribution;
+        using data_type = MultivariateData;
             
         virtual ~MultivariateDistribution() = 0;
 
@@ -2262,48 +2256,17 @@ namespace statiskit
 
     struct STATISKIT_CORE_API CategoricalMultivariateDistribution : MultivariateDistribution
     {
-        typedef CategoricalUnivariateDistribution marginal_type;
     };
 
     struct STATISKIT_CORE_API DiscreteMultivariateDistribution : MultivariateDistribution
     {
-        typedef DiscreteUnivariateDistribution marginal_type;
-    };
-
-    class STATISKIT_CORE_API SplittingDistribution : public PolymorphicCopy< MultivariateDistribution, SplittingDistribution, DiscreteMultivariateDistribution >
-    {
-        public:
-            SplittingDistribution(const DiscreteUnivariateDistribution& sum, const SingularDistribution& singular);
-            SplittingDistribution(const SplittingDistribution& splitting);
-            virtual ~SplittingDistribution();
-
-            virtual Index get_nb_components() const;
-
-            virtual unsigned int get_nb_parameters() const;
-
-            virtual double probability(const MultivariateEvent* event, const bool& logarithm) const;
-
-            std::unique_ptr< MultivariateEvent > simulate() const;
-
-            const DiscreteUnivariateDistribution* get_sum() const;
-            void set_sum(const DiscreteUnivariateDistribution& sum);
-
-            SingularDistribution* get_singular() const;
-            void set_singular(const SingularDistribution& singular);
-
-        protected:
-            DiscreteUnivariateDistribution* sum;
-            SingularDistribution* singular;
-
-            SplittingDistribution();
     };
 
     struct STATISKIT_CORE_API ContinuousMultivariateDistribution : MultivariateDistribution
     {
-        typedef ContinuousUnivariateDistribution marginal_type;
     };
 
-    class STATISKIT_CORE_API MultinormalDistribution : public PolymorphicCopy< MultivariateDistribution, MultinormalDistribution, ContinuousMultivariateDistribution >
+    class STATISKIT_CORE_API MultinormalDistribution : public PolymorphicCopy< MultinormalDistribution, ContinuousMultivariateDistribution >
     {
         public:
             MultinormalDistribution(const Eigen::VectorXd& mu, const Eigen::MatrixXd& sigma);
@@ -2329,7 +2292,7 @@ namespace statiskit
             Eigen::MatrixXd sigma;
     };
 
-    class STATISKIT_CORE_API DirichletDistribution : public PolymorphicCopy< MultivariateDistribution, DirichletDistribution, ContinuousMultivariateDistribution >
+    class STATISKIT_CORE_API DirichletDistribution : public PolymorphicCopy< DirichletDistribution, ContinuousMultivariateDistribution >
     {
         public:
             DirichletDistribution(const Index& nb_components);
@@ -2355,7 +2318,7 @@ namespace statiskit
 
     struct STATISKIT_CORE_API MultivariateConditionalDistribution
     {
-        typedef MultivariateDistribution response_type;
+        using response_type = MultivariateDistribution;
         
         virtual ~MultivariateConditionalDistribution() = 0;
         
@@ -2380,148 +2343,6 @@ namespace statiskit
     
     struct STATISKIT_CORE_API ContinuousMultivariateConditionalDistribution : MultivariateConditionalDistribution
     {};      
-
-    template<class D> class MixtureDistribution : public D
-    {
-        public:
-            typedef D observation_type;
-
-            MixtureDistribution();
-            virtual ~MixtureDistribution();
-
-            virtual unsigned int get_nb_parameters() const;
-
-            Index get_nb_states() const;
-
-            const D* get_observation(const Index& index) const;
-            virtual void set_observation(const Index& index, const D& observation);
-
-            const Eigen::VectorXd& get_pi() const;
-            void set_pi(const Eigen::VectorXd& pi);
-
-            Eigen::VectorXd posterior(const typename D::data_type::event_type* event, const bool& logarithm=false) const;
-        
-            Index assignment(const typename D::data_type::event_type* event) const;
-            std::vector< Index > assignment(const typename D::data_type& data) const;
-
-            double uncertainty(const typename D::data_type::event_type* event) const;
-            double uncertainty(const typename D::data_type& data) const;
-
-        protected:
-            std::vector< D* > observations;
-            Eigen::VectorXd pi;
-
-            void init(const std::vector< D* > observations, const Eigen::VectorXd& pi);
-            void init(const MixtureDistribution< D >& mixture);
-    };
-
-    template<class D> struct UnivariateMixtureDistribution : MixtureDistribution< D >
-    {
-        UnivariateMixtureDistribution();
-        virtual ~UnivariateMixtureDistribution();
-
-        virtual double ldf(const typename D::event_type::value_type& value) const;
-
-        virtual double pdf(const typename D::event_type::value_type& value) const;
-
-        std::unique_ptr< UnivariateEvent > simulate() const;
-    };
-
-    struct STATISKIT_CORE_API CategoricalUnivariateMixtureDistribution : PolymorphicCopy< UnivariateDistribution, CategoricalUnivariateMixtureDistribution, UnivariateMixtureDistribution< CategoricalUnivariateDistribution > >
-    {
-        CategoricalUnivariateMixtureDistribution(const std::vector< CategoricalUnivariateDistribution* > observations, const Eigen::VectorXd& pi);
-        CategoricalUnivariateMixtureDistribution(const CategoricalUnivariateMixtureDistribution& mixture);
-        virtual ~CategoricalUnivariateMixtureDistribution();
-
-        virtual double pdf(const int& position) const;
-
-        virtual std::set< std::string > get_values() const;
-    };
-
-    typedef std::vector< CategoricalUnivariateDistribution* > CategoricalUnivariateDistributionVector;
-
-    template<class D> struct QuantitativeUnivariateMixtureDistribution : UnivariateMixtureDistribution< D >
-    {
-        QuantitativeUnivariateMixtureDistribution();
-        virtual ~QuantitativeUnivariateMixtureDistribution();
-
-        virtual double cdf(const typename D::event_type::value_type& value) const;
-
-        virtual double get_mean() const;
-
-        virtual double get_variance() const;
-    };
-
-    struct STATISKIT_CORE_API DiscreteUnivariateMixtureDistribution : PolymorphicCopy< UnivariateDistribution, DiscreteUnivariateMixtureDistribution, QuantitativeUnivariateMixtureDistribution< DiscreteUnivariateDistribution > >
-    {
-        DiscreteUnivariateMixtureDistribution(const std::vector< DiscreteUnivariateDistribution* > observations, const Eigen::VectorXd& pi);
-        DiscreteUnivariateMixtureDistribution(const DiscreteUnivariateMixtureDistribution& mixture);
-        virtual ~DiscreteUnivariateMixtureDistribution();
-
-        virtual int quantile(const double& p) const;
-    };
-
-    typedef std::vector< DiscreteUnivariateDistribution* > DiscreteUnivariateDistributionVector;
-
-    struct STATISKIT_CORE_API ContinuousUnivariateMixtureDistribution : PolymorphicCopy< UnivariateDistribution, ContinuousUnivariateMixtureDistribution, QuantitativeUnivariateMixtureDistribution< ContinuousUnivariateDistribution > >
-    {
-        public:
-            ContinuousUnivariateMixtureDistribution(const std::vector< ContinuousUnivariateDistribution* > observations, const Eigen::VectorXd& pi);
-            ContinuousUnivariateMixtureDistribution(const ContinuousUnivariateMixtureDistribution& mixture);
-            virtual ~ContinuousUnivariateMixtureDistribution();
-
-            virtual double quantile(const double& p) const;
-
-            double get_epsilon() const;
-            void set_epsilon(const double& epsilon);
-
-        protected:
-            double epsilon;
-    };
-
-    typedef std::vector< ContinuousUnivariateDistribution* > ContinuousUnivariateDistributionVector;
-
-    template<class D> struct MultivariateMixtureDistribution : PolymorphicCopy< MultivariateDistribution, MultivariateMixtureDistribution< D >, MixtureDistribution< D > >
-    {
-        MultivariateMixtureDistribution(const std::vector< D* > observations, const Eigen::VectorXd& pi);
-        MultivariateMixtureDistribution(const MultivariateMixtureDistribution< D >& mixture);
-        virtual ~MultivariateMixtureDistribution();
-
-        virtual void set_observation(const Index& index, const D& observation);
-
-        virtual Index get_nb_components() const;
-
-        virtual double probability(const MultivariateEvent* event, const bool& logarithm) const;
-
-        std::unique_ptr< MultivariateEvent > simulate() const;
-    };
-
-    typedef MultivariateMixtureDistribution< MultivariateDistribution > MixedMultivariateMixtureDistribution;
-    typedef std::vector< MultivariateDistribution* > MultivariateDistributionVector;
-
-    typedef MultivariateMixtureDistribution< CategoricalMultivariateDistribution > CategoricalMultivariateMixtureDistribution;
-    typedef std::vector< CategoricalMultivariateDistribution* > CategoricalMultivariateDistributionVector;
-
-    typedef MultivariateMixtureDistribution< DiscreteMultivariateDistribution > DiscreteMultivariateMixtureDistribution;
-    typedef std::vector< DiscreteMultivariateDistribution* > DiscreteMultivariateDistributionVector;
-
-    struct STATISKIT_CORE_API MixtureSingularDistribution : PolymorphicCopy< SingularDistribution, MixtureSingularDistribution, MixtureDistribution< SingularDistribution > >
-    {
-        MixtureSingularDistribution(const std::vector< SingularDistribution* > observations, const Eigen::VectorXd& pi);
-        MixtureSingularDistribution(const MixtureSingularDistribution& mixture);
-        virtual ~MixtureSingularDistribution();
-
-        virtual void set_observation(const Index& index, const SingularDistribution& observation);
-
-        virtual Index get_nb_components() const;
-
-        virtual double probability(const MultivariateEvent* event, const bool& logarithm) const;
-
-        virtual std::unique_ptr< MultivariateEvent > simulate(unsigned int sum) const;
-    };
-
-    typedef MultivariateMixtureDistribution< ContinuousMultivariateDistribution > ContinuousMultivariateMixtureDistribution;
-    typedef std::vector< ContinuousMultivariateDistribution* > ContinuousMultivariateDistributionVector;
 }
 
 #include "distribution.hpp"

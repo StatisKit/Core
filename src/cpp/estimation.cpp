@@ -14,23 +14,47 @@ namespace statiskit
     underdispersion_error::underdispersion_error() : parameter_error("data", " is underdispersed")
     {}
 
-    std::unique_ptr< UnivariateDistributionEstimation::Estimator::estimation_type > UnivariateDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Index& variable, const bool& lazy) const
+    std::unique_ptr< UnivariateDistributionEstimation::Estimator::estimation_type > UnivariateDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Index& variable) const
     {
-        return this->operator()(*data.select(variable), lazy);
+        return this->operator()(*data.select(variable));
     }
 
-    std::unique_ptr< MultivariateDistributionEstimation::Estimator::estimation_type > MultivariateDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Indices& variables, const bool& lazy) const
+    void CategoricalUnivariateDistributionEstimation::Estimator::check(const UnivariateData& data) const
     {
-        return this->operator()(*data.select(variables), lazy);
+        DistributionEstimation< distribution_type >::Estimator::check(data);
+        if (data.get_sample_space()->get_outcome() != outcome_type::CATEGORICAL) {
+            throw sample_space_error(outcome_type::CATEGORICAL);
+        }
     }
 
-    std::unique_ptr< UnivariateConditionalDistributionEstimation::Estimator::estimation_type > UnivariateConditionalDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Index& response, const Indices& explanatories, const bool& lazy) const
+    void DiscreteUnivariateDistributionEstimation::Estimator::check(const UnivariateData& data) const
     {
-        return this->operator()(*data.select(response), *data.select(explanatories), lazy);
+        DistributionEstimation< distribution_type >::Estimator::check(data);
+        if (data.get_sample_space()->get_outcome() != outcome_type::DISCRETE) {
+            throw sample_space_error(outcome_type::DISCRETE);
+        }
     }
 
-    std::unique_ptr< MultivariateConditionalDistributionEstimation::Estimator::estimation_type > MultivariateConditionalDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Indices& responses, const Indices& explanatories, const bool& lazy) const
+    void ContinuousUnivariateDistributionEstimation::Estimator::check(const UnivariateData& data) const
     {
-        return this->operator()(*data.select(responses), *data.select(explanatories), lazy);
+        DistributionEstimation< distribution_type >::Estimator::check(data);
+        if (data.get_sample_space()->get_outcome() != outcome_type::CONTINUOUS) {
+            throw sample_space_error(outcome_type::CONTINUOUS);
+        }
+    }
+
+    std::unique_ptr< MultivariateDistributionEstimation::Estimator::estimation_type > MultivariateDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Indices& variables) const
+    {
+        return this->operator()(*data.select(variables));
+    }
+
+    std::unique_ptr< UnivariateConditionalDistributionEstimation::Estimator::estimation_type > UnivariateConditionalDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Index& response, const Indices& explanatories) const
+    {
+        return this->operator()(*data.select(response), *data.select(explanatories));
+    }
+
+    std::unique_ptr< MultivariateConditionalDistributionEstimation::Estimator::estimation_type > MultivariateConditionalDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Indices& responses, const Indices& explanatories) const
+    {
+        return this->operator()(*data.select(responses), *data.select(explanatories));
     }
 }

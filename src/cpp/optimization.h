@@ -1,14 +1,20 @@
+#pragma once
+#include "base.h"
 
+namespace statiskit
+{
     struct STATISKIT_CORE_API Schedule
     {
+        using copy_type = Schedule;
+
         virtual ~Schedule() = 0;
 
         virtual double operator() (const double& stage) const = 0;
 
-        virtual std::unique_ptr< Schedule > copy() const = 0;
+        virtual std::unique_ptr< copy_type > copy() const = 0;
     };
 
-    class STATISKIT_CORE_API ExponentialSchedule : public PolymorphicCopy< Schedule, ExponentialSchedule >
+    class STATISKIT_CORE_API ExponentialSchedule : public PolymorphicCopy<ExponentialSchedule, Schedule>
     { 
         public:
             ExponentialSchedule(const double& theta);
@@ -42,9 +48,9 @@
                 void set_maxits(const unsigned int& maxits);
 
             protected:
-                double _mindiff;
-                unsigned int _minits;
-                unsigned int _maxits;
+                double mindiff;
+                unsigned int minits;
+                unsigned int maxits;
 
                 bool run(const unsigned int& its, const double& delta) const;
         };
@@ -67,89 +73,12 @@
                 void set_maxits(const unsigned int& maxits);
 
             protected:
-                Schedule* _schedule;
-                unsigned int _minits;
-                unsigned int _maxits;
+                Schedule* schedule;
+                unsigned int minits;
+                unsigned int maxits;
 
                 bool accept(const unsigned int& its, const double& delta) const;
         };
+}
 
-    template<class T, class D, class B> class OptimizationEstimationImpl : public ActiveEstimation< D, B >
-    {
-        public:
-            OptimizationEstimationImpl();
-            OptimizationEstimationImpl(D const * estimated, typename B::data_type const * data);            
-            OptimizationEstimationImpl(const OptimizationEstimationImpl< T, D, B >& estimation);
-            virtual ~OptimizationEstimationImpl();
-
-            Index size() const;
-
-            class Estimator : public Optimization< typename B::Estimator >
-            {
-                public:
-                    Estimator();
-                    Estimator(const Estimator& estimator);
-                    virtual ~Estimator();
-            };
-
-        protected:
-            std::vector< T > _iterations;
-    };
-
-    template<class T, class D, class B> class SimulatedAnnealingEstimation : public ActiveEstimation< D, B >
-    {
-        public:
-            SimulatedAnnealingEstimation();
-            SimulatedAnnealingEstimation(D const * estimated, typename B::data_type const * data);            
-            SimulatedAnnealingEstimation(const SimulatedAnnealingEstimation< T, D, B >& estimation);
-            virtual ~SimulatedAnnealingEstimation();
-
-            Index size() const;
-
-            class Estimator : public SimulatedAnnealing< typename B::Estimator >
-            {
-                public:
-                    Estimator();
-                    Estimator(const Estimator& estimator);
-                    virtual ~Estimator();
-            };
-
-        protected:
-            std::vector< T > _iterations;
-    };
-
-    template<class T, class D, class B> struct OptimizationEstimation : OptimizationEstimationImpl<T, D, B >
-    {
-        // using __impl::OptimizationEstimation<T, D, B >::OptimizationEstimation;
-        OptimizationEstimation();
-        OptimizationEstimation(D const * estimated, typename B::data_type const * data);
-        OptimizationEstimation(const OptimizationEstimation< T, D, B>& estimation);
-        virtual ~OptimizationEstimation();
-
-        const T get_iteration(const Index& index) const;
-
-        struct Estimator : OptimizationEstimationImpl<T, D, B >::Estimator
-        { 
-            Estimator();
-            Estimator(const Estimator& estimator);
-            virtual ~Estimator();
-        };
-    };
-
-    template<class T, class D, class B> struct OptimizationEstimation< T*, D, B> : OptimizationEstimationImpl<T*, D, B >
-    {
-        // using OptimizationEstimationImpl<T*, D, B >::OptimizationEstimation;
-        OptimizationEstimation();
-        OptimizationEstimation(D const * estimated, typename B::data_type const * data);
-        OptimizationEstimation(const OptimizationEstimation< T*, D, B>& estimation);
-        virtual ~OptimizationEstimation();
-
-        const T* get_iteration(const Index& index) const;
-
-        struct Estimator : OptimizationEstimationImpl<T*, D, B >::Estimator
-        { 
-            Estimator();
-            Estimator(const Estimator& estimator);
-            virtual ~Estimator();
-        };
-    };
+#include "optimization.hpp"

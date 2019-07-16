@@ -1,12 +1,13 @@
 #pragma once
+#include "estimation.h"
+#include "slope_heuristic.h"
 
-    template<class B> class Selection : public B
+namespace statiskit
+{
+    template<class B> class Selection : public PolymorphicCopy<Selection<B>, B>
     {
         public:
-            Selection();
-            Selection(typename B::data_type const * data);
-            Selection(D const * estimated, typename B::data_type const * data);
-            Selection(const Selection< D, B >& estimation);
+            using PolymorphicCopy<Selection<B>, B>::PolymorphicCopy;
             virtual ~Selection();
 
             Index size() const;
@@ -31,7 +32,7 @@
                     void remove_estimator(const Index& index);
 
                 protected:
-                    std::vector< typename B::Estimator * > _estimators;
+                    std::vector< typename B::Estimator * > estimators;
 
                     virtual double scoring(const typename B::estimated_type * estimated, typename B::data_type const & data) const = 0;
 
@@ -39,7 +40,7 @@
                     void init(const Estimator& estimator);
             };
 
-            class CriterionEstimator : public PolymorphicCopy< typename B::Estimator::estimation_type::Estimator, CriterionEstimator, Estimator >
+            class CriterionEstimator : public PolymorphicCopy< CriterionEstimator, Estimator >
             {
                 public:
                     enum criterion_type {
@@ -63,8 +64,26 @@
             };/**/
 
         protected:
-            std::vector< B * > _estimations;
-            std::vector< double > _scores;
+            std::vector< B * > estimations;
+            std::vector< double > scores;
 
             void finalize();
     };
+
+    template<class B> class SlopeHeuristicSelection : public SlopeHeuristic, public B
+    {
+        public:
+            SlopeHeuristicSelection(const typename B::data_type* data);
+            SlopeHeuristicSelection(const SlopeHeuristicSelection< B >& she);
+            virtual ~SlopeHeuristicSelection();
+
+            virtual typename B::distribution_type const * get_distribution() const;
+
+            const typename B::distribution_type* get_proposal(const Index& index) const;
+            
+        protected:
+            std::vector< typename B::distribution_type* > proposals;
+
+            void add(const double& penshape, const double& score, typename B::distribution_type* proposal);
+    };
+}

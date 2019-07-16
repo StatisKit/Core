@@ -7,16 +7,8 @@
 
 namespace statiskit
 {
-    template<class T, class D, class B>
-        PolymorphicCopy< T, D, B >::PolymorphicCopy() : B()
-        {}
-
-    template<class T, class D, class B>
-        PolymorphicCopy< T, D, B >::PolymorphicCopy(const PolymorphicCopy< T, D, B>& other) : B(other)
-        {}
-
-    template<class T, class D, class B>
-        std::unique_ptr< T > PolymorphicCopy< T, D, B >::copy() const
+    template<class D, class B>
+        std::unique_ptr< typename B::copy_type > PolymorphicCopy<D, B>::copy() const
         {
             return std::make_unique< D >(static_cast< const D& >(*this));
         }

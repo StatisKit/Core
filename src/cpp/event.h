@@ -17,7 +17,7 @@ namespace statiskit
         MIXED,
     };
 
-    inline std::ostream& operator<<(std::ostream & os, const outcome_type& outcome);
+    std::ostream& operator<<(std::ostream& os, const outcome_type& outcome);
 
     enum class censoring_type
     {
@@ -30,6 +30,8 @@ namespace statiskit
 
     struct STATISKIT_CORE_API UnivariateEvent
     {
+        using copy_type = UnivariateEvent;
+
         virtual ~UnivariateEvent();
         
         virtual outcome_type get_outcome() const = 0;
@@ -171,6 +173,7 @@ namespace statiskit
 
     struct STATISKIT_CORE_API MultivariateEvent
     {        
+        using copy_type = MultivariateEvent;
 
         virtual ~MultivariateEvent() = 0;
 

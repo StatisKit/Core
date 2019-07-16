@@ -52,13 +52,13 @@
 namespace statiskit
 {
 
-    template<class T, class D, class B=T> struct PolymorphicCopy : public B
+    template<class D, class B=D> struct PolymorphicCopy : public B
     {
-        PolymorphicCopy();
-        PolymorphicCopy(const PolymorphicCopy<T, D, B>& other);
+        using B::B;
+
         virtual ~PolymorphicCopy() = default;
          
-        virtual std::unique_ptr< T > copy() const;
+        virtual std::unique_ptr< typename B::copy_type > copy() const;
     };
 
     namespace __impl
