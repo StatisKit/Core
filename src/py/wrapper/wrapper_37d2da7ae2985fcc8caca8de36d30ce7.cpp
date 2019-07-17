@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_37d2da7ae2985fcc8caca8de36d30ce7(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::CauchyDistribution, autowig::HolderType< class ::statiskit::CauchyDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::CauchyDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_37d2da7ae2985fcc8caca8de36d30ce7(module, "CauchyDistribution", "This class CauchyDistribution represents a `Cauchy\ndistribution <https://en.wikipedia.org/wiki/Cauchy_distribution>`__.\n\nThe Cauchy distribution is an univariate continuous distribution. The\nsupport is the set of real values :math:`\\mathbb{R}`.\n\n");
+    pybind11::class_<class ::statiskit::CauchyDistribution, autowig::HolderType< class ::statiskit::CauchyDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::CauchyDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_37d2da7ae2985fcc8caca8de36d30ce7(module, "CauchyDistribution", "This class CauchyDistribution represents a `Cauchy\ndistribution <https://en.wikipedia.org/wiki/Cauchy_distribution>`__.\n\nThe Cauchy distribution is an univariate continuous distribution. The\nsupport is the set of real values :math:`\\mathbb{R}`.\n\n");
     class_37d2da7ae2985fcc8caca8de36d30ce7.def(pybind11::init<  >());
     class_37d2da7ae2985fcc8caca8de36d30ce7.def(pybind11::init< double const &, double const & >());
     class_37d2da7ae2985fcc8caca8de36d30ce7.def(pybind11::init< class ::statiskit::CauchyDistribution const & >());

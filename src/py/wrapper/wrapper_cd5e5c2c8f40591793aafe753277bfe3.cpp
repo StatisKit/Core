@@ -9,7 +9,7 @@ namespace autowig {
 void wrapper_cd5e5c2c8f40591793aafe753277bfe3(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::DirichletDistribution, autowig::HolderType< class ::statiskit::DirichletDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::MultivariateDistribution, class ::statiskit::DirichletDistribution, struct ::statiskit::ContinuousMultivariateDistribution > > class_cd5e5c2c8f40591793aafe753277bfe3(module, "DirichletDistribution", "");
+    pybind11::class_<class ::statiskit::DirichletDistribution, autowig::HolderType< class ::statiskit::DirichletDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::DirichletDistribution, struct ::statiskit::ContinuousMultivariateDistribution > > class_cd5e5c2c8f40591793aafe753277bfe3(module, "DirichletDistribution", "");
     class_cd5e5c2c8f40591793aafe753277bfe3.def(pybind11::init< ::statiskit::Index const & >());
     class_cd5e5c2c8f40591793aafe753277bfe3.def(pybind11::init< class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & >());
     class_cd5e5c2c8f40591793aafe753277bfe3.def(pybind11::init< class ::statiskit::DirichletDistribution const & >());

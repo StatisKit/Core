@@ -3,8 +3,6 @@
 #include <set>
 #include <vector>
 
-#include <boost/math/special_functions/fpclassify.hpp>
-
 #include "base.h"
 
 namespace statiskit
@@ -41,7 +39,7 @@ namespace statiskit
         virtual std::unique_ptr< UnivariateEvent > copy() const = 0;
     };
  
-    template<class E> class ElementaryEvent : public E
+    template<class E> class ElementaryEvent : public PolymorphicCopy<ElementaryEvent<E>, E>
     {
         public:
             ElementaryEvent(const typename E::value_type& value);
@@ -55,10 +53,10 @@ namespace statiskit
             virtual std::unique_ptr< UnivariateEvent > copy() const;
             
         protected:
-            typename E::value_type _value;
+            typename E::value_type value;
     };
 
-    template<class E> class CensoredEvent : public E
+    template<class E> class CensoredEvent : public PolymorphicCopy<ElementaryEvent<E>, E>
     {
         public:
             CensoredEvent(const std::vector< typename E::value_type >& values);
@@ -71,10 +69,10 @@ namespace statiskit
             virtual std::unique_ptr< UnivariateEvent > copy() const;
 
         protected:
-            std::vector< typename E::value_type > _values;
+            std::vector< typename E::value_type > values;
     };
 
-    template<class E> class LeftCensoredEvent : public E
+    template<class E> class LeftCensoredEvent : public PolymorphicCopy<LeftCensoredEvent<E>, E>
     {
         public:
             LeftCensoredEvent(const typename E::value_type& upper_bound);
@@ -87,10 +85,10 @@ namespace statiskit
             virtual std::unique_ptr< UnivariateEvent > copy() const;
 
         protected:
-            typename E::value_type _upper_bound;
+            typename E::value_type upper_bound;
     };
 
-    template<class E> class RightCensoredEvent : public E
+    template<class E> class RightCensoredEvent : public PolymorphicCopy<RightCensoredEvent<E>, E>
     {
         public:
             RightCensoredEvent(const typename E::value_type& lower_bound);
@@ -103,10 +101,10 @@ namespace statiskit
             virtual std::unique_ptr< UnivariateEvent > copy() const;
         
         protected:
-            typename E::value_type _lower_bound;
+            typename E::value_type lower_bound;
     };
 
-    template<class E> class IntervalCensoredEvent : public E
+    template<class E> class IntervalCensoredEvent : public PolymorphicCopy<IntervalCensoredEvent<E>, E>
     {
         public:
             IntervalCensoredEvent(const typename E::value_type& lhs, const typename E::value_type& rhs);
@@ -123,7 +121,7 @@ namespace statiskit
             virtual std::unique_ptr< UnivariateEvent > copy() const;
             
         protected:
-            std::pair<typename E::value_type, typename E::value_type > _bounds;
+            std::pair<typename E::value_type, typename E::value_type > bounds;
     };
 
     class CategoricalUnivariateDistribution;
@@ -184,7 +182,7 @@ namespace statiskit
         virtual std::unique_ptr< MultivariateEvent > copy() const = 0;
     };
 
-    class STATISKIT_CORE_API VectorEvent : public MultivariateEvent
+    class STATISKIT_CORE_API VectorEvent : public PolymorphicCopy<VectorEvent, MultivariateEvent>
     {
         public:
             VectorEvent(const Index& size);
@@ -197,10 +195,8 @@ namespace statiskit
             virtual const UnivariateEvent* get_event(const Index& index) const;
             void set_event(const Index& index, const UnivariateEvent* event);
 
-            virtual std::unique_ptr< MultivariateEvent > copy() const;
-
         protected:
-            std::vector< UnivariateEvent* > _events;
+            std::vector< UnivariateEvent* > events;
     };
 }
 

@@ -97,6 +97,37 @@ namespace statiskit
             return set;
         }
 
+        template<class T>
+        void delete_vector(std::vector<T>& v)
+        {
+            v.clear();
+        }
+
+        template<class T>
+        void delete_vector(std::vector<T*>& v)
+        {
+            for (Index index = 0, max_index = v.size(); index < max_index; ++index) { 
+                delete v[index];
+                v[index] = nullptr; 
+            }
+            v.clear();
+        }
+
+        template<class T>
+        std::vector<T> copy_vector(const std::vector<T>& v)
+        {
+            return v;
+        }
+
+        template<class T>
+        std::vector<T*> copy_vector(const std::vector<T*>& v)
+        {
+            std::vector<T*> u = v;
+            for (Index index = 0, max_index = u.size(); index < max_index; ++index) { 
+                u[index] = u[index].copy().release();
+            }
+            return u;
+        }
     }
 
     template<typename T, typename L>

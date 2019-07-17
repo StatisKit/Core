@@ -9,7 +9,7 @@ namespace autowig {
 void wrapper_a14f45085a74550c89aab30952f6725b(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::UnivariateHistogramDistributionEstimation::Estimator, autowig::HolderType< class ::statiskit::UnivariateHistogramDistributionEstimation::Estimator >::Type, struct ::statiskit::ContinuousUnivariateDistributionEstimation::Estimator > class_a14f45085a74550c89aab30952f6725b(module, "Estimator", "");
+    pybind11::class_<class ::statiskit::UnivariateHistogramDistributionEstimation::Estimator, autowig::HolderType< class ::statiskit::UnivariateHistogramDistributionEstimation::Estimator >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::UnivariateHistogramDistributionEstimation::Estimator, class ::statiskit::ContinuousUnivariateDistributionEstimation::Estimator > > class_a14f45085a74550c89aab30952f6725b(module, "Estimator", "");
     class_a14f45085a74550c89aab30952f6725b.def(pybind11::init<  >());
     class_a14f45085a74550c89aab30952f6725b.def(pybind11::init< class ::statiskit::UnivariateHistogramDistributionEstimation::Estimator const & >());
     class_a14f45085a74550c89aab30952f6725b.def("get_nb_bins", method_pointer_51500bc0b2985679b02003e72c323092, pybind11::return_value_policy::copy, "");

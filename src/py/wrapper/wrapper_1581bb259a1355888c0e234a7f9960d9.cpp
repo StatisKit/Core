@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_1581bb259a1355888c0e234a7f9960d9(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::BinomialDistributionMMEstimation::Estimator, autowig::HolderType< class ::statiskit::BinomialDistributionMMEstimation::Estimator >::Type, struct ::statiskit::DiscreteUnivariateDistributionEstimation::Estimator > class_1581bb259a1355888c0e234a7f9960d9(module, "Estimator", "");
+    pybind11::class_<class ::statiskit::BinomialDistributionMMEstimation::Estimator, autowig::HolderType< class ::statiskit::BinomialDistributionMMEstimation::Estimator >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::BinomialDistributionMMEstimation::Estimator, class ::statiskit::DiscreteUnivariateDistributionEstimation::Estimator > > class_1581bb259a1355888c0e234a7f9960d9(module, "Estimator", "");
     class_1581bb259a1355888c0e234a7f9960d9.def(pybind11::init<  >());
     class_1581bb259a1355888c0e234a7f9960d9.def(pybind11::init< class ::statiskit::BinomialDistributionMMEstimation::Estimator const & >());
     class_1581bb259a1355888c0e234a7f9960d9.def("get_location", method_pointer_6d96ac53d1b95ead90800c8c317b84ac, pybind11::return_value_policy::reference_internal, "");

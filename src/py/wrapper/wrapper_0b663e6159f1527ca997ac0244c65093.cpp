@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_0b663e6159f1527ca997ac0244c65093(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::LogisticDistribution, autowig::HolderType< class ::statiskit::LogisticDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::LogisticDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_0b663e6159f1527ca997ac0244c65093(module, "LogisticDistribution", "This class LogisticDistribution represents a `logistic\ndistribution <https://en.wikipedia.org/wiki/Logistic_distribution>`__.\n\nThe logistic distribution is an univariate continuous distribution. The\nsupport is the set of real values :math:`\\mathbb{R}`.\n\n");
+    pybind11::class_<class ::statiskit::LogisticDistribution, autowig::HolderType< class ::statiskit::LogisticDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::LogisticDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_0b663e6159f1527ca997ac0244c65093(module, "LogisticDistribution", "This class LogisticDistribution represents a `logistic\ndistribution <https://en.wikipedia.org/wiki/Logistic_distribution>`__.\n\nThe logistic distribution is an univariate continuous distribution. The\nsupport is the set of real values :math:`\\mathbb{R}`.\n\n");
     class_0b663e6159f1527ca997ac0244c65093.def(pybind11::init<  >());
     class_0b663e6159f1527ca997ac0244c65093.def(pybind11::init< double const &, double const & >());
     class_0b663e6159f1527ca997ac0244c65093.def(pybind11::init< class ::statiskit::LogisticDistribution const & >());

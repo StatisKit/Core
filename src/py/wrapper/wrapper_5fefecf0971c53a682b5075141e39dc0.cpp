@@ -9,7 +9,7 @@ namespace autowig {
 void wrapper_5fefecf0971c53a682b5075141e39dc0(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::SlopeHeuristicBiSquareSolver, autowig::HolderType< class ::statiskit::SlopeHeuristicBiSquareSolver >::Type, class ::statiskit::SlopeHeuristicIWLSSolver > class_5fefecf0971c53a682b5075141e39dc0(module, "SlopeHeuristicBiSquareSolver", "");
+    pybind11::class_<class ::statiskit::SlopeHeuristicBiSquareSolver, autowig::HolderType< class ::statiskit::SlopeHeuristicBiSquareSolver >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::SlopeHeuristicBiSquareSolver, class ::statiskit::SlopeHeuristicIWLSSolver > > class_5fefecf0971c53a682b5075141e39dc0(module, "SlopeHeuristicBiSquareSolver", "");
     class_5fefecf0971c53a682b5075141e39dc0.def(pybind11::init<  >());
     class_5fefecf0971c53a682b5075141e39dc0.def(pybind11::init< class ::statiskit::SlopeHeuristicBiSquareSolver const & >());
     class_5fefecf0971c53a682b5075141e39dc0.def("get_k", method_pointer_9bddc4d28425559fa247588656301e76, pybind11::return_value_policy::copy, "");

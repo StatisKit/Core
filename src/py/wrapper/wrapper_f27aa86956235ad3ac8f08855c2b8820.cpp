@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_f27aa86956235ad3ac8f08855c2b8820(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::SplittingDistribution, autowig::HolderType< class ::statiskit::SplittingDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::MultivariateDistribution, class ::statiskit::SplittingDistribution, struct ::statiskit::DiscreteMultivariateDistribution > > class_f27aa86956235ad3ac8f08855c2b8820(module, "SplittingDistribution", "");
+    pybind11::class_<class ::statiskit::SplittingDistribution, autowig::HolderType< class ::statiskit::SplittingDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::SplittingDistribution, struct ::statiskit::DiscreteMultivariateDistribution > > class_f27aa86956235ad3ac8f08855c2b8820(module, "SplittingDistribution", "");
     class_f27aa86956235ad3ac8f08855c2b8820.def(pybind11::init< struct ::statiskit::DiscreteUnivariateDistribution const &, struct ::statiskit::SingularDistribution const & >());
     class_f27aa86956235ad3ac8f08855c2b8820.def(pybind11::init< class ::statiskit::SplittingDistribution const & >());
     class_f27aa86956235ad3ac8f08855c2b8820.def("get_sum", method_pointer_3d0a5e25401d5a02a6b475d9f5ce084d, pybind11::return_value_policy::reference_internal, "");

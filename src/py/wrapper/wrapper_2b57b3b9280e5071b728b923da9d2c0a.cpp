@@ -9,7 +9,7 @@ namespace autowig {
 void wrapper_2b57b3b9280e5071b728b923da9d2c0a(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::MultivariateVarianceEstimation::Estimator, autowig::HolderType< class ::statiskit::MultivariateVarianceEstimation::Estimator >::Type, struct ::statiskit::MultivariateDispersionEstimation::Estimator > class_2b57b3b9280e5071b728b923da9d2c0a(module, "Estimator", "");
+    pybind11::class_<class ::statiskit::MultivariateVarianceEstimation::Estimator, autowig::HolderType< class ::statiskit::MultivariateVarianceEstimation::Estimator >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::MultivariateVarianceEstimation::Estimator, struct ::statiskit::MultivariateDispersionEstimation::Estimator > > class_2b57b3b9280e5071b728b923da9d2c0a(module, "Estimator", "");
     class_2b57b3b9280e5071b728b923da9d2c0a.def(pybind11::init<  >());
     class_2b57b3b9280e5071b728b923da9d2c0a.def(pybind11::init< bool const & >());
     class_2b57b3b9280e5071b728b923da9d2c0a.def(pybind11::init< class ::statiskit::MultivariateVarianceEstimation::Estimator const & >());

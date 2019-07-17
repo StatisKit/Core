@@ -13,6 +13,8 @@ namespace statiskit
     class STATISKIT_CORE_API SlopeHeuristicSolver
     { 
         public:
+            using copy_type = SlopeHeuristicSolver;
+
             SlopeHeuristicSolver();
             SlopeHeuristicSolver(const SlopeHeuristicSolver& solver);
             virtual ~SlopeHeuristicSolver();
@@ -22,13 +24,13 @@ namespace statiskit
             linalg::solver_type get_solver() const;
             void set_solver(const linalg::solver_type& solver);
 
-            virtual std::unique_ptr< SlopeHeuristicSolver > copy() const = 0;
+            virtual std::unique_ptr< copy_type > copy() const = 0;
 
         protected:
             linalg::solver_type solver;
     };
 
-    struct STATISKIT_CORE_API SlopeHeuristicOLSSolver : SlopeHeuristicSolver
+    struct STATISKIT_CORE_API SlopeHeuristicOLSSolver : PolymorphicCopy<SlopeHeuristicOLSSolver, SlopeHeuristicSolver>
     {
         SlopeHeuristicOLSSolver();
         SlopeHeuristicOLSSolver(const SlopeHeuristicOLSSolver& solver);
@@ -59,13 +61,11 @@ namespace statiskit
             virtual void update(const Eigen::VectorXd& beta, Eigen::MatrixXd& W, const Eigen::MatrixXd& X, const Eigen::VectorXd& y) const = 0;
     };
 
-    class STATISKIT_CORE_API SlopeHeuristicHuberSolver : public SlopeHeuristicIWLSSolver
+    class STATISKIT_CORE_API SlopeHeuristicHuberSolver : public PolymorphicCopy<SlopeHeuristicHuberSolver, SlopeHeuristicIWLSSolver>
     {
         public:
             SlopeHeuristicHuberSolver();
             SlopeHeuristicHuberSolver(const SlopeHeuristicHuberSolver& shs);
-
-            virtual std::unique_ptr< SlopeHeuristicSolver > copy() const;
 
             const double& get_k() const;
             void set_k(const double& k);
@@ -76,13 +76,11 @@ namespace statiskit
             virtual void update(const Eigen::VectorXd& beta, Eigen::MatrixXd& W, const Eigen::MatrixXd& X, const Eigen::VectorXd& y) const;
     };
 
-    class STATISKIT_CORE_API SlopeHeuristicBiSquareSolver : public SlopeHeuristicIWLSSolver
+    class STATISKIT_CORE_API SlopeHeuristicBiSquareSolver : public PolymorphicCopy<SlopeHeuristicBiSquareSolver, SlopeHeuristicIWLSSolver>
     {
          public:
             SlopeHeuristicBiSquareSolver();
             SlopeHeuristicBiSquareSolver(const SlopeHeuristicBiSquareSolver& shs);
-
-            virtual std::unique_ptr< SlopeHeuristicSolver > copy() const;
 
             const double& get_k() const;
             void set_k(const double& k);
@@ -99,7 +97,9 @@ namespace statiskit
     { 
         using copy_type = SlopeHeuristicSelector;
 
-        virtual ~SlopeHeuristicSelector();
+        SlopeHeuristicSelector() = default;
+        SlopeHeuristicSelector(const SlopeHeuristicSelector& selector) = default;
+        virtual ~SlopeHeuristicSelector() = default;
 
         virtual Index operator() (const SlopeHeuristic& sh) const = 0;
 
@@ -116,8 +116,9 @@ namespace statiskit
     class STATISKIT_CORE_API SlopeHeuristicSuperiorSelector : public PolymorphicCopy<SlopeHeuristicSuperiorSelector, SlopeHeuristicSelector>
     {
         public:
-            using PolymorphicCopy<SlopeHeuristicSuperiorSelector, SlopeHeuristicSelector>::PolymorphicCopy;
-
+            SlopeHeuristicSuperiorSelector();
+            SlopeHeuristicSuperiorSelector(const SlopeHeuristicSuperiorSelector& selector);
+            
             virtual Index operator() (const SlopeHeuristic& sh) const;
 
             const double& get_threshold() const;

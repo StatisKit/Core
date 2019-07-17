@@ -1,3 +1,8 @@
+#include <algorithm>
+
+#include <boost/random/uniform_int.hpp>
+#include <boost/random/variate_generator.hpp>
+
 #include "sample_space.h"
 #include "data.h"
 
@@ -7,7 +12,9 @@ namespace statiskit
     {}
 
     CategoricalSampleSpace::CategoricalSampleSpace(const std::set< std::string >& values)
-    { this->values = std::make_shared< std::set< std::string > >(values); }
+    {
+        this->values = std::make_shared< std::set< std::string > >(values);
+    }
 
     CategoricalSampleSpace::CategoricalSampleSpace(const CategoricalSampleSpace& sample_space) 
     { 
@@ -19,27 +26,35 @@ namespace statiskit
     {}
 
     const std::set< std::string >& CategoricalSampleSpace::get_values() const
-    { return *(this->values.get()); }
+    {
+        return *(this->values.get());
+    }
     
     encoding_type CategoricalSampleSpace::get_encoding() const
-    { return this->encoding; }
+    {
+        return this->encoding;
+    }
     
     Index CategoricalSampleSpace::get_cardinality() const
-    { return this->values->size(); }
+    {
+        return this->values->size();
+    }
 
     outcome_type CategoricalSampleSpace::get_outcome() const
-    { return CATEGORICAL; }
+    {
+        return outcome_type::CATEGORICAL;
+    }
 
     bool CategoricalSampleSpace::is_compatible(const UnivariateEvent* event) const
     {
         bool compatible = !event;
         if (!compatible) {
-            if (event->get_outcome() == CATEGORICAL) {
-                switch (event->get_event()) {
-                    case ELEMENTARY:
+            if (event->get_outcome() == outcome_type::CATEGORICAL) {
+                switch (event->get_censoring()) {
+                    case censoring_type::NONE:
                         compatible = this->is_compatible_value(static_cast< const CategoricalElementaryEvent* >(event)->get_value());
                         break;
-                    case CENSORED:
+                    case censoring_type::CENSORED:
                         {
                             const std::vector< std::string >& values = static_cast< const CategoricalCensoredEvent* >(event)->get_values();
                             std::vector< std::string >::const_iterator it = values.cbegin(), ite = values.cend();
@@ -60,7 +75,9 @@ namespace statiskit
     }
 
     bool CategoricalSampleSpace::is_compatible_value(const std::string& value) const
-    { return this->values->find(value) != this->values->end(); }
+    {
+        return this->values->find(value) != this->values->end();
+    }
 
     NominalSampleSpace::NominalSampleSpace(const std::set< std::string >& values) : CategoricalSampleSpace(values)
     { 
@@ -80,10 +97,14 @@ namespace statiskit
     {}
 
     ordering_type NominalSampleSpace::get_ordering() const
-    { return NONE; }
+    {
+        return ordering_type::NONE;
+    }
 
     const std::string& NominalSampleSpace::get_reference() const
-    { return *(this->reference); }
+    {
+        return *(this->reference);
+    }
 
     void NominalSampleSpace::set_reference(const std::string& reference)
     {
@@ -105,7 +126,7 @@ namespace statiskit
 
     void NominalSampleSpace::set_encoding(const encoding_type& encoding)
     {
-        if (encoding > DEVIATION) {
+        if (encoding > encoding_type::DEVIATION) {
             throw std::runtime_error("invalid encoding");
         }
         this->encoding = encoding;
@@ -123,7 +144,7 @@ namespace statiskit
             } else {
                 Index index = std::distance(this->values->cbegin(), it), ref_index = std::distance(this->values->cbegin(), this->reference);
                 switch (this->encoding) {
-                    case TREATMENT:
+                    case encoding_type::TREATMENT:
                         dummy = Eigen::RowVectorXd::Zero(cardinality);
                         if (index < ref_index) {
                             dummy(index) = 1;
@@ -132,7 +153,7 @@ namespace statiskit
                             dummy(index) = 1;
                         }
                         break;
-                    case DEVIATION:
+                    case encoding_type::DEVIATION:
                         if (index == ref_index) {
                             dummy = -1 * Eigen::RowVectorXd::Ones(cardinality);
                         } else {
@@ -156,7 +177,9 @@ namespace statiskit
     }
 
     std::unique_ptr< OrdinalSampleSpace > NominalSampleSpace::as_ordinal() const
-    { return std::make_unique< OrdinalSampleSpace >(std::vector< std::string >(this->values->cbegin(), this->values->cend())); }
+    {
+        return std::make_unique< OrdinalSampleSpace >(std::vector< std::string >(this->values->cbegin(), this->values->cend()));
+    }
 
     std::unique_ptr< UnivariateSampleSpace > NominalSampleSpace::copy() const
     { return std::make_unique< NominalSampleSpace >(*this); }
@@ -180,10 +203,14 @@ namespace statiskit
     {}
 
     ordering_type OrdinalSampleSpace::get_ordering() const
-    { return TOTAL; }
+    {
+        return ordering_type::TOTAL;
+    }
 
     void OrdinalSampleSpace::set_encoding(const encoding_type& encoding)
-    { this->encoding = encoding; }
+    {
+        this->encoding = encoding;
+    }
 
     Eigen::RowVectorXd OrdinalSampleSpace::encode(const std::string& value) const
     {
@@ -197,14 +224,14 @@ namespace statiskit
                 dummy = std::numeric_limits< double >::quiet_NaN() * Eigen::RowVectorXd::Ones(cardinality);
             } else {
                 switch (this->encoding) {
-                    case TREATMENT:
+                    case encoding_type::TREATMENT:
                         index = (*this->rank)[std::distance(this->values->cbegin(), it)];
                         dummy = Eigen::RowVectorXd::Zero(cardinality);
                         if (index < cardinality) {
                             dummy(index) = 1;
                         }
                         break;
-                    case DEVIATION:
+                    case encoding_type::DEVIATION:
                         if (index == cardinality) {
                             dummy = -1 * Eigen::RowVectorXd::Ones(cardinality);
                         } else {
@@ -214,7 +241,7 @@ namespace statiskit
                             }
                         }
                         break;
-                    case CUMULATIVE:
+                    case encoding_type::CUMULATIVE:
                         dummy = Eigen::RowVectorXd::Zero(cardinality);
                         for (index = 0, max_index = std::min(cardinality, (*this->rank)[std::distance(this->values->cbegin(), it)]); index < max_index; ++index) {
                             dummy(index) = 1;
@@ -246,48 +273,55 @@ namespace statiskit
         std::shared_ptr< std::vector< Index > > rank = std::make_shared< std::vector< Index > >(ordered.size(), ordered.size());
         for (Index size = 0, max_size = ordered.size(); size < max_size; ++size) {
             std::set< std::string >::iterator it = this->values->find(ordered[size]);
-            if(it == this->values->end())
-            { throw std::runtime_error("rank"); }
+            if (it == this->values->end()) {
+                throw std::runtime_error("rank");
+            }
             (*rank)[std::distance(this->values->begin(), it)] = size;
 
         }
         for(Index size = 0, max_size = ordered.size(); size < max_size; ++size)
         {
-            if((*rank)[size] >= ordered.size())
-            { throw std::runtime_error("ordered"); }
+            if ((*rank)[size] >= ordered.size()) {
+                throw std::runtime_error("ordered");
+            }
         }
         this->rank = rank;
     }
     
     const std::vector< Index >& OrdinalSampleSpace::get_rank() const
-    { return *this->rank; }
+    {
+        return *this->rank;
+    }
 
     void OrdinalSampleSpace::set_rank(const std::vector< Index >& rank)
     {
-        if(rank.size() != this->values->size())
-        { throw std::runtime_error("rank"); }
+        if (rank.size() != this->values->size()){
+            throw std::runtime_error("rank");
+        }
         Indices order = Indices();
-        for(Index size = 0, max_size = this->values->size(); size < max_size; ++size)
-        { order.insert(order.end(), size); }
-        for(Index size = 0, max_size = this->values->size(); size < max_size; ++size)
-        {
+        for (Index size = 0, max_size = this->values->size(); size < max_size; ++size) {
+            order.insert(order.end(), size);
+        }
+        for (Index size = 0, max_size = this->values->size(); size < max_size; ++size) {
             Indices::iterator it = order.find(rank[size]);
-            if(it == order.end())
-            { throw std::runtime_error("rank"); }
+            if (it == order.end()) {
+                throw std::runtime_error("rank");
+            }
             order.erase(it);
         }
-        if(order.size() != 0)
-        { throw std::runtime_error("rank"); }
+        if (order.size() != 0) {
+            throw std::runtime_error("rank");
+        }
         this->rank = std::make_shared< std::vector< Index > >(rank);
     }
 
     void OrdinalSampleSpace::randomize()
     {
-        detach();
-        std::set< std::string >::iterator first_it = this->values->begin(), it_end = this->values->end();
+        this->detach();
+        std::set< std::string >::iterator first_it = this->values->begin();
+        std::set< std::string >::iterator it_end = this->values->end();
         ++first_it;
-        while(first_it != it_end)
-        {
+        while (first_it != it_end) {
             std::set< std::string >::iterator second_it = this->values->begin();
             boost::random::uniform_int_distribution<> dist(0, std::distance(this->values->begin(), first_it));
             boost::variate_generator<boost::mt19937&, boost::random::uniform_int_distribution<>  > simulator(__impl::get_random_generator(), dist);
@@ -300,10 +334,14 @@ namespace statiskit
     }
 
     std::unique_ptr< NominalSampleSpace > OrdinalSampleSpace::as_nominal() const
-    { return std::make_unique< NominalSampleSpace >(*(this->values.get())); }
+    {
+        return std::make_unique< NominalSampleSpace >(*(this->values.get()));
+    }
 
     std::unique_ptr< UnivariateSampleSpace > OrdinalSampleSpace::copy() const
-    { return std::make_unique< OrdinalSampleSpace >(*this); }
+    {
+        return std::make_unique< OrdinalSampleSpace >(*this);
+    }
 
     void OrdinalSampleSpace::detach()
     {
@@ -311,13 +349,15 @@ namespace statiskit
             this->rank = std::make_shared< std::vector< Index > >(*this->rank);
         }
     }
+
     HierarchicalSampleSpace::HierarchicalSampleSpace(const CategoricalSampleSpace& root_sample_space) : CategoricalSampleSpace(root_sample_space.get_values())
     {
         this->tree_sample_space = std::make_shared< std::map< std::string, std::unique_ptr< CategoricalSampleSpace > > >();
         (*this->tree_sample_space)[""] = std::unique_ptr< CategoricalSampleSpace >(static_cast< CategoricalSampleSpace* >(root_sample_space.copy().release()));
         this->parents = std::make_shared< std::map< std::string, std::string > >();
-        for(std::set< std::string >::const_iterator it = root_sample_space.get_values().cbegin(), it_end = root_sample_space.get_values().cend(); it != it_end; ++it)
-        { (*this->parents)[*it] = ""; }
+        for (std::set< std::string >::const_iterator it = root_sample_space.get_values().cbegin(), it_end = root_sample_space.get_values().cend(); it != it_end; ++it) {
+            (*this->parents)[*it] = "";
+        }
     }
 
     HierarchicalSampleSpace::HierarchicalSampleSpace(const HierarchicalSampleSpace& p_sample_space) : CategoricalSampleSpace(p_sample_space.get_values())
@@ -343,7 +383,7 @@ namespace statiskit
         // if(it != it_end)
         // { ordering = PARTIAL; }
         // return ordering;
-        return PARTIAL;
+        return ordering_type::PARTIAL;
     }
 
     void HierarchicalSampleSpace::set_encoding(const encoding_type& encoding)
@@ -366,7 +406,7 @@ namespace statiskit
                 ++it;
             }
             if (it == it_end) {
-                detach();
+                this->detach();
                 this->values->erase(leave);
                 this->values->insert(values.cbegin(), values.cend());
                 (*this->tree_sample_space)[leave] = std::unique_ptr< CategoricalSampleSpace >(static_cast< CategoricalSampleSpace* >(sample_space.copy().release())); 
@@ -381,53 +421,63 @@ namespace statiskit
         }
     }
 
-    UnivariateConditionalData HierarchicalSampleSpace::split(const std::string& non_leave, const UnivariateConditionalData& data) const
-    {
-        MultivariateDataFrame explanatories_data(*(data.get_explanatories()->get_sample_space()));
-        UnivariateDataFrame response_data(*((this->tree_sample_space->find(non_leave))->second));
+    // UnivariateConditionalData HierarchicalSampleSpace::split(const std::string& non_leave, const UnivariateConditionalData& data) const
+    // {
+    //     MultivariateDataFrame explanatories_data(*(data.get_explanatories()->get_sample_space()));
+    //     UnivariateDataFrame response_data(*((this->tree_sample_space->find(non_leave))->second));
 
-        std::map< std::string, std::string > new_leaves;
-        for (std::set< std::string >::const_iterator it = this->values->begin(), it_end = this->values->cend(); it != it_end; ++it) {
-            new_leaves[*it] = this->children(non_leave, *it);
-        }
+    //     std::map< std::string, std::string > new_leaves;
+    //     for (std::set< std::string >::const_iterator it = this->values->begin(), it_end = this->values->cend(); it != it_end; ++it) {
+    //         new_leaves[*it] = this->children(non_leave, *it);
+    //     }
 
-        std::unique_ptr< UnivariateConditionalData::Generator > generator = data.generator();
-        std::vector< double > weights;
-        while (generator->is_valid()) {
-            const CategoricalElementaryEvent* response_event = static_cast< const CategoricalElementaryEvent* >(generator->response()->copy().release());
-            if (response_event) {
-                std::string new_response = new_leaves.find(response_event->get_value())->second;
-                if (new_response != "") {
-                    CategoricalElementaryEvent* new_response_event = new CategoricalElementaryEvent(new_response);
-                    response_data.add_event(new_response_event);
-                    delete new_response_event;
-                    weights.push_back(generator->weight());
-                    explanatories_data.add_event(generator->explanatories());
-                }
-            }
-            ++(*generator);
-        }
-        UnivariateDataFrame* resp_data = new UnivariateDataFrame(response_data);
-        WeightedUnivariateData weighted_response_data(resp_data, weights);
-        delete resp_data;
-        UnivariateConditionalData new_data(weighted_response_data, explanatories_data);
-        return new_data;
-    }
+    //     std::unique_ptr< UnivariateConditionalData::Generator > generator = data.generator();
+    //     std::vector< double > weights;
+    //     while (generator->is_valid()) {
+    //         const CategoricalElementaryEvent* response_event = static_cast< const CategoricalElementaryEvent* >(generator->response()->copy().release());
+    //         if (response_event) {
+    //             std::string new_response = new_leaves.find(response_event->get_value())->second;
+    //             if (new_response != "") {
+    //                 CategoricalElementaryEvent* new_response_event = new CategoricalElementaryEvent(new_response);
+    //                 response_data.add_event(new_response_event);
+    //                 delete new_response_event;
+    //                 weights.push_back(generator->weight());
+    //                 explanatories_data.add_event(generator->explanatories());
+    //             }
+    //         }
+    //         ++(*generator);
+    //     }
+    //     UnivariateDataFrame* resp_data = new UnivariateDataFrame(response_data);
+    //     WeightedUnivariateData weighted_response_data(resp_data, weights);
+    //     delete resp_data;
+    //     UnivariateConditionalData new_data(weighted_response_data, explanatories_data);
+    //     return new_data;
+    // }
 
     std::unique_ptr< UnivariateSampleSpace > HierarchicalSampleSpace::copy() const
-    { return std::make_unique< HierarchicalSampleSpace >(*this); }
+    {
+        return std::make_unique< HierarchicalSampleSpace >(*this);
+    }
 
     HierarchicalSampleSpace::const_iterator HierarchicalSampleSpace::cbegin() const
-    { return this->tree_sample_space->cbegin(); }
+    {
+        return this->tree_sample_space->cbegin();
+    }
 
     HierarchicalSampleSpace::const_iterator HierarchicalSampleSpace::cend() const
-    { return this->tree_sample_space->cend(); }
+    {
+        return this->tree_sample_space->cend();
+    }
             
     const CategoricalSampleSpace* HierarchicalSampleSpace::get_sample_space(const std::string& value)
-    { return (*this->tree_sample_space)[value].get(); }
+    {
+        return (*this->tree_sample_space)[value].get();
+    }
 
     const std::map< std::string, std::string >& HierarchicalSampleSpace::get_parents() const
-    { return *this->parents; }
+    {
+        return *this->parents;
+    }
 
     std::string HierarchicalSampleSpace::children(const std::string& non_leave, const std::string& leave) const
     {
@@ -482,10 +532,14 @@ namespace statiskit
     }
 
     outcome_type DiscreteSampleSpace::get_outcome() const
-    { return DISCRETE; }
+    {
+        return outcome_type::DISCRETE;
+    }
 
     ordering_type DiscreteSampleSpace::get_ordering() const
-    { return TOTAL; }
+    {
+        return ordering_type::TOTAL;
+    }
 
     IntegerSampleSpace::IntegerSampleSpace(const int& lower_bound, const int& upper_bound)
     {
@@ -500,15 +554,15 @@ namespace statiskit
     {
         bool compatible = !event;
         if (!compatible) {
-            if (event->get_outcome() == DISCRETE) {
-                switch(event->get_event()) {
-                    case ELEMENTARY:
+            if (event->get_outcome() == outcome_type::DISCRETE) {
+                switch(event->get_censoring()) {
+                    case censoring_type::NONE:
                         {
                             int value = static_cast< const DiscreteElementaryEvent* >(event)->get_value();
                             compatible = value >= this->lower_bound && value <= this->upper_bound;
                         }    
                         break;
-                    case CENSORED:
+                    case censoring_type::CENSORED:
                         {
                             const std::vector< int >& __values = static_cast< const DiscreteCensoredEvent* >(event)->get_values();
                             std::vector< int >::const_iterator it = __values.cbegin(), ite = __values.cend();
@@ -519,7 +573,7 @@ namespace statiskit
                             }
                         }
                         break;
-                    case LEFT:
+                    case censoring_type::LEFT:
                         if (this->lower_bound == std::numeric_limits< int >::min()) {
                             int value = static_cast< const DiscreteLeftCensoredEvent* >(event)->get_upper_bound();
                             compatible = value >= this->lower_bound && value <= this->upper_bound;
@@ -527,7 +581,7 @@ namespace statiskit
                             compatible = false;
                         }
                         break;
-                    case RIGHT:
+                    case censoring_type::RIGHT:
                         if(this->upper_bound == std::numeric_limits< int >::max()) {
                             int value = static_cast< const DiscreteRightCensoredEvent* >(event)->get_lower_bound();
                             compatible = value >= this->lower_bound && value <= this->upper_bound;
@@ -535,7 +589,7 @@ namespace statiskit
                             compatible = false;
                         }
                         break;
-                    case INTERVAL:
+                    case censoring_type::INTERVAL:
                         {
                             int value = static_cast< const DiscreteIntervalCensoredEvent* >(event)->get_upper_bound();
                             compatible = value >= this->lower_bound && value <= this->upper_bound;
@@ -552,29 +606,43 @@ namespace statiskit
     }
 
     const int& IntegerSampleSpace::get_lower_bound() const
-    { return this->lower_bound; }
+    {
+        return this->lower_bound;
+    }
 
     const int& IntegerSampleSpace::get_upper_bound() const
-    { return this->upper_bound; }
+    {
+        return this->upper_bound;
+    }
 
     std::unique_ptr< UnivariateSampleSpace > IntegerSampleSpace::copy() const
-    { return std::make_unique< IntegerSampleSpace >(*this); }
+    {
+        return std::make_unique< IntegerSampleSpace >(*this);
+    }
 
     const IntegerSampleSpace NN = IntegerSampleSpace(0);
 
     const IntegerSampleSpace& get_NN()
-    { return NN; }
+    {
+        return NN;
+    }
 
     const IntegerSampleSpace ZZ = IntegerSampleSpace();
 
     const IntegerSampleSpace& get_ZZ()
-    { return ZZ; }
+    {
+        return ZZ;
+    }
 
     outcome_type ContinuousSampleSpace::get_outcome() const
-    { return CONTINUOUS; }
+    {
+        return outcome_type::CONTINUOUS;
+    }
 
     ordering_type ContinuousSampleSpace::get_ordering() const
-    { return TOTAL; }
+    {
+        return ordering_type::TOTAL;
+    }
 
     RealSampleSpace::RealSampleSpace(const double& lhs, const double& rhs, const bool& left_closed, const bool& right_closed)
     {
@@ -596,9 +664,9 @@ namespace statiskit
     {
         bool compatible = !event;
         if (!compatible) {
-            if (event->get_outcome() == CONTINUOUS) {
-                switch(event->get_event()) {
-                    case ELEMENTARY:
+            if (event->get_outcome() == outcome_type::CONTINUOUS) {
+                switch (event->get_censoring()) {
+                    case censoring_type::NONE:
                         {
                             double value = static_cast< const ContinuousElementaryEvent* >(event)->get_value();
                             compatible = boost::math::isfinite(value);
@@ -618,7 +686,7 @@ namespace statiskit
                             }
                         }    
                         break;
-                    case CENSORED:
+                    case censoring_type::CENSORED:
                         {
                             const std::vector< double >& __values = static_cast< const ContinuousCensoredEvent* >(event)->get_values();
                             std::vector< double >::const_iterator it = __values.cbegin(), ite = __values.cend();
@@ -643,7 +711,7 @@ namespace statiskit
                             }
                         }
                         break;
-                    case LEFT:
+                    case censoring_type::LEFT:
                         if (boost::math::isinf(this->lower_bound) && this->lower_bound < 0) {
                             double value = static_cast< const ContinuousLeftCensoredEvent* >(event)->get_upper_bound();
                             compatible = boost::math::isfinite(value) && value >= this->lower_bound && value <= this->upper_bound;
@@ -651,7 +719,7 @@ namespace statiskit
                             compatible = false;
                         }
                         break;
-                    case RIGHT:
+                    case censoring_type::RIGHT:
                         if (boost::math::isinf(this->upper_bound) && this->upper_bound > 0) {
                             double value = static_cast< const ContinuousRightCensoredEvent* >(event)->get_lower_bound();
                             compatible = boost::math::isfinite(value) && value >= this->lower_bound && value <= this->upper_bound;
@@ -659,7 +727,7 @@ namespace statiskit
                             compatible = false;
                         }
                         break;
-                    case INTERVAL:
+                    case censoring_type::INTERVAL:
                         {
                             double value = static_cast< const ContinuousIntervalCensoredEvent* >(event)->get_upper_bound();
                             compatible = boost::math::isfinite(value) && value >= this->lower_bound && value <= this->upper_bound;
@@ -676,34 +744,50 @@ namespace statiskit
     }
 
     const double& RealSampleSpace::get_lower_bound() const
-    { return this->lower_bound; }
+    {
+        return this->lower_bound;
+    }
 
     const double& RealSampleSpace::get_upper_bound() const
-    { return this->upper_bound; }
+    {
+        return this->upper_bound;
+    }
 
     const bool& RealSampleSpace::get_left_closed() const
-    { return this->left_closed; }
+    {
+        return this->left_closed;
+    }
 
     const bool& RealSampleSpace::get_right_closed() const
-    { return this->right_closed; }
+    {
+        return this->right_closed;
+    }
     
     std::unique_ptr< UnivariateSampleSpace > RealSampleSpace::copy() const
-    { return std::make_unique< RealSampleSpace >(*this); }
+    {
+        return std::make_unique< RealSampleSpace >(*this);
+    }
 
     const RealSampleSpace RR = RealSampleSpace();
 
     const RealSampleSpace& get_RR()
-    { return RR; }
+    {
+        return RR;
+    }
 
     const RealSampleSpace PR = RealSampleSpace(0);
 
     const RealSampleSpace& get_PR()
-    { return PR; }
+    {
+        return PR;
+    }
 
     const RealSampleSpace NR = RealSampleSpace(-1*std::numeric_limits< double >::infinity(), 0);
 
     const RealSampleSpace& get_NR()
-    { return NR; }
+    {
+        return NR;
+    }
 
     /*Eigen::MatrixXd MultivariateSampleSpace::encode(const MultivariateEvent& event, const std::set< std::set<Index> >& interactions) const
     {
@@ -812,7 +896,7 @@ namespace statiskit
             Index index = 0, max_index = this->size();
             while (compatible && index < max_index) {
                 sample_space = this->get_sample_space(index);
-                compatible = sample_space && sample_space->is_compatible(event->get(index));
+                compatible = sample_space && sample_space->is_compatible(event->get_event(index));
                 ++index;
             }
         } else {
@@ -826,7 +910,7 @@ namespace statiskit
         Index size = 0;
         for (Index index = 0, max_index = this->size(); index < max_index; ++index) {
             const UnivariateSampleSpace* sample_space = this->get_sample_space(index);
-            if (sample_space->get_outcome() == CATEGORICAL) {
+            if (sample_space->get_outcome() == outcome_type::CATEGORICAL) {
                 size += static_cast< const CategoricalSampleSpace* >(sample_space)->get_cardinality();
                 size -= 1;
             } else {
@@ -847,10 +931,10 @@ namespace statiskit
             Eigen::RowVectorXd temp;
             for (Index index = 0, max_index = this->size(); index< max_index; ++index) {
                 const UnivariateEvent* uevent = event.get_event(index);
-                if (uevent->get_event() == ELEMENTARY) {
-                    const UnivariateSampleSpace* sample_space = this->get_event(index);
+                if (uevent->get_censoring() == censoring_type::NONE) {
+                    const UnivariateSampleSpace* sample_space = this->get_sample_space(index);
                     switch (sample_space->get_outcome()) {
-                        case CATEGORICAL:
+                        case outcome_type::CATEGORICAL:
                             {
                                 temp = (static_cast< const CategoricalSampleSpace* >(sample_space)->encode(static_cast< const CategoricalElementaryEvent* >(uevent)->get_value()));
                                 dummy.segment(index + shift, temp.size()) = temp;
@@ -858,16 +942,16 @@ namespace statiskit
                                 --shift;
                             }
                             break;
-                        case DISCRETE:
+                        case outcome_type::DISCRETE:
                             dummy(index + shift) = static_cast< const DiscreteElementaryEvent* >(uevent)->get_value();
                             break;
-                        case CONTINUOUS:
+                        case outcome_type::CONTINUOUS:
                             dummy(index + shift) = static_cast< const ContinuousElementaryEvent* >(uevent)->get_value();
                             break;
                     }
                 } else {
-                    const UnivariateSampleSpace* sample_space = get_sample_space(index);
-                    if (sample_space->get_outcome() == CATEGORICAL) {
+                    const UnivariateSampleSpace* sample_space = this->get_sample_space(index);
+                    if (sample_space->get_outcome() == outcome_type::CATEGORICAL) {
                         Index max_size = index + shift + static_cast< const CategoricalSampleSpace* >(sample_space)->get_cardinality();
                         while(index + shift < max_size) {
                             dummy(index + shift) = std::numeric_limits< double >::quiet_NaN();
@@ -904,19 +988,25 @@ namespace statiskit
     }
 
     Index VectorSampleSpace::size() const
-    {return this->sample_spaces->size(); }
+    {
+        return this->sample_spaces->size();
+    }
 
     const UnivariateSampleSpace* VectorSampleSpace::get_sample_space(const Index& index) const
-    { return (*this->sample_spaces)[index].get(); }
+    {
+        return (*this->sample_spaces)[index].get();
+    }
 
     void VectorSampleSpace::set_sample_space(const Index& index, const UnivariateSampleSpace& sample_space)
     { 
-        detach();
+        this->detach();
         (*this->sample_spaces)[index] = sample_space.copy();
     }
     
     std::unique_ptr< MultivariateSampleSpace > VectorSampleSpace::copy() const
-    { return std::make_unique< VectorSampleSpace >(*this); }
+    {
+        return std::make_unique< VectorSampleSpace >(*this);
+    }
 
     void VectorSampleSpace::detach()
     {

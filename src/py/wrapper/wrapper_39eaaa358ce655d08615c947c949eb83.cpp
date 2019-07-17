@@ -9,7 +9,7 @@ namespace autowig {
 void wrapper_39eaaa358ce655d08615c947c949eb83(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::GeometricDistribution, autowig::HolderType< class ::statiskit::GeometricDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::GeometricDistribution, struct ::statiskit::DiscreteUnivariateDistribution > > class_39eaaa358ce655d08615c947c949eb83(module, "GeometricDistribution", "");
+    pybind11::class_<class ::statiskit::GeometricDistribution, autowig::HolderType< class ::statiskit::GeometricDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::GeometricDistribution, struct ::statiskit::DiscreteUnivariateDistribution > > class_39eaaa358ce655d08615c947c949eb83(module, "GeometricDistribution", "");
     class_39eaaa358ce655d08615c947c949eb83.def(pybind11::init<  >());
     class_39eaaa358ce655d08615c947c949eb83.def(pybind11::init< double const & >());
     class_39eaaa358ce655d08615c947c949eb83.def(pybind11::init< class ::statiskit::GeometricDistribution const & >());

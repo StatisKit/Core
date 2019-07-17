@@ -1,6 +1,22 @@
 #ifndef AUTOWIG
 #pragma once
 
+#include <boost/math/distributions/extreme_value.hpp>
+#include <boost/math/distributions/laplace.hpp>
+#include <boost/math/distributions/logistic.hpp>
+#include <boost/math/distributions/normal.hpp>
+#include <boost/math/distributions/students_t.hpp>
+#include <boost/math/special_functions/beta.hpp>
+#include <boost/math/special_functions/erf.hpp>
+#include <boost/math/special_functions/gamma.hpp>
+#include <boost/random/beta_distribution.hpp>
+#include <boost/random/binomial_distribution.hpp>
+#include <boost/random/gamma_distribution.hpp>
+#include <boost/random/normal_distribution.hpp>
+#include <boost/random/poisson_distribution.hpp>
+#include <boost/random/uniform_int_distribution.hpp>
+#include <boost/random/variate_generator.hpp>
+
 namespace statiskit
 {
     template<class T>

@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_505be4c829e95c51829a196fdbf7392f(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::GammaDistribution, autowig::HolderType< class ::statiskit::GammaDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::GammaDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_505be4c829e95c51829a196fdbf7392f(module, "GammaDistribution", "This class represents a Gamma distribution.\n\nThe Gamma distribution is an univariate continuous distribution. The\nsupport is the set of positive real values :math:`\\mathbb{R}_+^*`.\n\n");
+    pybind11::class_<class ::statiskit::GammaDistribution, autowig::HolderType< class ::statiskit::GammaDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::GammaDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_505be4c829e95c51829a196fdbf7392f(module, "GammaDistribution", "This class represents a Gamma distribution.\n\nThe Gamma distribution is an univariate continuous distribution. The\nsupport is the set of positive real values :math:`\\mathbb{R}_+^*`.\n\n");
     class_505be4c829e95c51829a196fdbf7392f.def(pybind11::init<  >());
     class_505be4c829e95c51829a196fdbf7392f.def(pybind11::init< double const &, double const & >());
     class_505be4c829e95c51829a196fdbf7392f.def(pybind11::init< class ::statiskit::GammaDistribution const & >());

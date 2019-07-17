@@ -9,7 +9,7 @@ namespace autowig {
 void wrapper_6100283fa34c5dc5af23228c1af7758a(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::ExponentialDistribution, autowig::HolderType< class ::statiskit::ExponentialDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::ExponentialDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_6100283fa34c5dc5af23228c1af7758a(module, "ExponentialDistribution", "This class represents a exponential distribution.\n\nThe exponential distribution is an univariate continuous distribution.\nThe support is the set of positive real values :math:`\\mathbb{R}_+^*`.\n\n");
+    pybind11::class_<class ::statiskit::ExponentialDistribution, autowig::HolderType< class ::statiskit::ExponentialDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::ExponentialDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_6100283fa34c5dc5af23228c1af7758a(module, "ExponentialDistribution", "This class represents a exponential distribution.\n\nThe exponential distribution is an univariate continuous distribution.\nThe support is the set of positive real values :math:`\\mathbb{R}_+^*`.\n\n");
     class_6100283fa34c5dc5af23228c1af7758a.def(pybind11::init<  >());
     class_6100283fa34c5dc5af23228c1af7758a.def(pybind11::init< double const & >());
     class_6100283fa34c5dc5af23228c1af7758a.def(pybind11::init< class ::statiskit::ExponentialDistribution const & >());

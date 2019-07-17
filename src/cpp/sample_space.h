@@ -1,10 +1,6 @@
 #pragma once
 
-#include <algorithm>
 #include <map>
-
-#include <boost/random/uniform_int.hpp>
-#include <boost/random/variate_generator.hpp>
 
 #include <statiskit/linalg/Eigen.h>
 
@@ -144,7 +140,7 @@ namespace statiskit
             virtual Eigen::RowVectorXd encode(const std::string& value) const;
 
             void partition(const std::string& leave, const CategoricalSampleSpace& sample_space); // partition the leave "value" into a sample space
-            UnivariateConditionalData split(const std::string& non_leave, const UnivariateConditionalData& data) const; 
+            // UnivariateConditionalData split(const std::string& non_leave, const UnivariateConditionalData& data) const; 
 
             virtual std::unique_ptr< UnivariateSampleSpace > copy() const;
 
@@ -236,7 +232,7 @@ namespace statiskit
 
         virtual Index size() const = 0;
         
-        virtual const UnivariateSampleSpace* get_event(const Index& index) const = 0;
+        virtual const UnivariateSampleSpace* get_sample_space(const Index& index) const = 0;
 
         virtual bool is_compatible(const MultivariateEvent* event) const;
         
@@ -256,8 +252,8 @@ namespace statiskit
 
             virtual Index size() const;
             
-            virtual const UnivariateSampleSpace* get_event(const Index& index) const;
-            virtual void set_event(const Index& index, const UnivariateSampleSpace& sample_space);
+            virtual const UnivariateSampleSpace* get_sample_space(const Index& index) const;
+            virtual void set_sample_space(const Index& index, const UnivariateSampleSpace& sample_space);
             
             virtual std::unique_ptr< MultivariateSampleSpace > copy() const;       
 

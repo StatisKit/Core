@@ -17,16 +17,11 @@ namespace statiskit
             this->weights = data.weights;
         }
 
-
     template<class B>
         WeightedData<B>::~WeightedData()
         {
             delete this->data;
         }
-
-    template<class B>
-        std::unique_ptr< typename B::Generator > WeightedData<B>::generator() const
-        { return std::make_unique< Generator >(*this); }
 
     template<class B>
         const B* WeightedData<B>::origin() const
@@ -67,116 +62,39 @@ namespace statiskit
         }
 
     template<class B>
-        WeightedData<B>::Generator::Generator(const WeightedData<B>& data) :  PolymorphicCopy< Generator, typename B::Generator >(data)
+        WeightedData<B>::Generator::Generator(const WeightedData<B>& data)
         {
-            this->data = data.copy().release();
+            this->data = static_cast< WeightedData<B>* >(data.copy().release());
+            this->generator = data.generator().release();
             this->index = 0;
-        }
-
-    template<class B>
-        WeightedData<B>::Generator::Generator(const Generator& generator) :  PolymorphicCopy< Generator, typename B::Generator >(generator)
-        {
-            this->data = static_cast< WeightedData<B>* >(generator.data->copy().release());
-            this->index = generator.index;
         }
 
     template<class B>
         WeightedData<B>::Generator::~Generator()
         {
             delete this->data;
+            delete this->generator;
         }
 
     template<class B>
         double WeightedData<B>::Generator::get_weight() const
-        { return this->data->get_weight(this->index); }
+        {
+            return this->data->get_weight(this->index);
+        }
+
+    template<class B>
+        bool WeightedData<B>::Generator::is_valid() const
+        {
+            return this->generator->is_valid() && this->index < this->data->get_nb_weights();
+        }
 
     template<class B>
         typename B::Generator& WeightedData<B>::Generator::operator++()
         {
-            B::Generator::operator++();
+            ++(*this->generator);
             ++index;
             return *this;
         }
-
-    // template<class I>
-    //     PairedData< I >::PairedData(const typename I::indexing_type first, const Indices& second, const MultivariateData& data)
-    //     {
-    //         this->first = data.select(first).release();
-    //         this->second = data.select(second).release();
-    //     }
-
-    // template<class I>
-    //     PairedData< I >::PairedData(const PairedData< I >& data)
-    //     {
-    //         this->first = data.first.copy().release();
-    //         this->second = data.second.copy().release();
-    //     }
-
-    // template<class I>
-    //     PairedData< I >::~PairedData()
-    //     {
-    //         delete this->first;
-    //         delete this->second;
-    //     }
-
-    // template<class I>
-    //     PairedData< I >::Generator::Generator(const PairedData< I >& data)
-    //     {
-    //         this->first = data.first->generator().release();
-    //         this->second = data.second->generator().release();
-    //     }
-
-    // template<class I>
-    //     PairedData< I >::Generator::Generator(const Generator& generator)
-    //     {
-    //         this->first = generator.first->copy().release();
-    //         this->second = generator.second->copy().release();
-    //     }
-
-    // template<class I>
-    //     PairedData< I >::Generator::~Generator()
-    //     {
-    //         if (this->first) {
-    //             delete this->first;
-    //             this->first = nullptr;
-    //         }
-    //         if (this->second) {
-    //             delete this->second;
-    //             this->second = nullptr;
-    //         }
-    //     }
-
-    // template<class I>
-    //     const typename I::event_type* PairedData< I >::Generator::get_first() const
-    //     {
-    //         return this->first->get_event();
-    //     }
-
-    // template<class I>
-    //     const MultivariateEvent* PairedData< I >::Generator::get_second() const
-    //     {
-    //         return this->second->get_event();
-    //     }
-
-    // template<class I>
-    //     double PairedData< I >::Generator::get_weight() const
-    //     {
-    //         return this->first->get_weight();
-    //     }
-
-    // template<class I>
-    //     bool PairedData< I >::Generator::is_valid() const
-    //     {
-    //         return this->first->is_valid() && this->second->is_valid();
-    //     }
-
-    // template<class I>
-    //     PairedData< I >::Generator& PairedData< I >::Generator::get_first() const
-    //     {
-    //         ++(*this->first);
-    //         ++(*this->second);
-    //         return *this;
-    //     }
 }
 
 #endif

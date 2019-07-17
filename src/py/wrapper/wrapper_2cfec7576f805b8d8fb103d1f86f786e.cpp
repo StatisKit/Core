@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_2cfec7576f805b8d8fb103d1f86f786e(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::NormalDistribution, autowig::HolderType< class ::statiskit::NormalDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::NormalDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_2cfec7576f805b8d8fb103d1f86f786e(module, "NormalDistribution", "This class NormalDistribution represents a `normal\ndistribution <https://en.wikipedia.org/wiki/Normal_distribution>`__.\n\nThe normal distribution is an univariate continuous distribution. The\nsupport is the set of real values :math:`\\mathbb{R}`.\n\n");
+    pybind11::class_<class ::statiskit::NormalDistribution, autowig::HolderType< class ::statiskit::NormalDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::NormalDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_2cfec7576f805b8d8fb103d1f86f786e(module, "NormalDistribution", "This class NormalDistribution represents a `normal\ndistribution <https://en.wikipedia.org/wiki/Normal_distribution>`__.\n\nThe normal distribution is an univariate continuous distribution. The\nsupport is the set of real values :math:`\\mathbb{R}`.\n\n");
     class_2cfec7576f805b8d8fb103d1f86f786e.def(pybind11::init<  >());
     class_2cfec7576f805b8d8fb103d1f86f786e.def(pybind11::init< double const &, double const & >());
     class_2cfec7576f805b8d8fb103d1f86f786e.def(pybind11::init< class ::statiskit::NormalDistribution const & >());

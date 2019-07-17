@@ -33,9 +33,9 @@ namespace statiskit
     template<class B>
         std::unique_ptr< typename ShiftedDistributionEstimation<B>::Estimator::estimation_type > ShiftedDistributionEstimation<B>::Estimator::operator() (const data_type& data) const
         { 
-            using event_type = ElementaryEvent< typename B::mixture_distribution_type::observation_type::event_type >;
+            using event_type = ElementaryEvent< typename B::event_type >;
             using value_type = typename event_type::value_type;
-            using distribution_type = ShiftedDistribution< typename B::mixture_distribution_type::observation_type >;
+            using distribution_type = ShiftedDistribution< typename B::observation_type >;
             this->check(data);
             if (!this->estimator) {
                 throw member_error("estimator", "you must give an estimator in order to compute a shifted estimation");
@@ -61,17 +61,17 @@ namespace statiskit
                 ++index;
             }
             return std::make_unique< ShiftedDistributionEstimation<B> >(weighted,
-                                                                        new distribution_type(*(*this->estimator(weighted))->get_distribution()), this->shift);
+                                                                        new distribution_type(*(*this->estimator(weighted))->get_distribution(), this->shift));
         }
 
     template<class B>
-        typename B::event_type::value_type ShiftedDistributionEstimation<B>::Estimator::get_shift() const
+        typename ShiftedDistributionEstimation<B>::Estimator::event_type::value_type ShiftedDistributionEstimation<B>::Estimator::get_shift() const
         {
             return this->shift;
         }
 
     template<class B>
-        void ShiftedDistributionEstimation<B>::Estimator::set_shift(const typename B::event_type::value_type& shift)
+        void ShiftedDistributionEstimation<B>::Estimator::set_shift(const typename event_type::value_type& shift)
         {
             this->shift = shift;
         }

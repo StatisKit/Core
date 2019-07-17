@@ -20,6 +20,7 @@ namespace statiskit
                 using estimator_type = typename B::Estimator;
                 using estimation_type = typename estimator_type::estimation_type;
                 using data_type = typename estimator_type::data_type;
+                using event_type = typename estimator_type::event_type;
 
                 Estimator();
                 Estimator(const Estimator& estimator);
@@ -27,15 +28,17 @@ namespace statiskit
 
                 virtual std::unique_ptr< estimation_type > operator() (const data_type& data) const;
 
-                typename B::event_type::value_type get_shift() const;
-                void set_shift(const typename B::event_type::value_type& shift);
+                typename event_type::value_type get_shift() const;
+                void set_shift(const typename event_type::value_type& shift);
 
                 const estimator_type* get_estimator() const;
                 void set_estimator(const estimator_type& estimator);
 
             protected:
-                typename B::event_type::value_type shift;
+                typename event_type::value_type shift;
                 estimator_type* estimator;
+
+                virtual std::unique_ptr< distribution_type > create(const distribution_type* distribution) const;
         };
     };
 
@@ -338,7 +341,7 @@ namespace statiskit
     {
         using PolymorphicCopy< NegativeMultinomialDistributionEstimation, IterativeEstimation<double, DiscreteMultivariateDistributionEstimation> >::PolymorphicCopy;
 
-        struct STATISKIT_CORE_API WZ99Estimator : PolymorphicCopy<WZ99Estimator, DiscreteMultivariateDistributionEstimation::Estimator>
+        struct STATISKIT_CORE_API WZ99Estimator : PolymorphicCopy< WZ99Estimator, Optimization< DiscreteMultivariateDistributionEstimation::Estimator > >
         {
             public:
                 WZ99Estimator();

@@ -66,7 +66,8 @@ namespace statiskit
         }
         unsigned int kappa = std::max<int>(round(pow(mean, 2)/(mean - variance)), static_cast< DiscreteElementaryEvent* >(data.compute_maximum().get())->get_value());
         BinomialDistribution* binomial = new BinomialDistribution(kappa, mean/double(kappa));
-        std::unique_ptr< BinomialDistributionMLEstimation > estimation = std::make_unique< BinomialDistributionMLEstimation >(binomial, &data);
+        std::unique_ptr< BinomialDistributionMLEstimation > estimation = std::make_unique< BinomialDistributionMLEstimation >(data.copy().release(),
+                                                                                                                              binomial);
         estimation->steps.push_back(kappa);
         double curr, prev = binomial->loglikelihood(data);
         unsigned int its = 1;
@@ -89,7 +90,7 @@ namespace statiskit
                     binomial->set_pi(mean / double(kappa));
                     curr = binomial->loglikelihood(data);
                     ++its;
-                } while (run(its, __impl::reldiff(prev, curr)) && curr > prev);
+                } while (this->run(its, __impl::reldiff(prev, curr)) && curr > prev);
             }
             if (curr < prev) {
                 ++kappa;
@@ -107,7 +108,7 @@ namespace statiskit
                 binomial->set_pi(mean / double(kappa));
                 curr = binomial->loglikelihood(data);
                 ++its;
-            } while (run(its, __impl::reldiff(prev, curr)) && curr > prev);
+            } while (this->run(its, __impl::reldiff(prev, curr)) && curr > prev);
             if (curr < prev) {
                 --kappa;
                 estimation->steps.push_back(kappa);
@@ -203,7 +204,8 @@ namespace statiskit
         }
         theta = 1 - 1 / theta;
         LogarithmicDistribution* logarithmic = new LogarithmicDistribution(theta);
-        std::unique_ptr< LogarithmicDistributionMLEstimation > estimation = std::make_unique< LogarithmicDistributionMLEstimation >(logarithmic, &data);
+        std::unique_ptr< LogarithmicDistributionMLEstimation > estimation = std::make_unique< LogarithmicDistributionMLEstimation >(data.copy().release(),
+                                                                                                                                    logarithmic);
         estimation->steps.push_back(theta);
         double prev, curr = logarithmic->loglikelihood(data);
         unsigned int its = 0;
@@ -216,7 +218,7 @@ namespace statiskit
                 curr = logarithmic->loglikelihood(data);
                 ++its;
             }
-        } while (run(its, __impl::reldiff(prev, curr)) && curr > prev);
+        } while (this->run(its, __impl::reldiff(prev, curr)) && curr > prev);
         return estimation;
     }
 
@@ -670,10 +672,10 @@ namespace statiskit
         this->constant = constant;
     }
 
-    NegativeMultinomialDistributionEstimation::WZ99Estimator::WZ99Estimator() : PolymorphicCopy<WZ99Estimator, DiscreteMultivariateDistributionEstimation::Estimator>()
+    NegativeMultinomialDistributionEstimation::WZ99Estimator::WZ99Estimator() : PolymorphicCopy< WZ99Estimator, Optimization< DiscreteMultivariateDistributionEstimation::Estimator > >()
     {}
 
-    NegativeMultinomialDistributionEstimation::WZ99Estimator::WZ99Estimator(const WZ99Estimator& estimator) : PolymorphicCopy<WZ99Estimator, DiscreteMultivariateDistributionEstimation::Estimator>(estimator)
+    NegativeMultinomialDistributionEstimation::WZ99Estimator::WZ99Estimator(const WZ99Estimator& estimator) : PolymorphicCopy< WZ99Estimator, Optimization< DiscreteMultivariateDistributionEstimation::Estimator > >(estimator)
     {}
 
     NegativeMultinomialDistributionEstimation::WZ99Estimator::~WZ99Estimator()

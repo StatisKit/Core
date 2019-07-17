@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_b3aefb8f8c96565c95d583848719e5b2(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::UniformDistribution, autowig::HolderType< class ::statiskit::UniformDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::UniformDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_b3aefb8f8c96565c95d583848719e5b2(module, "UniformDistribution", "This class represents a uniform distribution.\n\nThe uniform distribution is an univariate continuous distribution. The\nsupport is the interval :math:`[\\alpha,\\beta]` where :math:`\\alpha` and\n:math:`\\beta` are two real values such that :math:`\\alpha<\\beta`.\n\n");
+    pybind11::class_<class ::statiskit::UniformDistribution, autowig::HolderType< class ::statiskit::UniformDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::UniformDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_b3aefb8f8c96565c95d583848719e5b2(module, "UniformDistribution", "This class represents a uniform distribution.\n\nThe uniform distribution is an univariate continuous distribution. The\nsupport is the interval :math:`[\\alpha,\\beta]` where :math:`\\alpha` and\n:math:`\\beta` are two real values such that :math:`\\alpha<\\beta`.\n\n");
     class_b3aefb8f8c96565c95d583848719e5b2.def(pybind11::init<  >());
     class_b3aefb8f8c96565c95d583848719e5b2.def(pybind11::init< double const &, double const & >());
     class_b3aefb8f8c96565c95d583848719e5b2.def(pybind11::init< class ::statiskit::UniformDistribution const & >());

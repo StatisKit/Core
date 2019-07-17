@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_851931d00bce5cabad06313cbacce91b(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::GumbelDistribution, autowig::HolderType< class ::statiskit::GumbelDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::GumbelDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_851931d00bce5cabad06313cbacce91b(module, "GumbelDistribution", "This class GumbelDistribution represents a `Gumbel\ndistribution <https://en.wikipedia.org/wiki/Gumbel_distribution>`__\n(maximum).\n\nThe Gumbel distribution (maximum) is an univariate continuous\ndistribution. It is also called extreme value type I distribution\n(maximum). The support is the set of real values :math:`\\mathbb{R}`.\n\n");
+    pybind11::class_<class ::statiskit::GumbelDistribution, autowig::HolderType< class ::statiskit::GumbelDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::GumbelDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_851931d00bce5cabad06313cbacce91b(module, "GumbelDistribution", "This class GumbelDistribution represents a `Gumbel\ndistribution <https://en.wikipedia.org/wiki/Gumbel_distribution>`__\n(maximum).\n\nThe Gumbel distribution (maximum) is an univariate continuous\ndistribution. It is also called extreme value type I distribution\n(maximum). The support is the set of real values :math:`\\mathbb{R}`.\n\n");
     class_851931d00bce5cabad06313cbacce91b.def(pybind11::init<  >());
     class_851931d00bce5cabad06313cbacce91b.def(pybind11::init< double const &, double const & >());
     class_851931d00bce5cabad06313cbacce91b.def(pybind11::init< class ::statiskit::GumbelDistribution const & >());

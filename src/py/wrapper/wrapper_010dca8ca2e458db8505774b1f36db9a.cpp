@@ -9,7 +9,7 @@ namespace autowig {
 void wrapper_010dca8ca2e458db8505774b1f36db9a(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator, autowig::HolderType< class ::statiskit::RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator >::Type, struct ::statiskit::ContinuousUnivariateDistributionEstimation::Estimator > class_010dca8ca2e458db8505774b1f36db9a(module, "Estimator", "");
+    pybind11::class_<class ::statiskit::RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator, autowig::HolderType< class ::statiskit::RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator, class ::statiskit::ContinuousUnivariateDistributionEstimation::Estimator > > class_010dca8ca2e458db8505774b1f36db9a(module, "Estimator", "");
     class_010dca8ca2e458db8505774b1f36db9a.def(pybind11::init<  >());
     class_010dca8ca2e458db8505774b1f36db9a.def(pybind11::init< class ::statiskit::RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator const & >());
     class_010dca8ca2e458db8505774b1f36db9a.def("get_maxbins", method_pointer_8cc4d3f7e7a85290a6eac90ddb1b031c, pybind11::return_value_policy::copy, "");

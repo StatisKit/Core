@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_36adf88112dd5312b6c5fe75ebbc5559(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::ShiftedDistribution< struct ::statiskit::ContinuousUnivariateDistribution >, autowig::HolderType< class ::statiskit::ShiftedDistribution< struct ::statiskit::ContinuousUnivariateDistribution > >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::ShiftedDistribution< struct ::statiskit::ContinuousUnivariateDistribution >, struct ::statiskit::ContinuousUnivariateDistribution > > class_36adf88112dd5312b6c5fe75ebbc5559(module, "_ShiftedDistribution_36adf88112dd5312b6c5fe75ebbc5559", "");
+    pybind11::class_<class ::statiskit::ShiftedDistribution< struct ::statiskit::ContinuousUnivariateDistribution >, autowig::HolderType< class ::statiskit::ShiftedDistribution< struct ::statiskit::ContinuousUnivariateDistribution > >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::ShiftedDistribution< struct ::statiskit::ContinuousUnivariateDistribution >, struct ::statiskit::ContinuousUnivariateDistribution > > class_36adf88112dd5312b6c5fe75ebbc5559(module, "_ShiftedDistribution_36adf88112dd5312b6c5fe75ebbc5559", "");
     class_36adf88112dd5312b6c5fe75ebbc5559.def(pybind11::init< struct ::statiskit::ContinuousUnivariateDistribution const &, double const & >());
     class_36adf88112dd5312b6c5fe75ebbc5559.def(pybind11::init< class ::statiskit::ShiftedDistribution< struct ::statiskit::ContinuousUnivariateDistribution > const & >());
     class_36adf88112dd5312b6c5fe75ebbc5559.def("get_shift", method_pointer_d31c0f8ae5c6576ab7341adafae58204, pybind11::return_value_policy::copy, "");

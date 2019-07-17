@@ -4,6 +4,10 @@
 
 #include "base.h"
 #include "data.h"
+#include "distribution.h"
+#include "estimation.h"
+#include "optimization.h"
+#include "selection.h"
 
 namespace statiskit
 {
@@ -85,7 +89,7 @@ namespace statiskit
             Estimator(const Estimator& estimator);
             virtual ~Estimator();
 
-            virtual std::unique_ptr< estimation_type > operator() (const MultivariateData& data, const bool& lazy=false) const;
+            virtual std::unique_ptr< estimation_type > operator() (const data_type& data) const;
         };
     };
 
@@ -93,13 +97,13 @@ namespace statiskit
     {
         using PolymorphicCopy<DirichletMultinomialSingularDistributionEstimation, IterativeEstimation<Eigen::VectorXd, SingularDistributionEstimation > >::PolymorphicCopy;
 
-        struct STATISKIT_CORE_API Estimator : PolymorphicCopy< Estimator, SingularDistributionEstimation::Estimator >
+        struct STATISKIT_CORE_API Estimator : PolymorphicCopy< Estimator, Optimization< SingularDistributionEstimation::Estimator > >
         {
             Estimator();
             Estimator(const Estimator& estimator);
             virtual ~Estimator();
 
-            virtual std::unique_ptr< estimation_type > operator() (const MultivariateData& data, const bool& lazy=false) const;
+            virtual std::unique_ptr< estimation_type > operator() (const data_type& data) const;
         };
     };
 
@@ -136,6 +140,9 @@ namespace statiskit
         public:
             using PolymorphicCopy< SplittingDistributionEstimation, DiscreteMultivariateDistributionEstimation >::PolymorphicCopy;
 
+            SplittingDistributionEstimation(const SplittingDistributionEstimation& estimation);
+            ~SplittingDistributionEstimation();
+            
             const DiscreteUnivariateDistributionEstimation* get_sum() const;
 
             const SingularDistributionEstimation* get_singular() const;
@@ -147,7 +154,7 @@ namespace statiskit
                     Estimator(const Estimator& estimator);
                     virtual ~Estimator();
 
-                    virtual std::unique_ptr< estimation_type > operator() (const MultivariateData& data, const bool& lazy=false) const;
+                    virtual std::unique_ptr< estimation_type > operator() (const data_type& data) const;
 
                     const DiscreteUnivariateDistributionEstimation::Estimator* get_sum() const;
                     void  set_sum(const DiscreteUnivariateDistributionEstimation::Estimator& sum);

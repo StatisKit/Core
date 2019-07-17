@@ -87,6 +87,12 @@ namespace statiskit
         template<class T> void merge(std::unordered_set< T >& lhs, const std::unordered_set< T >& rhs);
 
         template<class U, class V> std::set< U > keys(const std::map< U, V >& map);
+
+        template<class T> void delete_vector(std::vector<T>& v);
+        template<class T> void delete_vector(std::vector<T*>& v);
+
+        template<class T> std::vector<T> copy_vector(const std::vector<T>& v);
+        template<class T> std::vector<T*> copy_vector(const std::vector<T*>& v);
     }
 
     STATISKIT_CORE_API void set_seed();

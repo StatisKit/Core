@@ -6,24 +6,13 @@ namespace statiskit
     template<class S, class B>
         IterativeEstimation<S, B>::IterativeEstimation(const IterativeEstimation<S, B>& estimation) : B(estimation)
         {
-            this->steps = estimation.steps;
-            if (std::is_pointer< S >::value) {
-                for(Index index = 0, max_index = this->steps.size(); index < max_index; ++index) {
-                    this->steps[index] = static_cast< S >(this->steps[index]->copy().release());
-                }
-            }
+            this->steps = __impl::copy_vector(estimation.steps);
         }
         
     template<class S, class B>
         IterativeEstimation<S, B>::~IterativeEstimation()
         {
-            if (std::is_pointer< S >::value) {
-                for (Index index = 0, max_index = this->steps.size(); index < max_index; ++index) { 
-                    delete this->steps[index];
-                    this->steps[index] = nullptr; 
-                }
-            }
-            this->steps.clear();
+            __impl::delete_vector(this->steps);
         }
 
     template<class S, class B>

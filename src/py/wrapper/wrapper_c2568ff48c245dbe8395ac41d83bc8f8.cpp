@@ -9,7 +9,7 @@ namespace autowig {
 void wrapper_c2568ff48c245dbe8395ac41d83bc8f8(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::LogarithmicDistribution, autowig::HolderType< class ::statiskit::LogarithmicDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::LogarithmicDistribution, struct ::statiskit::DiscreteUnivariateDistribution > > class_c2568ff48c245dbe8395ac41d83bc8f8(module, "LogarithmicDistribution", "");
+    pybind11::class_<class ::statiskit::LogarithmicDistribution, autowig::HolderType< class ::statiskit::LogarithmicDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::LogarithmicDistribution, struct ::statiskit::DiscreteUnivariateDistribution > > class_c2568ff48c245dbe8395ac41d83bc8f8(module, "LogarithmicDistribution", "");
     class_c2568ff48c245dbe8395ac41d83bc8f8.def(pybind11::init<  >());
     class_c2568ff48c245dbe8395ac41d83bc8f8.def(pybind11::init< double const & >());
     class_c2568ff48c245dbe8395ac41d83bc8f8.def(pybind11::init< class ::statiskit::LogarithmicDistribution const & >());

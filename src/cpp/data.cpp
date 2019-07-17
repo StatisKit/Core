@@ -154,6 +154,16 @@ namespace statiskit
     UnivariateData::Generator::~Generator()
     {}
 
+    std::unique_ptr< UnivariateData::Generator > WeightedUnivariateData::generator() const
+    {
+        return std::make_unique< Generator >(*this);
+    }
+
+    const UnivariateEvent* WeightedUnivariateData::Generator::get_event() const
+    {
+        return this->generator->get_event();
+    }
+
     unsigned int NamedData::INDEX = 0;
 
     NamedData::NamedData()
@@ -312,22 +322,10 @@ namespace statiskit
         this->index = 0;
     }
 
-    UnivariateDataFrame::Generator::Generator(const Generator& generator)
-    {
-        this->data = static_cast< UnivariateDataFrame* >(generator.data->copy().release());
-        this->index = generator.index;
-    }
-
     UnivariateDataFrame::Generator::~Generator()
     {
         delete this->data;
     }
-
-    outcome_type UnivariateDataFrame::Generator::get_outcome() const
-    { return this->get_event()->get_outcome(); }
-
-    censoring_type UnivariateDataFrame::Generator::get_censoring() const
-    { return this->get_event()->get_censoring(); }
 
     bool UnivariateDataFrame::Generator::is_valid() const
     { return this->index < this->data->get_nb_events(); }
@@ -418,7 +416,9 @@ namespace statiskit
     { return this->data->get_sample_space(this->index); }
 
     Index IndexSelectedData::get_index() const
-    { return this->index; }
+    {
+        return this->index;
+    }
 
     IndexSelectedData::Generator::Generator(const IndexSelectedData& data)
     {
@@ -426,22 +426,10 @@ namespace statiskit
         this->index = data.get_index();
     }
 
-    IndexSelectedData::Generator::Generator(const Generator& generator)
-    {
-        this->generator = static_cast< MultivariateData::Generator* >(generator.generator->copy().release());
-        this->index = generator.index;
-    }
-
     IndexSelectedData::Generator::~Generator()
     {
         delete this->generator;
     }
-
-    outcome_type IndexSelectedData::Generator::get_outcome() const
-    { return this->generator->get_event(this->index)->get_outcome(); }
-
-    censoring_type IndexSelectedData::Generator::get_censoring() const
-    { return this->generator->get_event(this->index)->get_censoring(); }
 
     const UnivariateEvent* IndexSelectedData::Generator::get_event() const
     { return this->generator->get_event(this->index); }
@@ -499,12 +487,6 @@ namespace statiskit
     {
         this->generator = data.origin()->generator().release();
         this->indices = data.indices;
-    }
-
-    IndicesSelectedData::Generator::Generator(const Generator& generator)
-    {
-        this->generator = static_cast< MultivariateData::Generator* >(generator.generator->copy().release());
-        this->indices = generator.indices;
     }
 
     IndicesSelectedData::Generator::~Generator()
@@ -658,12 +640,6 @@ namespace statiskit
     {
         this->data = static_cast< MultivariateDataFrame* >(data.copy().release());
         this->index = 0;
-    }
-
-    MultivariateDataFrame::Generator::Generator(const Generator& generator)
-    {
-        this->data = static_cast< MultivariateDataFrame* >(generator.data->copy().release());
-        this->index = generator.index;
     }
 
     MultivariateDataFrame::Generator::~Generator()

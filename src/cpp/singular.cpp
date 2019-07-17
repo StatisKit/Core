@@ -21,9 +21,9 @@ namespace statiskit
         double llh = 0.;
         std::unique_ptr< MultivariateData::Generator > generator = data.generator();
         while (generator->is_valid() && boost::math::isfinite(llh)) { 
-            double weight = generator->weight();
+            double weight = generator->get_weight();
             if (weight > 0.) {
-                llh += weight * this->probability(generator->event(), true);
+                llh += weight * this->probability(generator.get(), true);
             }
             ++(*generator);
         }
@@ -62,9 +62,9 @@ namespace statiskit
                 p = 0.;
                 int sum = 0;
                 for (Index component = 0, max_component = this->get_nb_components(); component < max_component; ++component) {
-                    const UnivariateEvent* uevent = event->get(component);
+                    const UnivariateEvent* uevent = event->get_event(component);
                     if (uevent) {
-                        if (uevent->get_outcome() == DISCRETE && uevent->get_event() == ELEMENTARY) {
+                        if (uevent->get_outcome() == outcome_type::DISCRETE && uevent->get_censoring() == censoring_type::NONE) {
                             int value = static_cast< const DiscreteElementaryEvent* >(uevent)->get_value();
                             if (!(this->pi[component] <= 0. && value == 0)) {
                                 p += value * log(this->pi[component]) - boost::math::lgamma(value + 1);
@@ -76,7 +76,7 @@ namespace statiskit
                     }
                 }
                 p += boost::math::lgamma(sum + 1);
-            } catch(const std::exception& error) {
+            } catch (const std::exception& error) {
                 p = log(0.);
             }
         } else {
@@ -98,14 +98,19 @@ namespace statiskit
             boost::variate_generator<boost::mt19937&, boost::binomial_distribution<> > simulator(__impl::get_random_generator(), dist);
             int value = simulator();
             pi += this->pi[component];
-            event->set(component, DiscreteElementaryEvent(value));
+            DiscreteElementaryEvent* uevent = new DiscreteElementaryEvent(value);
+            event->set_event(component, uevent);
+            delete uevent;
             sum -= value;
             ++component;
         }
         for (; component < max_component; ++component) {
-            event->set(component, DiscreteElementaryEvent(0));
+            DiscreteElementaryEvent* uevent = new DiscreteElementaryEvent(0);
+            event->set_event(component, uevent);
+            delete uevent;
         }
-        event->set(max_component, DiscreteElementaryEvent(sum));
+        DiscreteElementaryEvent* uevent = new DiscreteElementaryEvent(sum);
+        event->set_event(max_component, uevent);
         return std::move(event);
     }
 
@@ -176,17 +181,13 @@ namespace statiskit
                 p = 0.;
                 int sum = 0;
                 for (Index component = 0, max_component = this->get_nb_components(); component < max_component; ++component) {
-                    const UnivariateEvent* uevent = event->get(component);
-                    if (uevent) {
-                        if (uevent->get_outcome() == DISCRETE && uevent->get_event() == ELEMENTARY) {
-                            int value = static_cast< const DiscreteElementaryEvent* >(uevent)->get_value();
-                            if (!(this->alpha[component] <= 0. && value == 0)) {
-                                p += boost::math::lgamma(this->alpha[component] + value);
-                                p -= boost::math::lgamma(this->alpha[component]) + boost::math::lgamma(value + 1);
-                                sum += value;
-                            }
-                        } else {
-                            throw std::exception();
+                    const UnivariateEvent* uevent = event->get_event(component);
+                    if (uevent && uevent->get_outcome() == outcome_type::DISCRETE && uevent->get_censoring() == censoring_type::NONE) {
+                        int value = static_cast< const DiscreteElementaryEvent* >(uevent)->get_value();
+                        if (!(this->alpha[component] <= 0. && value == 0)) {
+                            p += boost::math::lgamma(this->alpha[component] + value);
+                            p -= boost::math::lgamma(this->alpha[component]) + boost::math::lgamma(value + 1);
+                            sum += value;
                         }
                     }
                 }
@@ -207,29 +208,36 @@ namespace statiskit
 
     std::unique_ptr< MultivariateEvent > DirichletMultinomialSingularDistribution::simulate(unsigned int sum) const
     {
-        Eigen::VectorXd this->pi = Eigen::VectorXd::Zero(this->get_nb_components());
+        Eigen::VectorXd pi = Eigen::VectorXd::Zero(this->get_nb_components());
         for (Index component = 0, max_component = this->get_nb_components(); component < max_component; ++component) {
             boost::random::gamma_distribution<> dist(this->alpha(component), 1.);
             boost::variate_generator<boost::mt19937&, boost::random::gamma_distribution<> > simulator(__impl::get_random_generator(), dist);
-            this->pi(component) = simulator(); 
+            pi(component) = simulator(); 
         }
-        this->pi /= this->pi.sum();
-        double pi = 0.;
-        Index component = 0, max_component = this->get_nb_components() - 1;
+        pi /= pi.sum();
+        double cum_pi = 0.;
+        Index component = 0;
+        Index max_component = this->get_nb_components() - 1;
         std::unique_ptr< VectorEvent > event = std::make_unique< VectorEvent >(max_component + 1);
         while (component < max_component && sum > 0) {
-            boost::binomial_distribution<> dist(sum, this->pi[component] / (1 - pi));
+            boost::binomial_distribution<> dist(sum, pi[component] / (1 - cum_pi));
             boost::variate_generator<boost::mt19937&, boost::binomial_distribution<> > simulator(__impl::get_random_generator(), dist);
             int value = simulator();
-            pi += this->pi[component];
-            event->set(component, DiscreteElementaryEvent(value));
+            cum_pi += pi[component];
+            DiscreteElementaryEvent* uevent = new DiscreteElementaryEvent(value);
+            event->set_event(component, uevent);
+            delete uevent;
             sum -= value;
             ++component;
         }
         for (; component < max_component; ++component) {
-            event->set(component, DiscreteElementaryEvent(0));
+            DiscreteElementaryEvent* uevent = new DiscreteElementaryEvent(0);
+            event->set_event(component, uevent);
+            delete uevent;
         }
-        event->set(max_component, DiscreteElementaryEvent(sum));
+        DiscreteElementaryEvent* uevent = new DiscreteElementaryEvent(sum);
+        event->set_event(max_component, uevent);
+        delete uevent;
         return std::move(event);
     }
 
@@ -254,21 +262,6 @@ namespace statiskit
         }
     }
 
-    SingularDistributionEstimation::~SingularDistributionEstimation()
-    {}
-
-    SingularDistributionEstimation::Estimator::~Estimator()
-    {}
-
-    MultinomialSingularDistributionEstimation::MultinomialSingularDistributionEstimation(MultinomialSingularDistribution const * estimated, MultivariateData const * data) : ActiveEstimation< MultinomialSingularDistribution, SingularDistributionEstimation >(estimated, data)
-    {}
-
-    MultinomialSingularDistributionEstimation::MultinomialSingularDistributionEstimation(const MultinomialSingularDistributionEstimation& estimation) : ActiveEstimation< MultinomialSingularDistribution, SingularDistributionEstimation >(estimation)
-    {}
-
-    MultinomialSingularDistributionEstimation::~MultinomialSingularDistributionEstimation()
-    {}
-
     MultinomialSingularDistributionEstimation::Estimator::Estimator()
     {}
 
@@ -278,43 +271,28 @@ namespace statiskit
     MultinomialSingularDistributionEstimation::Estimator::~Estimator()
     {}
 
-    std::unique_ptr< SingularDistributionEstimation > MultinomialSingularDistributionEstimation::Estimator::operator() (const MultivariateData& data) const
+    std::unique_ptr< MultinomialSingularDistributionEstimation::Estimator::estimation_type > MultinomialSingularDistributionEstimation::Estimator::operator() (const data_type& data) const
     {
-        std::unique_ptr< SingularDistributionEstimation > estimation;
+        this->check(data);
+        Eigen::VectorXd pi = Eigen::VectorXd::Zero(data.get_nb_components());
         std::unique_ptr< MultivariateData::Generator > generator = data.generator();
-        Eigen::VectorXd pi = Eigen::VectorXd::Zero(generator->event()->size());
-        while(generator->is_valid())
-        {
-            const MultivariateEvent* mevent = generator->event();
-            for(Index component = 0, max_component = mevent->size(); component < max_component; ++component)
-            {
-                const UnivariateEvent* uevent = mevent->get(component);
-                if(uevent && uevent->get_outcome() == DISCRETE && uevent->get_event() == ELEMENTARY)
-                { pi[component] += generator->weight() * static_cast< const DiscreteElementaryEvent* >(uevent)->get_value(); }
+        while (generator->is_valid()) {
+            for (Index component = 0, max_component = data.get_nb_components(); component < max_component; ++component) {
+                const UnivariateEvent* event = generator->get_event(component);
+                if (event && event->get_outcome() == outcome_type::DISCRETE && event->get_censoring() == censoring_type::NONE) {
+                    pi[component] += generator->get_weight() * static_cast< const DiscreteElementaryEvent* >(event)->get_value();
+                }
             }
             ++(*generator);
         }
-        MultinomialSingularDistribution* estimated = new MultinomialSingularDistribution(pi);
-        if(lazy)
-        { estimation = std::make_unique< LazyEstimation< MultinomialSingularDistribution, SingularDistributionEstimation > >(estimated); }
-        else
-        { estimation = std::make_unique< MultinomialSingularDistributionEstimation >(estimated, &data); }
-        return estimation;
+        return std::make_unique< MultinomialSingularDistributionEstimation >(data.copy().release(),
+                                                                             new MultinomialSingularDistribution(pi));
     }
 
-    DirichletMultinomialSingularDistributionEstimation::DirichletMultinomialSingularDistributionEstimation(DirichletMultinomialSingularDistribution const * estimated, MultivariateData const * data) : OptimizationEstimation<Eigen::VectorXd, DirichletMultinomialSingularDistribution, SingularDistributionEstimation >(estimated, data)
+    DirichletMultinomialSingularDistributionEstimation::Estimator::Estimator() : PolymorphicCopy< Estimator, Optimization< SingularDistributionEstimation::Estimator > >()
     {}
 
-    DirichletMultinomialSingularDistributionEstimation::DirichletMultinomialSingularDistributionEstimation(const DirichletMultinomialSingularDistributionEstimation& estimation) : OptimizationEstimation<Eigen::VectorXd, DirichletMultinomialSingularDistribution, SingularDistributionEstimation >(estimation)
-    {}
-
-    DirichletMultinomialSingularDistributionEstimation::~DirichletMultinomialSingularDistributionEstimation()
-    {}
-
-    DirichletMultinomialSingularDistributionEstimation::Estimator::Estimator() : PolymorphicCopy<SingularDistributionEstimation::Estimator, Estimator, OptimizationEstimation<Eigen::VectorXd, DirichletMultinomialSingularDistribution, SingularDistributionEstimation >::Estimator >() 
-    {}
-
-    DirichletMultinomialSingularDistributionEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy<SingularDistributionEstimation::Estimator, Estimator, OptimizationEstimation<Eigen::VectorXd, DirichletMultinomialSingularDistribution, SingularDistributionEstimation >::Estimator >(estimator)
+    DirichletMultinomialSingularDistributionEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< Estimator, Optimization< SingularDistributionEstimation::Estimator > >(estimator)
     {}
 
     DirichletMultinomialSingularDistributionEstimation::Estimator::~Estimator()
@@ -322,30 +300,22 @@ namespace statiskit
 
     std::unique_ptr< SingularDistributionEstimation > DirichletMultinomialSingularDistributionEstimation::Estimator::operator() (const MultivariateData& data) const
     {
-        std::unique_ptr< SingularDistributionEstimation > estimation;
         double total = data.compute_total();
-        Eigen::VectorXd prev, curr = Eigen::VectorXd::Ones(data.get_sample_space()->size());
+        Eigen::VectorXd prev;
+        Eigen::VectorXd curr = Eigen::VectorXd::Ones(data.get_nb_components());
         DirichletMultinomialSingularDistribution* estimated = new DirichletMultinomialSingularDistribution(curr);
-        if(lazy)
-        { estimation = std::make_unique< LazyEstimation< DirichletMultinomialSingularDistribution, SingularDistributionEstimation > >(estimated); }
-        else
-        { estimation = std::make_unique< DirichletMultinomialSingularDistributionEstimation >(estimated, &data); }
+        std::unique_ptr< DirichletMultinomialSingularDistributionEstimation > estimation = std::make_unique< DirichletMultinomialSingularDistributionEstimation >(data.copy().release(),
+                                                                                                                                                                  estimated);
         unsigned int its = 0;
-        do
-        {
+        do {
             prev = curr;
-            Eigen::VectorXd temp = Eigen::VectorXd::Zero(data.get_sample_space()->size());
-            for(Index component = 0, max_component = data.get_sample_space()->size(); component < max_component; ++component)
-            {
+            Eigen::VectorXd temp = Eigen::VectorXd::Zero(data.get_nb_components());
+            for (Index component = 0, max_component = temp.size(); component < max_component; ++component) {
                 std::unique_ptr< MultivariateData::Generator > generator = data.generator();
-                while(generator->is_valid())
-                {
-                    const MultivariateEvent* mevent = generator->event();
-                    if(mevent)
-                    {
-                        const UnivariateEvent* uevent = mevent->get(component);
-                        if(uevent && uevent->get_outcome() == DISCRETE && uevent->get_event() == ELEMENTARY)
-                        { temp[component] += generator->weight() * boost::math::digamma(static_cast< const DiscreteElementaryEvent* >(uevent)->get_value() + prev[component]); }
+                while (generator->is_valid()) {
+                    const UnivariateEvent* event = generator->get_event(component);
+                    if (event && event->get_outcome() == outcome_type::DISCRETE && event->get_censoring() == censoring_type::NONE) {
+                        temp[component] += generator->get_weight() * boost::math::digamma(static_cast< const DiscreteElementaryEvent* >(event)->get_value() + prev[component]);
                     }
                     ++(*generator);
                 }
@@ -353,32 +323,25 @@ namespace statiskit
             }
             std::pair< double, double > sums = std::make_pair(0., curr.sum());
             std::unique_ptr< MultivariateData::Generator > generator = data.generator();
-            while(generator->is_valid())
-            {
-                const MultivariateEvent* event = generator->event();
-                if(event)
-                {
-                    int value = 0;
-                    for(Index component = 0, max_component = data.get_sample_space()->size(); component < max_component; ++component)
-                    {
-                        const UnivariateEvent* uevent = event->get(component);
-                        if(uevent && uevent->get_outcome() == DISCRETE && uevent->get_event() == ELEMENTARY)
-                        { value += static_cast< const DiscreteElementaryEvent* >(uevent)->get_value(); }
+            while (generator->is_valid()) {
+                int value = 0;
+                for (Index component = 0, max_component = data.get_nb_components(); component < max_component; ++component) {
+                    const UnivariateEvent* event = generator->get_event(component);
+                    if (event && event->get_outcome() == outcome_type::DISCRETE && event->get_censoring() == censoring_type::NONE) {
+                        value += static_cast< const DiscreteElementaryEvent* >(event)->get_value();
                     }
-                    sums.first += generator->weight() * boost::math::digamma(value + sums.second);
                 }
+                sums.first += generator->get_weight() * boost::math::digamma(value + sums.second);
                 ++(*generator);
             }
             sums.first -= total * boost::math::digamma(sums.second);
             temp /= sums.first;
-            if(temp.minCoeff() >= 0.)
-            { 
+            if (temp.minCoeff() >= 0.) { 
                 curr = prev.cwiseProduct(temp);
-                if(!lazy)
-                { static_cast< DirichletMultinomialSingularDistributionEstimation* >(estimation.get())->_iterations.push_back(curr); }
+                estimation->steps.push_back(curr); 
             }
             ++its;
-        } while(run(its, __impl::reldiff(prev, curr)));
+        } while (this->run(its, __impl::reldiff(prev, curr)));
         estimated->set_alpha(curr);
         return estimation;
     }
@@ -498,130 +461,132 @@ namespace statiskit
         this->singular = singular.copy().release();
     }
 
-    SplittingDistributionEstimation::SplittingDistributionEstimation(SplittingDistribution const * estimated, MultivariateData const * data) : ActiveEstimation< SplittingDistribution, DiscreteMultivariateDistributionEstimation >(estimated, data)
+    SplittingDistributionEstimation::SplittingDistributionEstimation(const SplittingDistributionEstimation& estimation) : PolymorphicCopy< SplittingDistributionEstimation, DiscreteMultivariateDistributionEstimation >(estimation)
     {
-        _sum = nullptr;
-        _singular = nullptr;
-    }
-
-    SplittingDistributionEstimation::SplittingDistributionEstimation(const SplittingDistributionEstimation& estimation) : ActiveEstimation< SplittingDistribution, DiscreteMultivariateDistributionEstimation >(estimation)
-    {
-        _sum = estimation._sum;
-        _singular = estimation._singular;
+        if (estimation.sum) {
+            this->sum = static_cast< DiscreteUnivariateDistributionEstimation* >(estimation.sum->copy().release());
+        } else {
+            this->sum = nullptr;
+        }
+        if (estimation.singular) {
+            this->singular = estimation.singular->copy().release();
+        } else {
+            this->singular = nullptr;
+        }
     }
 
     SplittingDistributionEstimation::~SplittingDistributionEstimation()
     {
-        if(_sum)
-        { delete _sum; }
-        if(_singular)
-        { delete _singular; }
+        if (this->sum) {
+            delete this->sum;
+        }
+        if (this->singular)
+        {
+            delete this->singular;
+        }
     }
 
     const DiscreteUnivariateDistributionEstimation* SplittingDistributionEstimation::get_sum() const
-    { return _sum; }
+    {
+        return this->sum;
+    }
 
     const SingularDistributionEstimation* SplittingDistributionEstimation::get_singular() const
-    { return _singular; }
+    {
+        return this->singular;
+    }
 
     SplittingDistributionEstimation::Estimator::Estimator()
     {
-        _sum = nullptr;
-        _singular = nullptr;
+        this->sum = nullptr;
+        this->singular = nullptr;
     }
 
     SplittingDistributionEstimation::Estimator::Estimator(const Estimator& estimator)
     {
-        if(estimator._sum)
-        { _sum = static_cast< DiscreteUnivariateDistributionEstimation::Estimator* >((estimator._sum->copy()).release()); }
-        else
-        { _sum = nullptr; }
-        if(estimator._singular)
-        { _singular = estimator._singular->copy().release(); }
-        else
-        { _singular = nullptr; }    
+        if (estimator.sum) {
+            this->sum = static_cast< DiscreteUnivariateDistributionEstimation::Estimator* >(estimator.sum->copy().release());
+        } else {
+            this->sum = nullptr;
+        }
+        if (estimator.singular) {
+            this->singular = estimator.singular->copy().release();
+        } else {
+            this->singular = nullptr;
+        }    
     }
 
     SplittingDistributionEstimation::Estimator::~Estimator()
     {
-        if(_sum)
+        if(this->sum)
         {
-            delete _sum;
-            _sum = nullptr;
+            delete this->sum;
+            this->sum = nullptr;
         }
-        if(_singular)
+        if(this->singular)
         {
-            delete _singular;
-            _singular = nullptr;
+            delete this->singular;
+            this->singular = nullptr;
         }
     }
 
-    std::unique_ptr< MultivariateDistributionEstimation > SplittingDistributionEstimation::Estimator::operator() (const MultivariateData& data) const
+    std::unique_ptr< SplittingDistributionEstimation::Estimator::estimation_type > SplittingDistributionEstimation::Estimator::operator() (const data_type& data) const
     {
-        UnivariateDataFrame* sum_data = new UnivariateDataFrame(get_NN());
+        UnivariateDataFrame sum_data = UnivariateDataFrame(get_NN());
         std::unique_ptr< MultivariateData::Generator > generator = data.generator();
-        while(generator->is_valid())
-        {
+        while(generator->is_valid()) {
             int value = 0;
-            const MultivariateEvent* mevent = generator->event();
-            for(Index component = 0, max_component = mevent->size(); component < max_component; ++component)
-            {
-                const UnivariateEvent* uevent = mevent->get(component);
-                if(uevent && uevent->get_outcome() == DISCRETE && uevent->get_event() == ELEMENTARY)
-                { value += static_cast< const DiscreteElementaryEvent* >(uevent)->get_value(); }
+            for (Index component = 0, max_component = data.get_nb_components(); component < max_component; ++component) {
+                const UnivariateEvent* event = generator->get_event(component);
+                if (event && event->get_outcome() == outcome_type::DISCRETE && event->get_censoring() == censoring_type::NONE) {
+                    value += static_cast< const DiscreteElementaryEvent* >(event)->get_value();
+                }
             }
             DiscreteElementaryEvent* sum_event = new DiscreteElementaryEvent(value);
-            sum_data->add_event(sum_event);
+            sum_data.add_event(sum_event);
+            delete sum_event;
             ++(*generator);
         }
         WeightedUnivariateData weighted_sum_data = WeightedUnivariateData(sum_data);
         Index index = 0;
         generator = data.generator();
-        while(generator->is_valid())
-        {
-            weighted_sum_data.set_weight(index, generator->weight());
+        while (generator->is_valid()) {
+            weighted_sum_data.set_weight(index, generator->get_weight());
             ++index;
             ++(*generator);
         }
-        DiscreteUnivariateDistributionEstimation* sum = static_cast< DiscreteUnivariateDistributionEstimation* >(((*_sum)(weighted_sum_data, lazy)).release());
-        delete sum_data;
-        SingularDistributionEstimation* singular = (*_singular)(data, lazy).release();
-        SplittingDistribution* estimated = new SplittingDistribution(*(static_cast< const DiscreteUnivariateDistribution* >(sum->get_estimated())), *(singular->get_estimated()));
-        std::unique_ptr< MultivariateDistributionEstimation > estimation;
-        if(lazy)
-        { 
-            estimation = std::make_unique< LazyEstimation< SplittingDistribution, DiscreteMultivariateDistributionEstimation > >(estimated);
-            if(sum)
-            { delete sum; }
-            if(singular)
-            { delete singular; }
-        }
-        else
-        {
-            estimation = std::make_unique< SplittingDistributionEstimation >(estimated, &data);
-            static_cast< SplittingDistributionEstimation* >(estimation.get())->_sum = sum;
-            static_cast< SplittingDistributionEstimation* >(estimation.get())->_singular = singular;
-        }
+        DiscreteUnivariateDistributionEstimation* sum = static_cast< DiscreteUnivariateDistributionEstimation* >(((*this->sum)(weighted_sum_data)).release());
+        SingularDistributionEstimation* singular = (*this->singular)(data).release();
+        std::unique_ptr< SplittingDistributionEstimation > estimation = std::make_unique< SplittingDistributionEstimation >(data.copy().release(),
+                                                                                                                            new SplittingDistribution(*(static_cast< const DiscreteUnivariateDistribution* >(sum->get_distribution())), *(singular->get_distribution())));
+        estimation->sum = sum;
+        estimation->singular = singular;
         return estimation;
     }
 
     const DiscreteUnivariateDistributionEstimation::Estimator* SplittingDistributionEstimation::Estimator::get_sum() const
-    { return _sum; }
+    {
+        return this->sum;
+    }
 
     void  SplittingDistributionEstimation::Estimator::set_sum(const DiscreteUnivariateDistributionEstimation::Estimator& sum)
     {
-        if(_sum)
-        { delete _sum; }
-        _sum = static_cast< DiscreteUnivariateDistributionEstimation::Estimator* >(sum.copy().release());
+        if (this->sum) {
+            delete this->sum;
+        }
+        this->sum = static_cast< DiscreteUnivariateDistributionEstimation::Estimator* >(sum.copy().release());
     }
 
     const SingularDistributionEstimation::Estimator* SplittingDistributionEstimation::Estimator::get_singular() const
-    { return _singular; }
+    {
+        return this->singular;
+    }
 
     void SplittingDistributionEstimation::Estimator::set_singular(const SingularDistributionEstimation::Estimator& singular)
     { 
-        if(_singular)
-        { delete _singular; }
-        _singular = static_cast< SingularDistributionEstimation::Estimator* >(singular.copy().release());
+        if (this->singular) {
+            delete this->singular;
+        }
+        this->singular = static_cast< SingularDistributionEstimation::Estimator* >(singular.copy().release());
     }
 }

@@ -1,4 +1,5 @@
 #pragma once
+
 #include "estimation.h"
 #include "slope_heuristic.h"
 
@@ -7,12 +8,14 @@ namespace statiskit
     template<class B> class Selection : public PolymorphicCopy<Selection<B>, B>
     {
         public:
-            using PolymorphicCopy<Selection<B>, B>::PolymorphicCopy;
+            Selection();
+            Selection(const typename B::data_type* data);
+            Selection(const Selection<B>& selection);
             virtual ~Selection();
 
             Index size() const;
 
-            B const * get_estimation(const Index& index) const;
+            typename B::distribution_type const * get_distribution(const Index& index) const;
 
             const double& get_score(const Index& index) const;
 
@@ -34,7 +37,7 @@ namespace statiskit
                 protected:
                     std::vector< typename B::Estimator * > estimators;
 
-                    virtual double scoring(const typename B::estimated_type * estimated, typename B::data_type const & data) const = 0;
+                    virtual double scoring(const typename B::distribution_type * distribution, typename B::data_type const & data) const = 0;
 
                     void init();
                     void init(const Estimator& estimator);
@@ -58,19 +61,19 @@ namespace statiskit
                     void set_criterion(const criterion_type& criterion);
 
                 protected:
-                    criterion_type _criterion;
+                    criterion_type criterion;
 
-                    virtual double scoring(const typename B::estimated_type * estimated, typename B::data_type const & data) const;
-            };/**/
+                    virtual double scoring(const typename B::distribution_type * distribution, typename B::data_type const & data) const;
+            };
 
         protected:
-            std::vector< B * > estimations;
+            std::vector< typename B::distribution_type* > distributions;
             std::vector< double > scores;
 
             void finalize();
     };
 
-    template<class B> class SlopeHeuristicSelection : public SlopeHeuristic, public B
+    template<class B> class SlopeHeuristicSelection : public SlopeHeuristic, public PolymorphicCopy<SlopeHeuristicSelection<B>, B>
     {
         public:
             SlopeHeuristicSelection(const typename B::data_type* data);
@@ -85,5 +88,9 @@ namespace statiskit
             std::vector< typename B::distribution_type* > proposals;
 
             void add(const double& penshape, const double& score, typename B::distribution_type* proposal);
+
+            void finalize();
     };
 }
+
+#include "selection.hpp"
