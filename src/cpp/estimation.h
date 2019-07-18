@@ -43,6 +43,7 @@ namespace statiskit
             using data_type = typename D::data_type;
 
             DistributionEstimation();
+            DistributionEstimation(data_type const * data);
             DistributionEstimation(data_type const * data,
                                    distribution_type const * distribution);
             DistributionEstimation(const DistributionEstimation< D >& estimation);
@@ -239,7 +240,7 @@ namespace statiskit
     {
         using ConditionalDistributionEstimation< UnivariateConditionalDistribution >::ConditionalDistributionEstimation;
         
-        class STATISKIT_CORE_API Estimator : ConditionalDistributionEstimation< UnivariateConditionalDistribution >::Estimator
+        class STATISKIT_CORE_API Estimator : public ConditionalDistributionEstimation< UnivariateConditionalDistribution >::Estimator
         {
             public: 
                 using ConditionalDistributionEstimation< UnivariateConditionalDistribution >::Estimator::Estimator;
@@ -258,7 +259,7 @@ namespace statiskit
     {
         using ConditionalDistributionEstimation< MultivariateConditionalDistribution >::ConditionalDistributionEstimation;
         
-        class STATISKIT_CORE_API Estimator : ConditionalDistributionEstimation< MultivariateConditionalDistribution >::Estimator
+        class STATISKIT_CORE_API Estimator : public ConditionalDistributionEstimation< MultivariateConditionalDistribution >::Estimator
         { 
             public:
                 using ConditionalDistributionEstimation< MultivariateConditionalDistribution >::Estimator::Estimator;

@@ -97,7 +97,7 @@ namespace statiskit
     template<class B>
         std::unique_ptr< typename UnivariateFrequencyDistributionEstimation<B>::Estimator::estimation_type > UnivariateFrequencyDistributionEstimation<B>::Estimator::operator() (const data_type& data) const
         {
-            using event_type = ElementaryEvent< typename B::mixture_distribution_type::observation_type::event_type >;
+            using event_type = ElementaryEvent< typename B::Estimator::event_type >;
             using value_type = typename event_type::value_type;
             this->check(data);
             std::unique_ptr< UnivariateDistributionEstimation > estimation;
@@ -125,7 +125,8 @@ namespace statiskit
                 }
                 ++(*generator);
             }
-            return std::make_unique< UnivariateFrequencyDistributionEstimation<B> >(this->create(values, masses), &data);
+            return std::make_unique< UnivariateFrequencyDistributionEstimation<B> >(data.copy().release(),
+                                                                                    this->create(values, masses));
         }
 
     /*template<class E>

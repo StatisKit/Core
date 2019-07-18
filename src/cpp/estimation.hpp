@@ -25,7 +25,7 @@ namespace statiskit
             if (index >= this->size()) {
                 throw size_error("index", this->size(), size_error::inferior);
             }
-            return this->at_step[index];
+            return this->steps[index];
         }
 
     template<class D>
@@ -34,7 +34,14 @@ namespace statiskit
             this->data = nullptr;
             this->distribution = nullptr;
         }
-    
+
+    template<class D>
+        DistributionEstimation< D >::DistributionEstimation(data_type const * data)
+        {
+            this->data = data;
+            this->distribution = nullptr;
+        }
+
     template<class D>
         DistributionEstimation< D >::DistributionEstimation(data_type const * data, distribution_type const * distribution)
         {

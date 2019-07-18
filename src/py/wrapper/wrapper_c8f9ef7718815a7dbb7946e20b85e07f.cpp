@@ -12,6 +12,7 @@ void wrapper_c8f9ef7718815a7dbb7946e20b85e07f(pybind11::module& module)
 
     pybind11::class_<class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >, autowig::HolderType< class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution > >::Type > class_c8f9ef7718815a7dbb7946e20b85e07f(module, "_DistributionEstimation_c8f9ef7718815a7dbb7946e20b85e07f", "");
     class_c8f9ef7718815a7dbb7946e20b85e07f.def(pybind11::init<  >());
+    class_c8f9ef7718815a7dbb7946e20b85e07f.def(pybind11::init< ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >::data_type const * >());
     class_c8f9ef7718815a7dbb7946e20b85e07f.def(pybind11::init< ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >::data_type const *, ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >::distribution_type const * >());
     class_c8f9ef7718815a7dbb7946e20b85e07f.def(pybind11::init< class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution > const & >());
     class_c8f9ef7718815a7dbb7946e20b85e07f.def("get_data", method_pointer_aa2cbc3e3f6c51ec8b7709c23d558a89, pybind11::return_value_policy::reference_internal, "");

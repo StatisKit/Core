@@ -37,8 +37,6 @@ namespace statiskit
             protected:
                 typename event_type::value_type shift;
                 estimator_type* estimator;
-
-                virtual std::unique_ptr< distribution_type > create(const distribution_type* distribution) const;
         };
     };
 
@@ -52,13 +50,13 @@ namespace statiskit
     {
         using PolymorphicCopy< UnivariateFrequencyDistributionEstimation<B>, B >::PolymorphicCopy;
 
-        class Estimator : public PolymorphicCopy< Estimator, typename B::Estimator >
+        class Estimator : public B::Estimator
         { 
             public:
-                using data_type = typename PolymorphicCopy< Estimator, typename B::Estimator >::data_type;
-                using distribution_type = typename PolymorphicCopy< Estimator, typename B::Estimator >::distribution_type;
-                using estimation_type = typename PolymorphicCopy< Estimator, typename B::Estimator >::estimation_type;
-                using event_type = typename PolymorphicCopy< Estimator, typename B::Estimator >::event_type;
+                using data_type = typename B::Estimator::data_type;
+                using distribution_type = typename B::Estimator::distribution_type;
+                using estimation_type = typename B::Estimator::estimation_type;
+                using event_type = typename B::Estimator::event_type;
 
                 using value_type = typename event_type::value_type;
 
@@ -66,35 +64,45 @@ namespace statiskit
                 Estimator(const Estimator& estimator);
                 virtual ~Estimator();
 
+                using B::Estimator::operator();
                 virtual std::unique_ptr< estimation_type > operator() (const data_type& data) const;
 
             protected:
-                inline virtual distribution_type* create(const std::set< value_type >& values, const Eigen::VectorXd& pi) const = 0;
+                virtual distribution_type* create(const std::set< value_type >& values, const Eigen::VectorXd& pi) const = 0;
         };
     };
 
     using NominalDistributionEstimation = UnivariateFrequencyDistributionEstimation< CategoricalUnivariateDistributionEstimation >;
 
-    class NominalDistributionEstimator : NominalDistributionEstimation::Estimator
+    class NominalDistributionEstimator : public PolymorphicCopy<NominalDistributionEstimator, NominalDistributionEstimation::Estimator>
     {
+        public:
+            using PolymorphicCopy<NominalDistributionEstimator, NominalDistributionEstimation::Estimator>::PolymorphicCopy;
+
         protected:
-            inline virtual distribution_type* create(const std::set< value_type >& values, const Eigen::VectorXd& pi) const;
+            virtual distribution_type* create(const std::set< value_type >& values, const Eigen::VectorXd& pi) const;
     };
 
     using DiscreteUnivariateFrequencyDistributionEstimation = UnivariateFrequencyDistributionEstimation< DiscreteUnivariateDistributionEstimation >;
 
-    class DiscreteUnivariateFrequencyDistributionEstimator : DiscreteUnivariateFrequencyDistributionEstimation::Estimator
+    class DiscreteUnivariateFrequencyDistributionEstimator : public PolymorphicCopy<DiscreteUnivariateFrequencyDistributionEstimator, DiscreteUnivariateFrequencyDistributionEstimation::Estimator>
     {
+        public:
+            using PolymorphicCopy<DiscreteUnivariateFrequencyDistributionEstimator, DiscreteUnivariateFrequencyDistributionEstimation::Estimator>::PolymorphicCopy;
+
         protected:
-            inline virtual distribution_type* create(const std::set< value_type >& values, const Eigen::VectorXd& pi) const;
+            virtual distribution_type* create(const std::set< value_type >& values, const Eigen::VectorXd& pi) const;
     };
 
     using ContinuousUnivariateFrequencyDistributionEstimation = UnivariateFrequencyDistributionEstimation< ContinuousUnivariateDistributionEstimation >;
 
-    class ContinuousUnivariateFrequencyDistributionEstimator : ContinuousUnivariateFrequencyDistributionEstimation::Estimator
+    class ContinuousUnivariateFrequencyDistributionEstimator : public PolymorphicCopy<ContinuousUnivariateFrequencyDistributionEstimator, ContinuousUnivariateFrequencyDistributionEstimation::Estimator>
     {
+        public:
+            using PolymorphicCopy<ContinuousUnivariateFrequencyDistributionEstimator, ContinuousUnivariateFrequencyDistributionEstimation::Estimator>::PolymorphicCopy;
+
         protected:
-            inline virtual distribution_type* create(const std::set< value_type >& values, const Eigen::VectorXd& masses) const;
+            virtual distribution_type* create(const std::set< value_type >& values, const Eigen::VectorXd& masses) const;
     };
 
     struct STATISKIT_CORE_API PoissonDistributionMLEstimation : PolymorphicCopy< PoissonDistributionMLEstimation, DiscreteUnivariateDistributionEstimation >
@@ -175,7 +183,7 @@ namespace statiskit
     {
         using PolymorphicCopy<GeometricDistributionMLEstimation, DiscreteUnivariateDistributionEstimation>::PolymorphicCopy;
 
-        struct STATISKIT_CORE_API Estimator : public PolymorphicCopy<Estimator, DiscreteUnivariateDistributionEstimation>::Estimator
+        struct STATISKIT_CORE_API Estimator : PolymorphicCopy<Estimator, DiscreteUnivariateDistributionEstimation::Estimator>
         {
             Estimator();
             Estimator(const Estimator& estimator);

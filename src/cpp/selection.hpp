@@ -6,29 +6,29 @@ namespace statiskit
     template<class B>
         Selection<B>::Selection() : PolymorphicCopy<Selection<B>, B>()
         {
-            this->distributions.clear();
+            this->estimations.clear();
             this->scores.clear();
         }
 
     template<class B>
         Selection<B>::Selection(const typename B::data_type* data) : PolymorphicCopy<Selection<B>, B>(data)
         {
-            this->distributions.clear();
+            this->estimations.clear();
             this->scores.clear();
         }
 
     template<class B>
         Selection<B>::Selection(const Selection<B>& estimation) : PolymorphicCopy<Selection<B>, B>(estimation)
         {
-            this->distributions.resize(estimation.size(), nullptr);
+            this->estimations.resize(estimation.size(), nullptr);
             for (Index index = 0, max_index = estimation.size(); index < max_index; ++index) {
-                if (estimation.distributions[index]) { 
-                    this->distributions[index] = static_cast< typename B::distribution_type* >(estimation.distributions[index]->copy().release());
+                if (estimation.estimations[index]) { 
+                    this->estimations[index] = static_cast< B* >(estimation.estimations[index]->copy().release());
                 } else {
-                    this->distributions[index] = nullptr;
+                    this->estimations[index] = nullptr;
                 }
             }
-            this->scores = estimation->scores;
+            this->scores = estimation.scores;
             this->finalize();
         }
 
@@ -36,12 +36,12 @@ namespace statiskit
         Selection<B>::~Selection()
         {
             for(Index index = 0, max_index = this->size(); index < max_index; ++index) { 
-                if(this->distributions[index]) {
-                    delete this->distributions[index];
-                    this->distributions[index] = nullptr;
+                if(this->estimations[index]) {
+                    delete this->estimations[index];
+                    this->estimations[index] = nullptr;
                 }
             }
-            this->distributions.clear();
+            this->estimations.clear();
             this->scores.clear();
         }
     
@@ -52,9 +52,9 @@ namespace statiskit
         }
 
     template<class B>
-        typename B::distribution_type const * Selection<B>::get_distribution(const Index& index) const
+        B * const Selection<B>::get_estimation(const Index& index) const
         {
-            return this->distributions[index];
+            return this->estimations[index];
         }
 
     template<class B>
@@ -68,7 +68,7 @@ namespace statiskit
         {
             std::vector< double >::const_iterator it = std::max_element(this->scores.cbegin(), this->scores.cend());
             if (it != this->scores.cend() && boost::math::isfinite(*it)) {
-                this->distribution = static_cast< typename B::distribution_type * >(this->distributions[distance(this->scores.cbegin(), it)]->get_distribution()->copy().release());
+                this->distribution = static_cast< typename B::distribution_type * >(this->estimations[distance(this->scores.cbegin(), it)]->get_distribution()->copy().release());
             } else {
                 this->distribution = nullptr;
             }
@@ -87,17 +87,17 @@ namespace statiskit
     template<class B>
         std::unique_ptr< typename B::Estimator::estimation_type > Selection<B>::Estimator::operator() (const typename B::data_type& data, const bool& lazy) const
         {
-            std::unique_ptr<Selection<B>> estimation = std::make_unique< Selection<B> >(data.copy().release());
+            std::unique_ptr<Selection<B>> estimation = std::make_unique<Selection<B>>(data.copy().release());
             for (Index index = 0, max_index = this->size(); index < max_index; ++index) {
                 try {
-                    this->estimation->distributions.push_back(static_cast< B* >((*(this->estimators[index]))(data, false).release()));
-                    this->estimation->scores.push_back(scoring(estimation->distributions.back()->get_distribution(), data));
+                    estimation->estimations.push_back(static_cast< B* >((*(this->estimators[index]))(data).release()));
+                    estimation->scores.push_back(scoring(estimation->estimations.back()->get_distribution(), data));
                 } catch (const std::exception& e) {
-                    this->estimation->distributions.push_back(nullptr);
-                    this->estimation->scores.push_back(std::numeric_limits< double >::quiet_NaN());
+                    estimation->estimations.push_back(nullptr);
+                    estimation->scores.push_back(std::numeric_limits< double >::quiet_NaN());
                 }
             }
-            this->estimation->finalize();
+            estimation->finalize();
             if (!estimation->get_distribution()) {
                 throw std::runtime_error("All estimations failed, perform manually the estimations in order to investigate what went wrong");
             }

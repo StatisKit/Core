@@ -15,7 +15,7 @@ namespace statiskit
 
             Index size() const;
 
-            typename B::distribution_type const * get_distribution(const Index& index) const;
+            B* const get_estimation(const Index& index) const;
 
             const double& get_score(const Index& index) const;
 
@@ -67,7 +67,7 @@ namespace statiskit
             };
 
         protected:
-            std::vector< typename B::distribution_type* > distributions;
+            std::vector< B* > estimations;
             std::vector< double > scores;
 
             void finalize();
