@@ -80,8 +80,6 @@ namespace statiskit
             SlopeHeuristicSelection(const SlopeHeuristicSelection< B >& she);
             virtual ~SlopeHeuristicSelection();
 
-            virtual typename B::distribution_type const * get_distribution() const;
-
             const typename B::distribution_type* get_proposal(const Index& index) const;
             
         protected:

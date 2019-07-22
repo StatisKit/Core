@@ -9,8 +9,8 @@ namespace autowig
         public:
             using ::statiskit::PolymorphicCopy< ::statiskit::MultivariateMeanEstimation, struct ::statiskit::MultivariateLocationEstimation >::PolymorphicCopy;
 
-
-        public:
+            typedef class ::std::unique_ptr< struct ::statiskit::MultivariateLocationEstimation, struct ::std::default_delete< struct ::statiskit::MultivariateLocationEstimation > >  return_type_ed04a062d02a5efa9fbc74dde6ee9358;
+            virtual return_type_ed04a062d02a5efa9fbc74dde6ee9358 copy() const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_ed04a062d02a5efa9fbc74dde6ee9358, class_type, copy, ); };
             typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & return_type_79a5b0a58645590a8356a14195e34da5;
             virtual return_type_79a5b0a58645590a8356a14195e34da5 get_location() const override { PYBIND11_OVERLOAD_PURE(return_type_79a5b0a58645590a8356a14195e34da5, class_type, get_location, ); };
     };

@@ -168,7 +168,7 @@ namespace statiskit
         }
 
     template<class D>    
-        typename ConditionalDistributionEstimation< D >::explanatory_data_type const * ConditionalDistributionEstimation< D >::get_explanatory_data() const
+        explanatory_data_type const * ConditionalDistributionEstimation< D >::get_explanatory_data() const
         {
             return this->explanatory_data;
         }

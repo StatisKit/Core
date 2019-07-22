@@ -244,12 +244,6 @@ namespace statiskit
             }
             this->proposals.clear();
         }
-    
-    template<class B>
-        typename B::distribution_type const * SlopeHeuristicSelection<B>::get_distribution() const
-        { 
-            return this->distribution;
-        }
 
     template<class B>
         const typename B::distribution_type* SlopeHeuristicSelection<B>::get_proposal(const Index& index) const

@@ -9,8 +9,10 @@ namespace autowig
         public:
             using ::statiskit::PolymorphicCopy< ::statiskit::ElementaryEvent< struct ::statiskit::ContinuousEvent >, struct ::statiskit::ContinuousEvent >::PolymorphicCopy;
 
-
-        public:
+            typedef class ::std::unique_ptr< struct ::statiskit::UnivariateEvent, struct ::std::default_delete< struct ::statiskit::UnivariateEvent > >  return_type_cbbca6699ce05d0ea9488bf5a1a5e645;
+            virtual return_type_cbbca6699ce05d0ea9488bf5a1a5e645 copy() const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_cbbca6699ce05d0ea9488bf5a1a5e645, class_type, copy, ); };
+            typedef enum ::statiskit::outcome_type  return_type_e273d319eb365120b28ccc9993bd199b;
+            virtual return_type_e273d319eb365120b28ccc9993bd199b get_outcome() const override { PYBIND11_OVERLOAD(return_type_e273d319eb365120b28ccc9993bd199b, class_type, get_outcome, ); };
             typedef enum ::statiskit::censoring_type  return_type_e27fd4219e44503fa91f650545c9af28;
             virtual return_type_e27fd4219e44503fa91f650545c9af28 get_censoring() const override { PYBIND11_OVERLOAD_PURE(return_type_e27fd4219e44503fa91f650545c9af28, class_type, get_censoring, ); };
     };

@@ -79,6 +79,8 @@ namespace statiskit
         public:
             using PolymorphicCopy<NominalDistributionEstimator, NominalDistributionEstimation::Estimator>::PolymorphicCopy;
 
+            NominalDistributionEstimator(const NominalDistributionEstimator&) = default;
+
         protected:
             virtual distribution_type* create(const std::set< value_type >& values, const Eigen::VectorXd& pi) const;
     };
@@ -90,6 +92,8 @@ namespace statiskit
         public:
             using PolymorphicCopy<DiscreteUnivariateFrequencyDistributionEstimator, DiscreteUnivariateFrequencyDistributionEstimation::Estimator>::PolymorphicCopy;
 
+            DiscreteUnivariateFrequencyDistributionEstimator(const DiscreteUnivariateFrequencyDistributionEstimator&) = default;
+
         protected:
             virtual distribution_type* create(const std::set< value_type >& values, const Eigen::VectorXd& pi) const;
     };
@@ -100,6 +104,8 @@ namespace statiskit
     {
         public:
             using PolymorphicCopy<ContinuousUnivariateFrequencyDistributionEstimator, ContinuousUnivariateFrequencyDistributionEstimation::Estimator>::PolymorphicCopy;
+
+            ContinuousUnivariateFrequencyDistributionEstimator(const ContinuousUnivariateFrequencyDistributionEstimator&) = default;
 
         protected:
             virtual distribution_type* create(const std::set< value_type >& values, const Eigen::VectorXd& masses) const;

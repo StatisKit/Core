@@ -9,8 +9,8 @@ namespace autowig
         public:
             using ::statiskit::PolymorphicCopy< ::statiskit::ExponentialSchedule, struct ::statiskit::Schedule >::PolymorphicCopy;
 
-
-        public:
+            typedef class ::std::unique_ptr< struct ::statiskit::Schedule, struct ::std::default_delete< struct ::statiskit::Schedule > >  return_type_24f981130a195fbe9daa0a87630d8ddb;
+            virtual return_type_24f981130a195fbe9daa0a87630d8ddb copy() const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_24f981130a195fbe9daa0a87630d8ddb, class_type, copy, ); };
             typedef double  return_type_004876688c73571590d218338cd011b5;
             typedef double const & param_004876688c73571590d218338cd011b5_0_type;
             virtual return_type_004876688c73571590d218338cd011b5 operator()(param_004876688c73571590d218338cd011b5_0_type param_0) const override { PYBIND11_OVERLOAD_PURE(return_type_004876688c73571590d218338cd011b5, class_type, operator(), param_0); };

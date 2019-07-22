@@ -9,24 +9,16 @@ namespace autowig
         public:
             using ::statiskit::Selection< class ::statiskit::DistributionEstimation< ::statiskit::SingularDistribution > >::Estimator::Estimator;
 
-
-        protected:
             typedef double  return_type_be440bc3a52251dfbc42d722b716ef3f;
             typedef struct ::statiskit::SingularDistribution const * param_be440bc3a52251dfbc42d722b716ef3f_0_type;
             typedef struct ::statiskit::MultivariateData const & param_be440bc3a52251dfbc42d722b716ef3f_1_type;
             virtual return_type_be440bc3a52251dfbc42d722b716ef3f scoring(param_be440bc3a52251dfbc42d722b716ef3f_0_type param_0, param_be440bc3a52251dfbc42d722b716ef3f_1_type param_1) const override { PYBIND11_OVERLOAD_PURE(return_type_be440bc3a52251dfbc42d722b716ef3f, class_type, scoring, param_0, param_1); };
-
-        public:
             typedef class ::std::unique_ptr< class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >, struct ::std::default_delete< class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution > > >  return_type_e63871509e675384a85dc2f7ea740325;
             typedef struct ::statiskit::MultivariateData const & param_e63871509e675384a85dc2f7ea740325_0_type;
             typedef bool const & param_e63871509e675384a85dc2f7ea740325_1_type;
             virtual return_type_e63871509e675384a85dc2f7ea740325 operator()(param_e63871509e675384a85dc2f7ea740325_0_type param_0, param_e63871509e675384a85dc2f7ea740325_1_type param_1) const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_e63871509e675384a85dc2f7ea740325, class_type, operator(), param_0, param_1); };
-
-        public:
             typedef class ::std::unique_ptr< class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >::Estimator, struct ::std::default_delete< class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >::Estimator > >  return_type_9457ae163d2b51e6a4b68c1d52a61c5e;
             virtual return_type_9457ae163d2b51e6a4b68c1d52a61c5e copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_9457ae163d2b51e6a4b68c1d52a61c5e, class_type, copy, ); };
-
-        public:
             typedef class ::std::unique_ptr< class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >, struct ::std::default_delete< class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution > > >  return_type_1b58fb67872859e3906ec2e648200d3c;
             typedef ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >::Estimator::data_type const & param_1b58fb67872859e3906ec2e648200d3c_0_type;
             virtual return_type_1b58fb67872859e3906ec2e648200d3c operator()(param_1b58fb67872859e3906ec2e648200d3c_0_type param_0) const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_1b58fb67872859e3906ec2e648200d3c, class_type, operator(), param_0); };

@@ -97,6 +97,8 @@ namespace statiskit
 
     struct STATISKIT_CORE_API CategoricalUnivariateDistributionEstimation : UnivariateDistributionEstimation
     {
+        using distribution_type = CategoricalUnivariateDistribution;
+
         using UnivariateDistributionEstimation::UnivariateDistributionEstimation;
 
         class STATISKIT_CORE_API Estimator : public UnivariateDistributionEstimation::Estimator
@@ -111,6 +113,8 @@ namespace statiskit
 
     struct STATISKIT_CORE_API DiscreteUnivariateDistributionEstimation : UnivariateDistributionEstimation
     {
+        using distribution_type = DiscreteUnivariateDistribution;
+
         using UnivariateDistributionEstimation::UnivariateDistributionEstimation;
 
         class STATISKIT_CORE_API Estimator : public UnivariateDistributionEstimation::Estimator
@@ -125,6 +129,8 @@ namespace statiskit
 
     struct STATISKIT_CORE_API ContinuousUnivariateDistributionEstimation : UnivariateDistributionEstimation
     {
+        using distribution_type = ContinuousUnivariateDistribution;
+
         using UnivariateDistributionEstimation::UnivariateDistributionEstimation;
 
         class STATISKIT_CORE_API Estimator : public UnivariateDistributionEstimation::Estimator
@@ -155,6 +161,8 @@ namespace statiskit
 
     struct STATISKIT_CORE_API CategoricalMultivariateDistributionEstimation : MultivariateDistributionEstimation
     {
+        using distribution_type = CategoricalMultivariateDistribution;
+
         using MultivariateDistributionEstimation::MultivariateDistributionEstimation;
 
         class STATISKIT_CORE_API Estimator : public MultivariateDistributionEstimation::Estimator
@@ -173,6 +181,8 @@ namespace statiskit
 
     struct STATISKIT_CORE_API DiscreteMultivariateDistributionEstimation : MultivariateDistributionEstimation
     {
+        using distribution_type = DiscreteMultivariateDistribution;
+
         using MultivariateDistributionEstimation::MultivariateDistributionEstimation;
 
         class STATISKIT_CORE_API Estimator : public MultivariateDistributionEstimation::Estimator
@@ -184,6 +194,8 @@ namespace statiskit
 
     struct STATISKIT_CORE_API ContinuousMultivariateDistributionEstimation : MultivariateDistributionEstimation
     {
+        using distribution_type = ContinuousMultivariateDistribution;
+
         using MultivariateDistributionEstimation::MultivariateDistributionEstimation;
 
         class STATISKIT_CORE_API Estimator : public MultivariateDistributionEstimation::Estimator
@@ -193,13 +205,14 @@ namespace statiskit
         };
     };
 
+    using explanatory_data_type = MultivariateData;
+
     template<class D>
     class ConditionalDistributionEstimation
     {
         public:
             using distribution_type = D;
             using response_data_type = typename D::response_type::data_type;
-            using explanatory_data_type = MultivariateData;
 
             ConditionalDistributionEstimation();
             ConditionalDistributionEstimation(response_data_type const* response_data,

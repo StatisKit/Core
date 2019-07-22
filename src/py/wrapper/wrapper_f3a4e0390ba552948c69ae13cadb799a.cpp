@@ -9,8 +9,8 @@ namespace autowig
         public:
             using ::statiskit::PolymorphicCopy< struct ::statiskit::MultinomialSingularDistributionEstimation::Estimator, ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >::Estimator >::PolymorphicCopy;
 
-
-        public:
+            typedef class ::std::unique_ptr< class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >::Estimator, struct ::std::default_delete< class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >::Estimator > >  return_type_350c37163a93559ca07485ee2b6fe75c;
+            virtual return_type_350c37163a93559ca07485ee2b6fe75c copy() const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_350c37163a93559ca07485ee2b6fe75c, class_type, copy, ); };
             typedef class ::std::unique_ptr< class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >, struct ::std::default_delete< class ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution > > >  return_type_1b58fb67872859e3906ec2e648200d3c;
             typedef ::statiskit::DistributionEstimation< struct ::statiskit::SingularDistribution >::Estimator::data_type const & param_1b58fb67872859e3906ec2e648200d3c_0_type;
             virtual return_type_1b58fb67872859e3906ec2e648200d3c operator()(param_1b58fb67872859e3906ec2e648200d3c_0_type param_0) const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_1b58fb67872859e3906ec2e648200d3c, class_type, operator(), param_0); };

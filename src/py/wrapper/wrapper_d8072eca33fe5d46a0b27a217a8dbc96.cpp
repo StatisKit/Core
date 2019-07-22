@@ -4,7 +4,7 @@
 void wrapper_d8072eca33fe5d46a0b27a217a8dbc96(pybind11::module& module)
 {
 
-    pybind11::enum_< ::statiskit::censoring_type > enum_d8072eca33fe5d46a0b27a217a8dbc96(module, "censoring_type");
+    pybind11::enum_< enum ::statiskit::censoring_type > enum_d8072eca33fe5d46a0b27a217a8dbc96(module, "censoring_type");
     enum_d8072eca33fe5d46a0b27a217a8dbc96.value("NONE", ::statiskit::censoring_type::NONE);
     enum_d8072eca33fe5d46a0b27a217a8dbc96.value("CENSORED", ::statiskit::censoring_type::CENSORED);
     enum_d8072eca33fe5d46a0b27a217a8dbc96.value("LEFT", ::statiskit::censoring_type::LEFT);

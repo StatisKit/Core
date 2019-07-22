@@ -9,12 +9,8 @@ namespace autowig
         public:
             using ::statiskit::Schedule::Schedule;
 
-
-        public:
             typedef class ::std::unique_ptr< struct ::statiskit::Schedule, struct ::std::default_delete< struct ::statiskit::Schedule > >  return_type_7b1ce88d04fc5ffb8e9402122cfa4883;
             virtual return_type_7b1ce88d04fc5ffb8e9402122cfa4883 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_7b1ce88d04fc5ffb8e9402122cfa4883, class_type, copy, ); };
-
-        public:
             typedef double  return_type_004876688c73571590d218338cd011b5;
             typedef double const & param_004876688c73571590d218338cd011b5_0_type;
             virtual return_type_004876688c73571590d218338cd011b5 operator()(param_004876688c73571590d218338cd011b5_0_type param_0) const override { PYBIND11_OVERLOAD_PURE(return_type_004876688c73571590d218338cd011b5, class_type, operator(), param_0); };

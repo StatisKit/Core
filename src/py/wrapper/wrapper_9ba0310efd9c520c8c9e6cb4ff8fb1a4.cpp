@@ -1,6 +1,6 @@
 #include "_core.h"
 
-struct ::statiskit::UnivariateDistribution const * (::statiskit::SlopeHeuristicSelection< ::statiskit::ContinuousUnivariateDistributionEstimation >::*method_pointer_8204f20a4c0f58e1adcc7dacf271e202)(::statiskit::Index const &)const= &::statiskit::SlopeHeuristicSelection< struct ::statiskit::ContinuousUnivariateDistributionEstimation >::get_proposal;
+struct ::statiskit::ContinuousUnivariateDistribution const * (::statiskit::SlopeHeuristicSelection< ::statiskit::ContinuousUnivariateDistributionEstimation >::*method_pointer_8204f20a4c0f58e1adcc7dacf271e202)(::statiskit::Index const &)const= &::statiskit::SlopeHeuristicSelection< struct ::statiskit::ContinuousUnivariateDistributionEstimation >::get_proposal;
 
 namespace autowig {
 }

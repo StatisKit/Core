@@ -16,7 +16,7 @@ namespace statiskit
         {
             this->shift = estimator.shift;
             if (estimator.estimator) {
-                this->estimator = static_cast< typename B::Estimator* >(estimator._estimator->copy().release());
+                this->estimator = static_cast< typename B::Estimator* >(estimator.estimator->copy().release());
             } else {
                 this->estimator = nullptr;
             }
@@ -33,9 +33,9 @@ namespace statiskit
     template<class B>
         std::unique_ptr< typename ShiftedDistributionEstimation<B>::Estimator::estimation_type > ShiftedDistributionEstimation<B>::Estimator::operator() (const data_type& data) const
         { 
-            using event_type = ElementaryEvent< typename B::event_type >;
+            using event_type = ElementaryEvent< typename B::Estimator::event_type >;
             using value_type = typename event_type::value_type;
-            using distribution_type = ShiftedDistribution< typename B::observation_type >;
+            using distribution_type = ShiftedDistribution< typename B::distribution_type >;
             this->check(data);
             if (!this->estimator) {
                 throw member_error("estimator", "you must give an estimator in order to compute a shifted estimation");
@@ -61,7 +61,7 @@ namespace statiskit
                 ++index;
             }
             return std::make_unique< ShiftedDistributionEstimation<B> >(weighted,
-                                                                        new distribution_type(*(*this->estimator(weighted))->get_distribution(), this->shift));
+                                                                        new distribution_type(*static_cast< typename B::distribution_type const * >(((*(this->estimator))(weighted))->get_distribution()), this->shift));
         }
 
     template<class B>

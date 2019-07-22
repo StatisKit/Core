@@ -9,20 +9,12 @@ namespace autowig
         public:
             using ::statiskit::UnivariateData::Generator::Generator;
 
-
-        public:
             typedef struct ::statiskit::UnivariateData::Generator & return_type_de48c02aa8db50929f6a3f8784c2ec4d;
             virtual return_type_de48c02aa8db50929f6a3f8784c2ec4d operator++() override { PYBIND11_OVERLOAD_PURE(return_type_de48c02aa8db50929f6a3f8784c2ec4d, class_type, operator++, ); };
-
-        public:
             typedef bool  return_type_ef9b151802e1543cb7c98d1c40761fbe;
             virtual return_type_ef9b151802e1543cb7c98d1c40761fbe is_valid() const override { PYBIND11_OVERLOAD_PURE(return_type_ef9b151802e1543cb7c98d1c40761fbe, class_type, is_valid, ); };
-
-        public:
             typedef double  return_type_3ff5d6aeae9b500daee4500fa6bcd9d2;
             virtual return_type_3ff5d6aeae9b500daee4500fa6bcd9d2 get_weight() const override { PYBIND11_OVERLOAD_PURE(return_type_3ff5d6aeae9b500daee4500fa6bcd9d2, class_type, get_weight, ); };
-
-        public:
             typedef struct ::statiskit::UnivariateEvent const * return_type_54decb3c8cd45099a4ee49e01abbc27d;
             virtual return_type_54decb3c8cd45099a4ee49e01abbc27d get_event() const override { PYBIND11_OVERLOAD_PURE(return_type_54decb3c8cd45099a4ee49e01abbc27d, class_type, get_event, ); };
     };

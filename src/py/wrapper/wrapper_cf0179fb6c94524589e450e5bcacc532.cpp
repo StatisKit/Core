@@ -9,12 +9,10 @@ namespace autowig
         public:
             using ::statiskit::CategoricalEvent::CategoricalEvent;
 
-
-        public:
+            typedef enum ::statiskit::outcome_type  return_type_6be7c81ad3ae5c77a462d7101baa7329;
+            virtual return_type_6be7c81ad3ae5c77a462d7101baa7329 get_outcome() const override { PYBIND11_OVERLOAD(return_type_6be7c81ad3ae5c77a462d7101baa7329, class_type, get_outcome, ); };
             typedef class ::std::unique_ptr< struct ::statiskit::UnivariateEvent, struct ::std::default_delete< struct ::statiskit::UnivariateEvent > >  return_type_963689b729ca55bb9ee4a8fbb5e871c0;
             virtual return_type_963689b729ca55bb9ee4a8fbb5e871c0 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_963689b729ca55bb9ee4a8fbb5e871c0, class_type, copy, ); };
-
-        public:
             typedef enum ::statiskit::censoring_type  return_type_e27fd4219e44503fa91f650545c9af28;
             virtual return_type_e27fd4219e44503fa91f650545c9af28 get_censoring() const override { PYBIND11_OVERLOAD_PURE(return_type_e27fd4219e44503fa91f650545c9af28, class_type, get_censoring, ); };
     };
