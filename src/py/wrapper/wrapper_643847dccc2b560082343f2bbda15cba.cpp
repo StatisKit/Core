@@ -9,16 +9,16 @@ namespace autowig
         public:
             using ::statiskit::SlopeHeuristicIWLSSolver::SlopeHeuristicIWLSSolver;
 
+
+        protected:
             typedef void  return_type_5339015f18e1581c8a543e2e79fa15bc;
             typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_5339015f18e1581c8a543e2e79fa15bc_0_type;
             typedef class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > & param_5339015f18e1581c8a543e2e79fa15bc_1_type;
             typedef class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const & param_5339015f18e1581c8a543e2e79fa15bc_2_type;
             typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_5339015f18e1581c8a543e2e79fa15bc_3_type;
             virtual return_type_5339015f18e1581c8a543e2e79fa15bc update(param_5339015f18e1581c8a543e2e79fa15bc_0_type param_0, param_5339015f18e1581c8a543e2e79fa15bc_1_type param_1, param_5339015f18e1581c8a543e2e79fa15bc_2_type param_2, param_5339015f18e1581c8a543e2e79fa15bc_3_type param_3) const override { PYBIND11_OVERLOAD_PURE(return_type_5339015f18e1581c8a543e2e79fa15bc, class_type, update, param_0, param_1, param_2, param_3); };
-            typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >  return_type_c817adc5fda95841b7424a9157dc057f;
-            typedef class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const & param_c817adc5fda95841b7424a9157dc057f_0_type;
-            typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_c817adc5fda95841b7424a9157dc057f_1_type;
-            virtual return_type_c817adc5fda95841b7424a9157dc057f operator()(param_c817adc5fda95841b7424a9157dc057f_0_type param_0, param_c817adc5fda95841b7424a9157dc057f_1_type param_1) const override { PYBIND11_OVERLOAD(return_type_c817adc5fda95841b7424a9157dc057f, class_type, operator(), param_0, param_1); };
+
+        public:
             typedef class ::std::unique_ptr< class ::statiskit::SlopeHeuristicSolver, struct ::std::default_delete< class ::statiskit::SlopeHeuristicSolver > >  return_type_c193a50a08b25a91813276a3c5fd5c33;
             virtual return_type_c193a50a08b25a91813276a3c5fd5c33 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_c193a50a08b25a91813276a3c5fd5c33, class_type, copy, ); };
     };

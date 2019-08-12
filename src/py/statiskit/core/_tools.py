@@ -9,3 +9,19 @@ def float_str(value):
 
 def remove_latex(string):
     return string.replace('$', '')
+
+import difflib
+
+a = "PoissonDistributionEstimator"
+b = "PoissonDistributionMLEstimator"
+c = "PoissonDistributionMMEstimator"
+
+def compute_diff(a, b):
+    diff = ""
+    for char in difflib.ndiff(a,b):
+        if char.startswith('+ '):
+            diff += char[2:]
+    return diff
+
+compute_diff(a,b)
+compute_diff(a,c)

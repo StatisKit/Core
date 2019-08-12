@@ -3,13 +3,11 @@ import math
 
 from . import _core
 from .__core.statiskit import (SingularDistribution,
-                                   MultinomialSingularDistribution,
-                                   DirichletMultinomialSingularDistribution,
-                                   MixtureSingularDistribution)
+                               MultinomialSingularDistribution,
+                               DirichletMultinomialSingularDistribution)
 
 __all__ = ['MultinomialSingularDistribution',
-           'DirichletMultinomialSingularDistribution',
-           'MixtureSingularDistribution']
+           'DirichletMultinomialSingularDistribution']
 
 def wrapper_probability(f):
     @wraps(f)
@@ -76,3 +74,47 @@ def _repr_latex_(self):
 
 DirichletMultinomialSingularDistribution._repr_latex_ = _repr_latex_
 del _repr_latex_
+
+SplittingDistributionEstimation.Estimator.sum = property(SplittingDistributionEstimation.Estimator.get_sum, SplittingDistributionEstimation.Estimator.set_sum)
+del SplittingDistributionEstimation.Estimator.get_sum, SplittingDistributionEstimation.Estimator.set_sum
+
+SplittingDistributionEstimation.Estimator.singular = property(SplittingDistributionEstimation.Estimator.get_singular, SplittingDistributionEstimation.Estimator.set_singular)
+del SplittingDistributionEstimation.Estimator.get_singular, SplittingDistributionEstimation.Estimator.set_singular
+
+SplittingDistributionEstimation.sum = property(SplittingDistributionEstimation.get_sum)
+del SplittingDistributionEstimation.get_sum
+
+SplittingDistributionEstimation.get_singular = property(SplittingDistributionEstimation.get_singular)
+del SplittingDistributionEstimation.get_singular
+
+def singular_selection(*args, **kwargs):
+    data = kwargs.pop('data', None)
+    if len(args) == 0:
+        raise ValueError()
+    elif len(args) == 1:
+        arg = args[0]
+        if arg == 'MN':
+            algo = kwargs.pop('algo', 'default')
+            mapping = dict(default = MultinomialSingularDistributionEstimation.Estimator)
+            return _estimation(algo, data, mapping, **kwargs)
+        elif arg == 'DM':
+            algo = kwargs.pop('algo', 'default')
+            mapping = dict(default = DirichletMultinomialSingularDistributionEstimation.Estimator)
+            return _estimation(algo, data, mapping, **kwargs)
+        else:
+            raise ValueError("'args' parameter")
+    else:
+        algo = kwargs.pop('algo', 'criterion')
+        mapping = dict(criterion = SingularDistributionSelection.CriterionEstimator)
+        estimators = []
+        for arg in args:
+            estimators.append(singular_selection(arg, **dict((key, value) for (key, value) in kwargs.items() if key == "sum")))
+        kwargs.pop('sum', None)
+        return _estimation(algo, data, mapping, estimators=estimators, **kwargs)
+
+def splitting_estimation(data=None, **kwargs):
+    mapping = dict(default = SplittingDistributionEstimation.Estimator)
+    return _estimation('default', data, mapping, **kwargs)
+
+SingularDistributionEstimation.distribution = property(SingularDistributionEstimation.get_distribution)
+del SingularDistributionEstimation.get_distribution

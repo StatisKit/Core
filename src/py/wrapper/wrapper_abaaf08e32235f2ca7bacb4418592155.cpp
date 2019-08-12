@@ -9,7 +9,7 @@ namespace autowig {
 void wrapper_abaaf08e32235f2ca7bacb4418592155(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::BetaBinomialDistribution, autowig::HolderType< class ::statiskit::BetaBinomialDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::BetaBinomialDistribution, class ::statiskit::BetaCompoundDiscreteUnivariateDistribution > > class_abaaf08e32235f2ca7bacb4418592155(module, "BetaBinomialDistribution", "");
+    pybind11::class_<class ::statiskit::BetaBinomialDistribution, autowig::HolderType< class ::statiskit::BetaBinomialDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::BetaBinomialDistribution, class ::statiskit::BetaCompoundDiscreteUnivariateDistribution > > class_abaaf08e32235f2ca7bacb4418592155(module, "BetaBinomialDistribution", "");
     class_abaaf08e32235f2ca7bacb4418592155.def(pybind11::init<  >());
     class_abaaf08e32235f2ca7bacb4418592155.def(pybind11::init< unsigned int const &, double const &, double const & >());
     class_abaaf08e32235f2ca7bacb4418592155.def(pybind11::init< class ::statiskit::BetaBinomialDistribution const & >());

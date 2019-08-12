@@ -1,15 +1,13 @@
-#ifndef STATISKIT_CORE_EVENT_H
-#define STATISKIT_CORE_EVENT_H
+#pragma once
 
-#include <vector>
 #include <set>
-#include <boost/math/special_functions/fpclassify.hpp>
+#include <vector>
 
 #include "base.h"
 
 namespace statiskit
 {
-    enum outcome_type 
+    enum class outcome_type 
     {
         CATEGORICAL,
         DISCRETE,
@@ -17,110 +15,103 @@ namespace statiskit
         MIXED,
     };
 
-    enum event_type
+    STATISKIT_CORE_API std::ostream& operator<<(std::ostream& os, const outcome_type& outcome);
+
+    enum class censoring_type
     {
-        ELEMENTARY,
+        NONE,
         CENSORED,
         LEFT,
         RIGHT,
         INTERVAL,
-        COMPOUND
     };
 
     struct STATISKIT_CORE_API UnivariateEvent
     {
+        typedef UnivariateEvent copy_type;
+
         virtual ~UnivariateEvent();
         
         virtual outcome_type get_outcome() const = 0;
 
-        virtual event_type get_event() const = 0;
+        virtual censoring_type get_censoring() const = 0;
 
         virtual std::unique_ptr< UnivariateEvent > copy() const = 0;
     };
  
-    template<class E> class ElementaryEvent : public E
+    template<class E> class ElementaryEvent : public PolymorphicCopy<ElementaryEvent<E>, E>
     {
         public:
             ElementaryEvent(const typename E::value_type& value);
             ElementaryEvent(const ElementaryEvent< E >& event);
             virtual ~ElementaryEvent();
         
-            virtual event_type get_event() const;
+            virtual censoring_type get_censoring() const;
 
             const typename E::value_type& get_value() const;
-
-            virtual std::unique_ptr< UnivariateEvent > copy() const;
             
         protected:
-            typename E::value_type _value;
+            typename E::value_type value;
     };
 
-    template<class E> class CensoredEvent : public E
+    template<class E> class CensoredEvent : public PolymorphicCopy<ElementaryEvent<E>, E>
     {
         public:
             CensoredEvent(const std::vector< typename E::value_type >& values);
             CensoredEvent(const CensoredEvent< E >& event);
 
-            virtual event_type get_event() const;
+            virtual censoring_type get_censoring() const;
 
             const std::vector< typename E::value_type >& get_values() const;
 
-            virtual std::unique_ptr< UnivariateEvent > copy() const;
-
         protected:
-            std::vector< typename E::value_type > _values;
+            std::vector< typename E::value_type > values;
     };
 
-    template<class E> class LeftCensoredEvent : public E
+    template<class E> class LeftCensoredEvent : public PolymorphicCopy<LeftCensoredEvent<E>, E>
     {
         public:
             LeftCensoredEvent(const typename E::value_type& upper_bound);
             LeftCensoredEvent(const LeftCensoredEvent< E >& event);
 
-            virtual event_type get_event() const;
+            virtual censoring_type get_censoring() const;
 
             const typename E::value_type& get_upper_bound() const;
 
-            virtual std::unique_ptr< UnivariateEvent > copy() const;
-
         protected:
-            typename E::value_type _upper_bound;
+            typename E::value_type upper_bound;
     };
 
-    template<class E> class RightCensoredEvent : public E
+    template<class E> class RightCensoredEvent : public PolymorphicCopy<RightCensoredEvent<E>, E>
     {
         public:
             RightCensoredEvent(const typename E::value_type& lower_bound);
             RightCensoredEvent(const RightCensoredEvent< E >& event);
 
-            virtual event_type get_event() const;
+            virtual censoring_type get_censoring() const;
 
             const typename E::value_type& get_lower_bound() const;
-
-            virtual std::unique_ptr< UnivariateEvent > copy() const;
         
         protected:
-            typename E::value_type _lower_bound;
+            typename E::value_type lower_bound;
     };
 
-    template<class E> class IntervalCensoredEvent : public E
+    template<class E> class IntervalCensoredEvent : public PolymorphicCopy<IntervalCensoredEvent<E>, E>
     {
         public:
             IntervalCensoredEvent(const typename E::value_type& lhs, const typename E::value_type& rhs);
             IntervalCensoredEvent(const IntervalCensoredEvent< E >& event);
 
-            virtual event_type get_event() const;
+            virtual censoring_type get_censoring() const;
 
             const typename E::value_type& get_lower_bound() const;
             const typename E::value_type& get_upper_bound() const;
             
             typename E::value_type get_range() const;
             typename E::value_type get_center() const;
-
-            virtual std::unique_ptr< UnivariateEvent > copy() const;
             
         protected:
-            std::pair<typename E::value_type, typename E::value_type > _bounds;
+            std::pair<typename E::value_type, typename E::value_type > bounds;
     };
 
     class CategoricalUnivariateDistribution;
@@ -170,17 +161,18 @@ namespace statiskit
 
     struct STATISKIT_CORE_API MultivariateEvent
     {        
+        typedef MultivariateEvent copy_type;
 
         virtual ~MultivariateEvent() = 0;
 
         virtual Index size() const = 0;
                 
-        virtual const UnivariateEvent* get(const Index& index) const = 0;
+        virtual const UnivariateEvent* get_event(const Index& index) const = 0;
 
         virtual std::unique_ptr< MultivariateEvent > copy() const = 0;
     };
 
-    class STATISKIT_CORE_API VectorEvent : public MultivariateEvent
+    class STATISKIT_CORE_API VectorEvent : public PolymorphicCopy<VectorEvent, MultivariateEvent>
     {
         public:
             VectorEvent(const Index& size);
@@ -190,17 +182,12 @@ namespace statiskit
 
             virtual Index size() const;
                     
-            virtual const UnivariateEvent* get(const Index& index) const;
-            void set(const Index& index, const UnivariateEvent& event);
-
-            virtual std::unique_ptr< MultivariateEvent > copy() const;
+            virtual const UnivariateEvent* get_event(const Index& index) const;
+            void set_event(const Index& index, const UnivariateEvent* event);
 
         protected:
-            std::vector< UnivariateEvent* > _events;
+            std::vector< UnivariateEvent* > events;
     };
 }
 
-#ifndef AUTOWIG
 #include "event.hpp"
-#endif
-#endif

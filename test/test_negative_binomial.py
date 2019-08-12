@@ -13,25 +13,21 @@ class TestNegativeBinomial(unittest.TestCase, AbstractTestDiscreteUnivariateDist
 
     @classmethod
     def setUpClass(cls):
-        """Test negative binomial distribution construction"""
         cls._dist = core.NegativeBinomialDistribution(2., .5)
 
     def test_mle(self):
-        """Test negative binomial ML estimation"""
         data = self._dist.simulation(90)
-        mle = core.negative_binomial_estimation('ml', data)
-        # mme = core.negative_binomial_estimation('mm', data)
-        self.assertGreaterEqual(mle.estimated.loglikelihood(data), self._dist.loglikelihood(data)) #mme.estimated.loglikelihood(data))
+        mle = core.negative_binomial_estimation('ML', data)
+        self.assertGreaterEqual(mle.distribution.loglikelihood(data),
+                                self._dist.loglikelihood(data))
 
 
     def test_mme(self):
-        """Test negative binomial MM estimation"""
         data = self._dist.simulation(100)
-        mme = core.negative_binomial_estimation('mm', data)
-        self.assertAlmostEqual(mme.estimated.mean, float(data.location))
-        self.assertAlmostEqual(mme.estimated.variance, float(data.dispersion))
+        mme = core.negative_binomial_estimation('MM', data)
+        self.assertAlmostEqual(mme.distribution.mean, data.location)
+        self.assertAlmostEqual(mme.distribution.variance, data.dispersion)
 
     @classmethod
     def tearDownClass(cls):
-        """Test distribution deletion"""
         del cls._dist

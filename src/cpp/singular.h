@@ -1,15 +1,21 @@
-#ifndef STATISKIT_CORE_SINGULAR_H
-#define STATISKIT_CORE_SINGULAR_H
+#pragma once
+
+#include <statiskit/linalg/Eigen.h>
 
 #include "base.h"
 #include "data.h"
-#include <statiskit/linalg/Eigen.h>
+#include "distribution.h"
+#include "estimation.h"
+#include "optimization.h"
+#include "selection.h"
 
 namespace statiskit
 {
     struct STATISKIT_CORE_API SingularDistribution
     {
+        typedef SingularDistribution copy_type;
         typedef MultivariateData data_type;
+        typedef Indices indexing_type;
 
         virtual ~SingularDistribution() = 0;
         
@@ -26,7 +32,7 @@ namespace statiskit
         virtual std::unique_ptr< SingularDistribution > copy() const = 0;
     };
 
-    class STATISKIT_CORE_API MultinomialSingularDistribution : public PolymorphicCopy< SingularDistribution, MultinomialSingularDistribution >
+    class STATISKIT_CORE_API MultinomialSingularDistribution : public PolymorphicCopy< MultinomialSingularDistribution, SingularDistribution >
     {
         public:
             MultinomialSingularDistribution(const Eigen::VectorXd& pi);
@@ -45,10 +51,10 @@ namespace statiskit
             void set_pi(const Eigen::VectorXd& pi);
 
         protected:
-            Eigen::VectorXd _pi;
+            Eigen::VectorXd pi;
     };
 
-    class STATISKIT_CORE_API DirichletMultinomialSingularDistribution : public PolymorphicCopy< SingularDistribution, DirichletMultinomialSingularDistribution >
+    class STATISKIT_CORE_API DirichletMultinomialSingularDistribution : public PolymorphicCopy< DirichletMultinomialSingularDistribution, SingularDistribution >
     {
         public:
             DirichletMultinomialSingularDistribution(const Eigen::VectorXd& alpha);
@@ -67,8 +73,103 @@ namespace statiskit
             void set_alpha(const Eigen::VectorXd& alpha);
             
         protected:
-            Eigen::VectorXd _alpha;
+            Eigen::VectorXd alpha;
+    };
+
+    typedef DistributionEstimation< SingularDistribution > SingularDistributionEstimation;
+    typedef Selection< SingularDistributionEstimation > SingularDistributionSelection;
+    typedef SingularDistributionSelection::CriterionEstimator SingularDistributionCriterionEstimator;
+
+    struct STATISKIT_CORE_API MultinomialSingularDistributionEstimation : PolymorphicCopy<MultinomialSingularDistributionEstimation, SingularDistributionEstimation>
+    {
+        using PolymorphicCopy<MultinomialSingularDistributionEstimation, SingularDistributionEstimation>::PolymorphicCopy;
+
+        struct STATISKIT_CORE_API Estimator : PolymorphicCopy< Estimator, SingularDistributionEstimation::Estimator >
+        {
+            Estimator();
+            Estimator(const Estimator& estimator);
+            virtual ~Estimator();
+
+            virtual std::unique_ptr< estimation_type > operator() (const data_type& data) const;
+        };
+    };
+
+    struct STATISKIT_CORE_API DirichletMultinomialSingularDistributionEstimation : PolymorphicCopy<DirichletMultinomialSingularDistributionEstimation, IterativeEstimation<Eigen::VectorXd, SingularDistributionEstimation > >
+    {
+        using PolymorphicCopy<DirichletMultinomialSingularDistributionEstimation, IterativeEstimation<Eigen::VectorXd, SingularDistributionEstimation > >::PolymorphicCopy;
+
+        struct STATISKIT_CORE_API Estimator : PolymorphicCopy< Estimator, Optimization< SingularDistributionEstimation::Estimator > >
+        {
+            Estimator();
+            Estimator(const Estimator& estimator);
+            virtual ~Estimator();
+
+            virtual std::unique_ptr< estimation_type > operator() (const data_type& data) const;
+        };
+    };
+
+    class STATISKIT_CORE_API SplittingDistribution : public PolymorphicCopy< SplittingDistribution, DiscreteMultivariateDistribution >
+    {
+        public:
+            SplittingDistribution(const DiscreteUnivariateDistribution& sum, const SingularDistribution& singular);
+            SplittingDistribution(const SplittingDistribution& splitting);
+            virtual ~SplittingDistribution();
+
+            virtual Index get_nb_components() const;
+
+            virtual unsigned int get_nb_parameters() const;
+
+            virtual double probability(const MultivariateEvent* event, const bool& logarithm) const;
+
+            std::unique_ptr< MultivariateEvent > simulate() const;
+
+            const DiscreteUnivariateDistribution* get_sum() const;
+            void set_sum(const DiscreteUnivariateDistribution& sum);
+
+            SingularDistribution* get_singular() const;
+            void set_singular(const SingularDistribution& singular);
+
+        protected:
+            DiscreteUnivariateDistribution* sum;
+            SingularDistribution* singular;
+
+            SplittingDistribution();
+    };
+
+    class STATISKIT_CORE_API SplittingDistributionEstimation : public PolymorphicCopy< SplittingDistributionEstimation, DiscreteMultivariateDistributionEstimation >
+    {
+        public:
+            using PolymorphicCopy< SplittingDistributionEstimation, DiscreteMultivariateDistributionEstimation >::PolymorphicCopy;
+
+            SplittingDistributionEstimation(const SplittingDistributionEstimation& estimation);
+            ~SplittingDistributionEstimation();
+            
+            const DiscreteUnivariateDistributionEstimation* get_sum() const;
+
+            const SingularDistributionEstimation* get_singular() const;
+
+            class STATISKIT_CORE_API Estimator : public PolymorphicCopy< Estimator, DiscreteMultivariateDistributionEstimation::Estimator >
+            {
+                public:
+                    Estimator();
+                    Estimator(const Estimator& estimator);
+                    virtual ~Estimator();
+
+                    virtual std::unique_ptr< estimation_type > operator() (const data_type& data) const;
+
+                    const DiscreteUnivariateDistributionEstimation::Estimator* get_sum() const;
+                    void  set_sum(const DiscreteUnivariateDistributionEstimation::Estimator& sum);
+
+                    const SingularDistributionEstimation::Estimator* get_singular() const;
+                    void set_singular(const SingularDistributionEstimation::Estimator& singular);
+
+                protected:
+                    DiscreteUnivariateDistributionEstimation::Estimator* sum;
+                    SingularDistributionEstimation::Estimator* singular;
+            };
+
+        protected:
+            DiscreteUnivariateDistributionEstimation* sum;        
+            SingularDistributionEstimation* singular;
     };
 }
-
-#endif

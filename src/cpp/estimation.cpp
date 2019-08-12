@@ -14,90 +14,121 @@ namespace statiskit
     underdispersion_error::underdispersion_error() : parameter_error("data", " is underdispersed")
     {}
 
-    std::unordered_set< uintptr_t > Estimator::compute_children(const Estimator& estimator)
-    { return estimator.children(); }
-
-    std::unordered_set< uintptr_t > Estimator::children() const
-    { return std::unordered_set< uintptr_t >(); }
-
-    uintptr_t Estimator::identifier() const
-    { return (uintptr_t)(this); }
-
-    uintptr_t Estimator::compute_identifier(const Estimator& estimator)
-    { return estimator.identifier(); }
-
-    UnivariateDistributionEstimation::~UnivariateDistributionEstimation()
-    {}
-
-    UnivariateDistributionEstimation::Estimator::~Estimator()
-    {}
-
-    CategoricalUnivariateDistributionEstimation::Estimator::Estimator()
-    {}
-
-    CategoricalUnivariateDistributionEstimation::Estimator::Estimator(const Estimator& estimator)
-    {}
-
-    CategoricalUnivariateDistributionEstimation::Estimator::~Estimator()
-    {}
-
-    std::unique_ptr< UnivariateDistributionEstimation > CategoricalUnivariateDistributionEstimation::Estimator::operator() (const UnivariateData& data, const bool& lazy) const
+    void CategoricalUnivariateDistributionEstimation::Estimator::check(const UnivariateData& data) const
     {
-        if(data.get_sample_space()->get_outcome() != CATEGORICAL)
-        { throw statiskit::sample_space_error(CATEGORICAL); }
-        std::unique_ptr< UnivariateDistributionEstimation > estimation;
-        std::set< std::string > values;
-        double total = data.compute_total();
-        if(total > 0. && boost::math::isfinite(total))
-        {
-            const CategoricalSampleSpace* sample_space = static_cast< const CategoricalSampleSpace* >(data.get_sample_space());
-            values = sample_space->get_values();
-            Eigen::VectorXd masses = Eigen::VectorXd::Zero(values.size());
-            std::unique_ptr< UnivariateData::Generator > generator = data.generator();
-            while(generator->is_valid())
-            {
-                auto event = generator->event();
-                if(event)
-                {
-                    if(event->get_event() == ELEMENTARY)
-                    {
-                        std::set< std::string >::iterator it = values.find(static_cast< const CategoricalElementaryEvent* >(event)->get_value());
-                        masses[distance(values.begin(), it)] += generator->weight() / total;
-                    }
-                }
-                ++(*generator);
-            }
-            CategoricalUnivariateDistribution* distribution;
-            switch(sample_space->get_ordering())
-            {
-                case NONE:
-                case PARTIAL:
-                    distribution = new NominalDistribution(values, masses);
-                    break;
-                case TOTAL:
-                    distribution = new OrdinalDistribution(static_cast< const OrdinalSampleSpace* >(sample_space)->get_ordered(), masses);
-                    break;
-            }
-            if(lazy)
-            { estimation = std::make_unique< CategoricalUnivariateDistributionLazyEstimation >(distribution); }
-            else
-            { estimation = std::make_unique< CategoricalUnivariateDistributionActiveEstimation >(distribution, &data); }
+        UnivariateDistributionEstimation::Estimator::check(data);
+        if (data.get_sample_space()->get_outcome() != outcome_type::CATEGORICAL) {
+            throw sample_space_error(outcome_type::CATEGORICAL);
         }
-        return estimation;
     }
 
-    std::unique_ptr< UnivariateDistributionEstimation::Estimator > CategoricalUnivariateDistributionEstimation::Estimator::copy() const
-    { return std::make_unique< Estimator >(*this); }
+    void DiscreteUnivariateDistributionEstimation::Estimator::check(const UnivariateData& data) const
+    {
+        UnivariateDistributionEstimation::Estimator::check(data);
+        if (data.get_sample_space()->get_outcome() != outcome_type::DISCRETE) {
+            throw sample_space_error(outcome_type::DISCRETE);
+        }
+    }
 
-    MultivariateDistributionEstimation::~MultivariateDistributionEstimation()
-    {}
+    void ContinuousUnivariateDistributionEstimation::Estimator::check(const UnivariateData& data) const
+    {
+        UnivariateDistributionEstimation::Estimator::check(data);
+        if (data.get_sample_space()->get_outcome() != outcome_type::CONTINUOUS) {
+            throw sample_space_error(outcome_type::CONTINUOUS);
+        }
+    }
 
-    MultivariateDistributionEstimation::Estimator::~Estimator()
-    {}
+    void CategoricalMultivariateDistributionEstimation::Estimator::check(const MultivariateData& data) const
+    {
+        MultivariateDistributionEstimation::Estimator::check(data);
+        for (Index index = 0, max_index = data.get_nb_components(); index < max_index; ++index) {
+            if (data.get_sample_space(index)->get_outcome() != outcome_type::CATEGORICAL) {
+                throw sample_space_error(outcome_type::CATEGORICAL);
+            }
+        }
+    }
 
-    UnivariateConditionalDistributionEstimation::~UnivariateConditionalDistributionEstimation()
-    {}
+    void DiscreteMultivariateDistributionEstimation::Estimator::check(const MultivariateData& data) const
+    {
+        MultivariateDistributionEstimation::Estimator::check(data);
+        for (Index index = 0, max_index = data.get_nb_components(); index < max_index; ++index) {
+            if (data.get_sample_space(index)->get_outcome() != outcome_type::DISCRETE) {
+                throw sample_space_error(outcome_type::DISCRETE);
+            }
+        }
+    }
 
-    MultivariateConditionalDistributionEstimation::~MultivariateConditionalDistributionEstimation()
-    {}
+    void ContinuousMultivariateDistributionEstimation::Estimator::check(const MultivariateData& data) const
+    {
+        MultivariateDistributionEstimation::Estimator::check(data);
+        for (Index index = 0, max_index = data.get_nb_components(); index < max_index; ++index) {
+            if (data.get_sample_space(index)->get_outcome() != outcome_type::CONTINUOUS) {
+                throw sample_space_error(outcome_type::CONTINUOUS);
+            }
+        }
+    }
+
+    std::unique_ptr< UnivariateConditionalDistributionEstimation::Estimator::estimation_type > UnivariateConditionalDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Index& response, const Indices& explanatories) const
+    {
+        return this->operator()(*data.select(response), *data.select(explanatories));
+    }
+
+    void CategoricalUnivariateConditionalDistributionEstimation::Estimator::check(const UnivariateData& data) const
+    {
+        UnivariateConditionalDistributionEstimation::Estimator::check(data);
+        if (data.get_sample_space()->get_outcome() != outcome_type::CATEGORICAL) {
+            throw sample_space_error(outcome_type::CATEGORICAL);
+        }
+    }
+
+    void DiscreteUnivariateConditionalDistributionEstimation::Estimator::check(const UnivariateData& data) const
+    {
+        UnivariateConditionalDistributionEstimation::Estimator::check(data);
+        if (data.get_sample_space()->get_outcome() != outcome_type::DISCRETE) {
+            throw sample_space_error(outcome_type::DISCRETE);
+        }
+    }
+
+    void ContinuousUnivariateConditionalDistributionEstimation::Estimator::check(const UnivariateData& data) const
+    {
+        UnivariateConditionalDistributionEstimation::Estimator::check(data);
+        if (data.get_sample_space()->get_outcome() != outcome_type::CONTINUOUS) {
+            throw sample_space_error(outcome_type::CONTINUOUS);
+        }
+    }
+
+    std::unique_ptr< MultivariateConditionalDistributionEstimation::Estimator::estimation_type > MultivariateConditionalDistributionEstimation::Estimator::operator() (const MultivariateData& data, const Indices& responses, const Indices& explanatories) const
+    {
+        return this->operator()(*data.select(responses), *data.select(explanatories));
+    }
+
+    void CategoricalMultivariateConditionalDistributionEstimation::Estimator::check(const MultivariateData& data) const
+    {
+        MultivariateConditionalDistributionEstimation::Estimator::check(data);
+        for (Index index = 0, max_index = data.get_nb_components(); index < max_index; ++index) {
+            if (data.get_sample_space(index)->get_outcome() != outcome_type::CATEGORICAL) {
+                throw sample_space_error(outcome_type::CATEGORICAL);
+            }
+        }
+    }
+
+    void DiscreteMultivariateConditionalDistributionEstimation::Estimator::check(const MultivariateData& data) const
+    {
+        MultivariateConditionalDistributionEstimation::Estimator::check(data);
+        for (Index index = 0, max_index = data.get_nb_components(); index < max_index; ++index) {
+            if (data.get_sample_space(index)->get_outcome() != outcome_type::DISCRETE) {
+                throw sample_space_error(outcome_type::DISCRETE);
+            }
+        }
+    }
+
+    void ContinuousMultivariateConditionalDistributionEstimation::Estimator::check(const MultivariateData& data) const
+    {
+        MultivariateConditionalDistributionEstimation::Estimator::check(data);
+        for (Index index = 0, max_index = data.get_nb_components(); index < max_index; ++index) {
+            if (data.get_sample_space(index)->get_outcome() != outcome_type::CONTINUOUS) {
+                throw sample_space_error(outcome_type::CONTINUOUS);
+            }
+        }
+    }
 }

@@ -13,11 +13,9 @@ class TestBinomial(unittest.TestCase, AbstractTestDiscreteUnivariateDistribution
 
     @classmethod
     def setUpClass(cls):
-        """Test Poisson distribution construction"""
         cls._dist = core.PoissonDistribution(5.)
 
     def test_mle(self):
-        """Test Poisson ML estimation"""
         data = self._dist.simulation(10)
-        mle = core.poisson_estimation('ml', data)
-        self.assertGreaterEqual(mle.estimated.loglikelihood(data), self._dist.loglikelihood(data))
+        mle = core.poisson_estimation('ML', data)
+        self.assertGreaterEqual(mle.distribution.loglikelihood(data), self._dist.loglikelihood(data))

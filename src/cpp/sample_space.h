@@ -1,15 +1,11 @@
-#ifndef STATISKIT_CORE_SAMPLE_SPACE_H
-#define STATISKIT_CORE_SAMPLE_SPACE_H
+#pragma once
 
-#include "base.h"
-#include "event.h"
+#include <map>
 
 #include <statiskit/linalg/Eigen.h>
 
-#include <algorithm>
-#include <boost/random/uniform_int.hpp>
-#include <boost/random/variate_generator.hpp>
-#include <map>
+#include "base.h"
+#include "event.h"
 
 namespace statiskit
 {    
@@ -61,11 +57,10 @@ namespace statiskit
             virtual Eigen::RowVectorXd encode(const std::string& outcome) const = 0;
 
         protected:
-            std::set< std::string > _values;
-            encoding_type _encoding;     
+            std::shared_ptr< std::set< std::string > > values;
+            encoding_type encoding;     
 
             virtual bool is_compatible_value(const std::string& value) const;
-       
     };
 
     class OrdinalSampleSpace;
@@ -93,7 +88,7 @@ namespace statiskit
             std::unique_ptr< UnivariateSampleSpace > copy() const;
 
         protected:
-            std::set< std::string >::const_iterator _reference;
+            std::set< std::string >::const_iterator reference;
     };
 
     class STATISKIT_CORE_API OrdinalSampleSpace : public CategoricalSampleSpace
@@ -122,7 +117,9 @@ namespace statiskit
             virtual std::unique_ptr< UnivariateSampleSpace > copy() const;
 
         protected:
-            std::vector< Index > _rank;
+            std::shared_ptr< std::vector< Index > > rank;
+
+            virtual void detach();
     };
 
     class UnivariateConditionalData;
@@ -130,7 +127,7 @@ namespace statiskit
     class STATISKIT_CORE_API HierarchicalSampleSpace : public CategoricalSampleSpace
     {
         public:
-            typedef std::map< std::string, CategoricalSampleSpace* >::const_iterator const_iterator;
+            typedef std::map< std::string, std::unique_ptr< CategoricalSampleSpace > >::const_iterator const_iterator;
 
             HierarchicalSampleSpace(const CategoricalSampleSpace& root_sample_space);
             HierarchicalSampleSpace(const HierarchicalSampleSpace& p_sample_space);
@@ -143,7 +140,7 @@ namespace statiskit
             virtual Eigen::RowVectorXd encode(const std::string& value) const;
 
             void partition(const std::string& leave, const CategoricalSampleSpace& sample_space); // partition the leave "value" into a sample space
-            UnivariateConditionalData split(const std::string& non_leave, const UnivariateConditionalData& data) const; 
+            // UnivariateConditionalData split(const std::string& non_leave, const UnivariateConditionalData& data) const; 
 
             virtual std::unique_ptr< UnivariateSampleSpace > copy() const;
 
@@ -151,15 +148,17 @@ namespace statiskit
             const_iterator cend() const;
 
             const CategoricalSampleSpace* get_sample_space(const std::string& value);
-            std::map< std::string, std::string > get_parents() const;
-            //const std::string get_parent(const std::string& value);
+            const std::map< std::string, std::string >& get_parents() const;
 
             std::string children(const std::string& non_leave, const std::string& leave) const;
+
         protected:
-            std::map< std::string, CategoricalSampleSpace* > _tree_sample_space;
-            std::map< std::string, std::string > _parents;
+            std::shared_ptr< std::map< std::string, std::unique_ptr< CategoricalSampleSpace > > > tree_sample_space;
+            std::shared_ptr< std::map< std::string, std::string > > parents;
 
             virtual bool is_compatible_value(const std::string& value) const;   
+
+            virtual void detach();
     };
 
     struct STATISKIT_CORE_API DiscreteSampleSpace : public UnivariateSampleSpace
@@ -184,8 +183,8 @@ namespace statiskit
             virtual std::unique_ptr< UnivariateSampleSpace > copy() const;
 
         protected:
-            int _lower_bound;
-            int _upper_bound;
+            int lower_bound;
+            int upper_bound;
     };
 
     STATISKIT_CORE_API const IntegerSampleSpace& get_NN();
@@ -217,10 +216,10 @@ namespace statiskit
             virtual std::unique_ptr< UnivariateSampleSpace > copy() const;
 
         protected:
-            double _lower_bound;
-            double _upper_bound;
-            bool _left_closed;
-            bool _right_closed;
+            double lower_bound;
+            double upper_bound;
+            bool left_closed;
+            bool right_closed;
     };
 
     STATISKIT_CORE_API const RealSampleSpace& get_RR();
@@ -233,14 +232,14 @@ namespace statiskit
 
         virtual Index size() const = 0;
         
-        virtual const UnivariateSampleSpace* get(const Index& index) const = 0;
+        virtual const UnivariateSampleSpace* get_sample_space(const Index& index) const = 0;
 
         virtual bool is_compatible(const MultivariateEvent* event) const;
         
         virtual Index encode() const;
         
         virtual Eigen::RowVectorXd encode(const MultivariateEvent& event) const;
-        
+
         virtual std::unique_ptr< MultivariateSampleSpace > copy() const = 0;
     };
 
@@ -253,16 +252,16 @@ namespace statiskit
 
             virtual Index size() const;
             
-            virtual const UnivariateSampleSpace* get(const Index& index) const;
-            virtual void set(const Index& index, const UnivariateSampleSpace& sample_space);
+            virtual const UnivariateSampleSpace* get_sample_space(const Index& index) const;
+            virtual void set_sample_space(const Index& index, const UnivariateSampleSpace& sample_space);
             
             virtual std::unique_ptr< MultivariateSampleSpace > copy() const;       
 
         protected:
-            std::vector< UnivariateSampleSpace* > _sample_spaces;
+            std::shared_ptr< std::vector< std::unique_ptr< UnivariateSampleSpace > > > sample_spaces;
+
+            void detach();
     };
 
     typedef std::vector< UnivariateSampleSpace* > SampleSpaceVector;
 }
-
-#endif

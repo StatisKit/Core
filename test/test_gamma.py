@@ -13,10 +13,8 @@ class TestGamma(unittest.TestCase, AbstractTestContinuousUnivariateDistribution)
 
     @classmethod
     def setUpClass(cls):
-        """Test Gamma distribution construction"""
         cls._dist = core.GammaDistribution()
 
     @classmethod
     def tearDownClass(cls):
-        """Test Gamma distribution deletion"""
         del cls._dist

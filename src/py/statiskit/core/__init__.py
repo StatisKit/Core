@@ -1,18 +1,21 @@
 from statiskit import linalg
-del linalg
 from statiskit import stl
-del stl
 
 from .base import *
 from .controls import *
-from .event import *
-from .sample_space import *
 from .data import *
-from .io import *
+from ._data import load_data
 from .distribution import *
-from .singular import *
-from .slope_heuristic import *
 from .estimation import *
+from .estimator import *
+from .event import *
 from .indicator import *
-
+from .io import *
+from .sample_space import *
+from .selection import *
+# from .singular import *
+from .slope_heuristic import *
 from .stl import *
+
+del linalg
+del stl

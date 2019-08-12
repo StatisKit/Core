@@ -7,72 +7,52 @@ from statiskit import stl
 from . import _core
 from .__core.statiskit import (_ShiftedDistribution,
                                UnivariateDistribution,
-                                 _UnivariateFrequencyDistribution,
-                                 _QuantitativeUnivariateFrequencyDistribution,
-                                 CategoricalUnivariateDistribution,
-                                     BinaryDistribution,
-                                     NominalDistribution,
-                                     OrdinalDistribution,
-                                     HierarchicalDistribution,
-                                     CategoricalUnivariateMixtureDistribution,
-                                 CategoricalUnivariateDistributionVector,
-                                 DiscreteUnivariateDistribution,
-                                     DiscreteUnivariateFrequencyDistribution,
-                                     PoissonDistribution,
-                                     BinomialDistribution,
-                                     LogarithmicDistribution,
-                                     GeometricDistribution,
-                                     NegativeBinomialDistribution,
-                                     BetaCompoundDiscreteUnivariateDistribution,
-                                         BetaBinomialDistribution,
-                                         BetaNegativeBinomialDistribution,
-                                     DiscreteUnivariateMixtureDistribution,
-                                 DiscreteUnivariateDistributionVector,
-                                 ContinuousUnivariateDistribution,
-                                     ContinuousUnivariateFrequencyDistribution,
-                                     UnivariateHistogramDistribution,
-                                     NormalDistribution,
-                                     LogisticDistribution,
-                                     LaplaceDistribution,
-                                     CauchyDistribution,
-                                     StudentDistribution,
-                                     NonStandardStudentDistribution,
-                                     GumbelDistribution,
-                                     GompertzDistribution,
-                                     ExponentialDistribution,
-                                     GammaDistribution,
-                                     BetaDistribution,
-                                     ContinuousUnivariateMixtureDistribution,
-                                 ContinuousUnivariateDistributionVector,
+                               _UnivariateFrequencyDistribution,
+                               _QuantitativeUnivariateFrequencyDistribution,
+                               CategoricalUnivariateDistribution,
+                               BinaryDistribution,
+                               NominalDistribution,
+                               OrdinalDistribution,
+                               HierarchicalDistribution,
+                               DiscreteUnivariateDistribution,
+                               DiscreteUnivariateFrequencyDistribution,
+                               PoissonDistribution,
+                               BinomialDistribution,
+                               LogarithmicDistribution,
+                               GeometricDistribution,
+                               NegativeBinomialDistribution,
+                               BetaCompoundDiscreteUnivariateDistribution,
+                               BetaBinomialDistribution,
+                               BetaNegativeBinomialDistribution,
+                               ContinuousUnivariateDistribution,
+                               ContinuousUnivariateFrequencyDistribution,
+                               UnivariateHistogramDistribution,
+                               NormalDistribution,
+                               LogisticDistribution,
+                               LaplaceDistribution,
+                               CauchyDistribution,
+                               StudentDistribution,
+                               NonStandardStudentDistribution,
+                               GumbelDistribution,
+                               GompertzDistribution,
+                               ExponentialDistribution,
+                               GammaDistribution,
+                               BetaDistribution,
                                MultivariateDistribution,
-                                 # _IndependentMultivariateDistribution,
-                                 MixedMultivariateMixtureDistribution,
-                                 CategoricalMultivariateDistribution,
-                                     # CategoricalIndependentMultivariateDistribution,
-                                     CategoricalMultivariateMixtureDistribution,
-                                 CategoricalMultivariateDistributionVector,
-                                 DiscreteMultivariateDistribution,
-                                     SplittingDistribution,
-                                     # DiscreteIndependentMultivariateDistribution,
-                                     DiscreteMultivariateMixtureDistribution,
-                                 DiscreteMultivariateDistributionVector,
-
-                                 ContinuousMultivariateDistribution,
-                                     MultinormalDistribution,
-                                     DirichletDistribution,
-                                     # ContinuousIndependentMultivariateDistribution,
-                                     ContinuousMultivariateMixtureDistribution,
-                                 ContinuousMultivariateDistributionVector,
-                             MultivariateDistributionVector,
-                               _MixtureDistribution, _UnivariateMixtureDistribution, _QuantitativeUnivariateMixtureDistribution, _MultivariateMixtureDistribution,
+                               CategoricalMultivariateDistribution,
+                               DiscreteMultivariateDistribution,
+                               SplittingDistribution,
+                               ContinuousMultivariateDistribution,
+                               MultinormalDistribution,
+                               DirichletDistribution,
                                UnivariateConditionalDistribution,
-                                   CategoricalUnivariateConditionalDistribution,
-                                   DiscreteUnivariateConditionalDistribution,
-                                   ContinuousUnivariateConditionalDistribution,
+                               CategoricalUnivariateConditionalDistribution,
+                               DiscreteUnivariateConditionalDistribution,
+                               ContinuousUnivariateConditionalDistribution,
                                MultivariateConditionalDistribution,
-                                   CategoricalMultivariateConditionalDistribution,
-                                   DiscreteMultivariateConditionalDistribution,
-                                   ContinuousMultivariateConditionalDistribution)
+                               CategoricalMultivariateConditionalDistribution,
+                               DiscreteMultivariateConditionalDistribution,
+                               ContinuousMultivariateConditionalDistribution)
 
 from .optionals import pyplot, numpy
 from .io import from_list
@@ -123,9 +103,7 @@ __all__ = ['BinaryDistribution',
            'BetaDistribution',
            'SplittingDistribution',
            'MultinormalDistribution',
-           'DirichletDistribution',
-           # 'IndependentMultivariateDistribution',
-           'MixtureDistribution']
+           'DirichletDistribution']
 
 def shifted_distribution_decorator(cls):
 
@@ -1123,165 +1101,6 @@ del DirichletDistribution.get_alpha, DirichletDistribution.set_alpha
 #         return MixedIndependentMultivariateDistribution(args)
 #     else:
 #         raise TypeError('\'args\' parameter')
-
-def statiskit_mixture_distribution_decorator(cls):
-    
-    cls.nb_states = property(cls.get_nb_states)
-    del cls.get_nb_states
-
-    cls.pi = property(cls.get_pi, cls.set_pi)
-    del cls.get_pi, cls.set_pi
-
-    class Observations(object):
-
-        def __init__(self, distribution):
-            self._distribution = distribution
-
-        def __len__(self):
-            return self._distribution.nb_states
-
-    def wrapper_observations(f0, f1):
-
-        @wraps(f0)
-        def __getitem__(self, index):
-            if index < 0:
-                index += len(self)
-            if not 0 <= index < len(self):
-                raise IndexError(self._distribution.__class__.__name__ + " index out of range")
-            return f0(self._distribution, index)
-
-        @wraps(f1)
-        def __setitem__(self, index, value):
-            if index < 0:
-                index += len(self)
-            if not 0 <= index < len(self):
-                raise IndexError(self._distribution.__class__.__name__ + " index out of range")
-            return f1(self._distribution, index, value)
-
-        return __getitem__, __setitem__
-        
-    Observations.__getitem__, Observations.__setitem__ = wrapper_observations(cls.get_observation, cls.set_observation)
-    del cls.get_observation, cls.set_observation
-
-    cls.observations = property(Observations)
-
-    if hasattr(cls, 'pdf_plot'):
-
-        def wrapper_pdf_plot(f):
-            @wraps(f)
-            def pdf_plot(self, axes=None, *args, **kwargs):
-                norm = kwargs.pop('norm', 1.)
-                states = kwargs.pop('states', True)
-                if states:
-                    if isinstance(states, (list, tuple)):
-                        skwargs = states
-                    else:
-                        skwargs = [{}] * self.nb_states
-                    for index, (pi, observation) in enumerate(zip(self.pi, self.observations)):
-                        for key, value in kwargs.items():
-                            if not key in skwargs[index]:
-                                skwargs[index][key] = value
-                        axes = observation.pdf_plot(axes=axes, norm=pi*norm, *args, **skwargs[index])
-                return f(self, axes=axes, *args, norm=norm, **kwargs)
-            return pdf_plot
-
-        cls.pdf_plot = wrapper_pdf_plot(cls.pdf_plot)
-
-for cls in _MixtureDistribution:
-    statiskit_mixture_distribution_decorator(cls)
-
-def statiskit_univariate_mixture_distribution_decorator(cls):
-
-    def wrapper_posterior(f):
-        @wraps(f)
-        def posterior(self, event, **kwargs):
-            return f(self, type_to_event(event), kwargs.pop('log', False))
-        return posterior
-
-    cls.posterior = wrapper_posterior(cls.posterior)
-
-    def wrapper_assignment(f):
-        @wraps(f)
-        def assignment(self, event):
-            return f(self, type_to_event(event))
-        return assignment
-
-    cls.assignment = wrapper_assignment(cls.assignment)
-
-    def wrapper_uncertainty(f):
-        @wraps(f)
-        def uncertainty(self, arg):
-            if isinstance(arg, UnivariateData):
-                return f(self, arg)
-            else:
-                return f(self, types_to_event(arg))
-        return uncertainty
-
-    cls.uncertainty = wrapper_uncertainty(cls.uncertainty)
-
-for cls in _UnivariateMixtureDistribution:
-    statiskit_univariate_mixture_distribution_decorator(cls)
-
-def statiskit_Multivariate_mixture_distribution_decorator(cls):
-
-    def wrapper_posterior(f):
-        @wraps(f)
-        def posterior(self, *event, **kwargs):
-            return f(self, types_to_event(*events), kwargs.pop('log', False))
-        return posterior
-
-    cls.posterior = wrapper_posterior(cls.posterior)
-
-    def wrapper_assignment(f):
-        @wraps(f)
-        def assignment(self, *event):
-            if len(event) == 1 and isinstance(event[0], (UnivariateData, MultivariateData)):
-                event = event[0]
-            else:
-                event = types_to_event(*event)
-            return f(self, event)
-        return assignment
-
-    cls.assignment = wrapper_assignment(cls.assignment)
-    
-    def wrapper_uncertainty(f):
-        @wraps(f)
-        def uncertainty(self, *args):
-            if len(args) == 1 and isinstance(args[0], MultivariateData):
-                return f(self, args[0])
-            else:
-                return f(self, types_to_event(*args))
-        return uncertainty
-
-    cls.uncertainty = wrapper_uncertainty(cls.uncertainty)
-
-for cls in _MultivariateMixtureDistribution:
-    statiskit_Multivariate_mixture_distribution_decorator(cls)
-
-def MixtureDistribution(*args, **kwargs):
-    if 'pi' in kwargs:
-        pi = kwargs.pop('pi')
-    else:
-        pi = [1. for arg in args]
-    if not isinstance(pi, linalg.Vector):
-        pi = linalg.Vector(pi)
-    if all(isinstance(arg, CategoricalUnivariateDistribution) for arg in args):
-        return CategoricalUnivariateMixtureDistribution(CategoricalUnivariateDistributionVector(*args), pi)
-    elif all(isinstance(arg, DiscreteUnivariateDistribution) for arg in args):
-        return DiscreteUnivariateMixtureDistribution(DiscreteUnivariateDistributionVector(*args), pi)
-    elif all(isinstance(arg, ContinuousUnivariateDistribution) for arg in args):
-        return ContinuousUnivariateMixtureDistribution(ContinuousUnivariateDistributionVector(*args), pi)
-    elif all(isinstance(arg, MultivariateDistribution) for arg in args):
-        if all(isinstance(arg, CategoricalMultivariateDistribution) for arg in args):
-            return CategoricalMultivariateMixtureDistribution(CategoricalMultivariateDistributionVector(*args), pi)
-        elif all(isinstance(arg, DiscreteMultivariateDistribution) for arg in args):
-            return DiscreteMultivariateMixtureDistribution(DiscreteMultivariateDistributionVector(*args), pi)
-        elif all(isinstance(arg, ContinuousMultivariateDistribution) for arg in args):
-            return ContinuousMultivariateMixtureDistribution(ContinuousMultivariateDistributionVector(*args), pi)
-        else:
-            return MixedMultivariateMixtureDistribution(MultivariateDistributionVector(*args), pi)
-    else:
-        raise TypeError('\'args\' parameter')
 
 UnivariateConditionalDistribution.nb_parameters = property(UnivariateConditionalDistribution.get_nb_parameters)
 del UnivariateConditionalDistribution.get_nb_parameters

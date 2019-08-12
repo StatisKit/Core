@@ -13,16 +13,13 @@ class TestGompertz(unittest.TestCase, AbstractTestContinuousUnivariateDistributi
 
     @classmethod
     def setUpClass(cls):
-        """Test Gompertz distribution construction"""
         cls._dist = core.GompertzDistribution(-1., 1.5)
 
     def test_moments(self):
-        """Test moments"""
         data = self._dist.simulation(1000)
         self.assertAlmostEqual(abs(data.location - self._dist.mean), self._epsilon, delta=self._delta)
         self.assertAlmostEqual(abs(data.dispersion - self._dist.variance) / data.dispersion, self._epsilon, delta=self._delta)
 
     @classmethod
     def tearDownClass(cls):
-        """Test Gompertz distribution deletion"""
         del cls._dist

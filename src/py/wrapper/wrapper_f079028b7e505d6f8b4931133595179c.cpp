@@ -9,7 +9,7 @@ namespace autowig {
 void wrapper_f079028b7e505d6f8b4931133595179c(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::StudentDistribution, autowig::HolderType< class ::statiskit::StudentDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::StudentDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_f079028b7e505d6f8b4931133595179c(module, "StudentDistribution", "This class NonStandardStudentDistribution represents a Student\ndistribution.\n\nThe Student distribution is an univariate continuous distribution. The\nsupport is the set of real values :math:`\\mathbb{R}`.\n\n");
+    pybind11::class_<class ::statiskit::StudentDistribution, autowig::HolderType< class ::statiskit::StudentDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::StudentDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_f079028b7e505d6f8b4931133595179c(module, "StudentDistribution", "This class NonStandardStudentDistribution represents a Student\ndistribution.\n\nThe Student distribution is an univariate continuous distribution. The\nsupport is the set of real values :math:`\\mathbb{R}`.\n\n");
     class_f079028b7e505d6f8b4931133595179c.def(pybind11::init<  >());
     class_f079028b7e505d6f8b4931133595179c.def(pybind11::init< double const & >());
     class_f079028b7e505d6f8b4931133595179c.def(pybind11::init< class ::statiskit::StudentDistribution const & >());

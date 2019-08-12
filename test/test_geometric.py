@@ -13,16 +13,13 @@ class TestGeometric(unittest.TestCase, AbstractTestDiscreteUnivariateDistributio
 
     @classmethod
     def setUpClass(cls):
-        """Test geometric distribution construction"""
         cls._dist = core.GeometricDistribution()
 
     def test_mle(self):
-        """Test geometric distribution ML estimation"""
         data = self._dist.simulation(20)
-        mle = core.geometric_estimation('ml', data)
-        self.assertGreaterEqual(mle.estimated.loglikelihood(data), self._dist.loglikelihood(data))
+        mle = core.geometric_estimation('ML', data)
+        self.assertGreaterEqual(mle.distribution.loglikelihood(data), self._dist.loglikelihood(data))
 
     @classmethod
     def tearDownClass(cls):
-        """Test geometric distribution deletion"""
         del cls._dist

@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_985dfffef8265a319e222a08d8f11f05(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::BetaDistribution, autowig::HolderType< class ::statiskit::BetaDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::BetaDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_985dfffef8265a319e222a08d8f11f05(module, "BetaDistribution", "This class represents a beta distribution.\n\nThe beta distribution is an univariate continuous distribution. The\nsupport is the set of positive real values :math:`\\mathbb{R}_+^*`.\n\n");
+    pybind11::class_<class ::statiskit::BetaDistribution, autowig::HolderType< class ::statiskit::BetaDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::BetaDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_985dfffef8265a319e222a08d8f11f05(module, "BetaDistribution", "This class represents a beta distribution.\n\nThe beta distribution is an univariate continuous distribution. The\nsupport is the set of positive real values :math:`\\mathbb{R}_+^*`.\n\n");
     class_985dfffef8265a319e222a08d8f11f05.def(pybind11::init<  >());
     class_985dfffef8265a319e222a08d8f11f05.def(pybind11::init< double const &, double const & >());
     class_985dfffef8265a319e222a08d8f11f05.def(pybind11::init< class ::statiskit::BetaDistribution const & >());

@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_55c811c1cb0f58cf8dbf62aa61f8d814(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::MultinormalDistribution, autowig::HolderType< class ::statiskit::MultinormalDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::MultivariateDistribution, class ::statiskit::MultinormalDistribution, struct ::statiskit::ContinuousMultivariateDistribution > > class_55c811c1cb0f58cf8dbf62aa61f8d814(module, "MultinormalDistribution", "");
+    pybind11::class_<class ::statiskit::MultinormalDistribution, autowig::HolderType< class ::statiskit::MultinormalDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::MultinormalDistribution, struct ::statiskit::ContinuousMultivariateDistribution > > class_55c811c1cb0f58cf8dbf62aa61f8d814(module, "MultinormalDistribution", "");
     class_55c811c1cb0f58cf8dbf62aa61f8d814.def(pybind11::init< class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const &, class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const & >());
     class_55c811c1cb0f58cf8dbf62aa61f8d814.def(pybind11::init< class ::statiskit::MultinormalDistribution const & >());
     class_55c811c1cb0f58cf8dbf62aa61f8d814.def("get_mu", method_pointer_c8bbfad5ecf85392beceef1fb0fb5eb8, pybind11::return_value_policy::copy, "");

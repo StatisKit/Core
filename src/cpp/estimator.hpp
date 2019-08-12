@@ -1,210 +1,139 @@
 #ifndef AUTOWIG
-#ifndef STATISKIT_CORE_ESTIMATOR_HPP
-#define STATISKIT_CORE_ESTIMATOR_HPP
+#pragma once
 
 namespace statiskit
 {    
-    template<class D, class B>
-        ShiftedDistributionEstimation< D, B >::ShiftedDistributionEstimation() : LazyEstimation< ShiftedDistribution< D >, B >()
-        { 
-            _estimation = nullptr;
-            _data = nullptr;
-        }
 
-    template<class D, class B>
-        ShiftedDistributionEstimation< D, B >::ShiftedDistributionEstimation(LazyEstimation< D, B >* estimation, const UnivariateDataFrame* data, const typename D::event_type::value_type& shift) : LazyEstimation< ShiftedDistribution< D >, B >(new ShiftedDistribution< D >(*static_cast< const D* >(estimation->get_estimated()), shift))
+    template<class B>
+        ShiftedDistributionEstimation<B>::Estimator::Estimator()
         {
-             _estimation = estimation;
-             _data = data;
+            this->shift = 0;
+            this->estimator = nullptr;
         }
 
-    template<class D, class B>
-        ShiftedDistributionEstimation< D, B >::ShiftedDistributionEstimation(const ShiftedDistributionEstimation< D, B >& estimation) : LazyEstimation< ShiftedDistribution< D >, B >(estimation)
-        { 
-            _estimation = estimation._estimation;
-            _data = estimation._data;
-        }
-
-    template<class D, class B>
-        ShiftedDistributionEstimation< D, B >::~ShiftedDistributionEstimation()
-        { 
-            if(_estimation)
-            {
-                delete _estimation;
-                _estimation = nullptr;
-            }
-            if(_data)
-            {
-                delete _data;
-                _data = nullptr;
+    template<class B>
+        ShiftedDistributionEstimation<B>::Estimator::Estimator(const Estimator& estimator)
+        {
+            this->shift = estimator.shift;
+            if (estimator.estimator) {
+                this->estimator = static_cast< typename B::Estimator* >(estimator.estimator->copy().release());
+            } else {
+                this->estimator = nullptr;
             }
         }
 
-    template<class D, class B>
-        const LazyEstimation< D, B >* ShiftedDistributionEstimation< D, B >::get_estimation() const
-        { return _estimation; }
-
-    template<class D, class B>
-        ShiftedDistributionEstimation< D, B >::Estimator::Estimator()
+    template<class B>
+        ShiftedDistributionEstimation<B>::Estimator::~Estimator()
         {
-            _shift = 0;
-            _estimator = nullptr;
+            if (this->estimator) {
+                delete this->estimator;
+            }
         }
 
-    template<class D, class B>
-        ShiftedDistributionEstimation< D, B >::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< UnivariateDistributionEstimation::Estimator, Estimator, typename B::Estimator >(estimator)
-        {
-            _shift = estimator._shift;
-            if(estimator._estimator)
-            { _estimator = static_cast< typename B::Estimator* >(estimator._estimator->copy().release()); }
-            else
-            { _estimator = nullptr; }
-        }
-
-    template<class D, class B>
-        ShiftedDistributionEstimation< D, B >::Estimator::~Estimator()
-        {
-            if(_estimator)
-            { delete _estimator; }
-        }
-
-    template<class D, class B>
-        std::unique_ptr< UnivariateDistributionEstimation > ShiftedDistributionEstimation< D, B >::Estimator::operator() (const UnivariateData& data, const bool& lazy) const
+    template<class B>
+        std::unique_ptr< typename ShiftedDistributionEstimation<B>::Estimator::estimation_type > ShiftedDistributionEstimation<B>::Estimator::operator() (const data_type& data) const
         { 
-            if(!_estimator)
-            { throw member_error("estimator", "you must give an estimator in order to compute a shifted estimation"); }
-            UnivariateDataFrame* shifted = new UnivariateDataFrame(*data.get_sample_space());
+            using event_type = ElementaryEvent< typename B::Estimator::event_type >;
+            using value_type = typename event_type::value_type;
+            using distribution_type = ShiftedDistribution< typename B::distribution_type >;
+            this->check(data);
+            if (!this->estimator) {
+                throw member_error("estimator", "you must give an estimator in order to compute a shifted estimation");
+            }
+            UnivariateDataFrame shifted(*data.get_sample_space());
             std::unique_ptr< UnivariateData::Generator > generator = data.generator();
-            while(generator->is_valid())
-            {
-                const UnivariateEvent* event = generator->event();
-                if(event->get_event() == ELEMENTARY)
-                { 
-                    typename D::event_type::value_type value = static_cast< const ElementaryEvent< typename D::event_type >* >(event)->get_value();
-                    ElementaryEvent< typename D::event_type >* shifted_event = new ElementaryEvent< typename D::event_type >(value - _shift);
-                    shifted->add_event(shifted_event);
+            while (generator->is_valid()) {
+                const UnivariateEvent* event = generator->get_event();
+                if (event->get_censoring() == censoring_type::NONE) { 
+                    value_type value = static_cast< const event_type* >(event)->get_value();
+                    event_type* shifted_event = new event_type(value - this->shift);
+                    shifted.add_event(shifted_event);
                     delete shifted_event;
                 }
                 ++(*generator);
             }
-            WeightedUnivariateData weighted = WeightedUnivariateData(shifted);
+            UnivariateData::weighted_type* weighted = new UnivariateData::weighted_type(shifted);
             generator = data.generator();
             Index index = 0;
-            while(generator->is_valid())
-            {
-                weighted.set_weight(index, generator->weight());
+            while (generator->is_valid()) {
+                weighted->set_weight(index, generator->get_weight());
                 ++(*generator);
                 ++index;
             }
+            return std::make_unique< ShiftedDistributionEstimation<B> >(weighted,
+                                                                        new distribution_type(*static_cast< typename B::distribution_type const * >(((*(this->estimator))(*weighted))->get_distribution()), this->shift));
+        }
+
+    template<class B>
+        typename ShiftedDistributionEstimation<B>::Estimator::event_type::value_type ShiftedDistributionEstimation<B>::Estimator::get_shift() const
+        {
+            return this->shift;
+        }
+
+    template<class B>
+        void ShiftedDistributionEstimation<B>::Estimator::set_shift(const typename event_type::value_type& shift)
+        {
+            this->shift = shift;
+        }
+
+    template<class B>
+        const typename ShiftedDistributionEstimation<B>::Estimator::estimator_type* ShiftedDistributionEstimation<B>::Estimator::get_estimator() const
+        {
+            return this->estimator;
+        }
+
+    template<class B>
+        void ShiftedDistributionEstimation<B>::Estimator::set_estimator(const estimator_type& estimator)
+        {
+            this->estimator = static_cast< estimator_type* >(estimator.copy().release());
+        }
+
+    template<class B>
+        UnivariateFrequencyDistributionEstimation<B>::Estimator::Estimator()
+        {}
+
+    template<class B>
+        UnivariateFrequencyDistributionEstimation<B>::Estimator::Estimator(const Estimator& estimator)
+        {}
+
+    template<class B>
+        UnivariateFrequencyDistributionEstimation<B>::Estimator::~Estimator()
+        {}
+
+    template<class B>
+        std::unique_ptr< typename UnivariateFrequencyDistributionEstimation<B>::Estimator::estimation_type > UnivariateFrequencyDistributionEstimation<B>::Estimator::operator() (const data_type& data) const
+        {
+            using event_type = ElementaryEvent< typename B::Estimator::event_type >;
+            using value_type = typename event_type::value_type;
+            this->check(data);
             std::unique_ptr< UnivariateDistributionEstimation > estimation;
-            if(lazy)
-            {
-                estimation = std::make_unique< LazyEstimation< ShiftedDistribution< D >, B > >(new ShiftedDistribution< D >(*static_cast< const D* >((*_estimator)(weighted, lazy)->get_estimated()), _shift));
-                delete shifted;
+            std::set< value_type > values;
+            std::unique_ptr< UnivariateData::Generator > generator = data.generator();
+            while (generator->is_valid()) {
+                auto event = generator->get_event();
+                if (event) {
+                    if(event->get_censoring() == censoring_type::NONE) {
+                        values.insert(static_cast< const event_type* >(event)->get_value());
+                    }
+                }
+                ++(*generator);
             }
-            else
-            { estimation = std::make_unique< ShiftedDistributionEstimation< D, B > >(static_cast< LazyEstimation< D, B >* >((*_estimator)(weighted, lazy).release()), shifted, _shift); }
-            return estimation;
-        }
-
-    template<class D, class B>
-        typename D::event_type::value_type ShiftedDistributionEstimation< D, B >::Estimator::get_shift() const
-        { return _shift; }
-
-    template<class D, class B>
-        void ShiftedDistributionEstimation< D, B >::Estimator::set_shift(const typename D::event_type::value_type& shift)
-        { _shift = shift; }
-
-    template<class D, class B>
-        const typename ShiftedDistributionEstimation< D, B >::Estimator::estimator_type* ShiftedDistributionEstimation< D, B >::Estimator::get_estimator() const
-        { return _estimator; }
-
-    template<class D, class B>
-        void ShiftedDistributionEstimation< D, B >::Estimator::set_estimator(const estimator_type& estimator)
-        { _estimator = static_cast< estimator_type* >(estimator.copy().release()); }
-
-    template<class D, class B>
-        std::unordered_set< uintptr_t > ShiftedDistributionEstimation< D, B >::Estimator::children() const
-        {
-            std::unordered_set< uintptr_t > ch;
-            ch.insert(this->compute_identifier(*_estimator));
-            __impl::merge(ch, this->compute_children(*_estimator));
-            return ch;
-        }
-
-    template<class D, class B>
-        UnivariateFrequencyDistributionEstimation< D, B >::UnivariateFrequencyDistributionEstimation() : ActiveEstimation< D, B >()
-        {}
-
-    template<class D, class B>
-        UnivariateFrequencyDistributionEstimation< D, B >::UnivariateFrequencyDistributionEstimation(D const * estimated, typename B::data_type const * data) : ActiveEstimation< D, B >(estimated, data)
-        {}
-
-     template<class D, class B>
-        UnivariateFrequencyDistributionEstimation< D, B >::UnivariateFrequencyDistributionEstimation(const UnivariateFrequencyDistributionEstimation< D, B >& estimation) : ActiveEstimation< D, B >(estimation)
-        {}
-
-    template<class D, class B>
-        UnivariateFrequencyDistributionEstimation< D, B >::~UnivariateFrequencyDistributionEstimation()
-        {}
-
-    template<class D, class B>
-        UnivariateFrequencyDistributionEstimation< D, B >::Estimator::Estimator()
-        {}
-
-    template<class D, class B>
-        UnivariateFrequencyDistributionEstimation< D, B >::Estimator::Estimator(const Estimator& estimator)
-        {}
-
-    template<class D, class B>
-        UnivariateFrequencyDistributionEstimation< D, B >::Estimator::~Estimator()
-        {}
-
-    template<class D, class B>
-        std::unique_ptr< UnivariateDistributionEstimation > UnivariateFrequencyDistributionEstimation< D, B >::Estimator::operator() (const UnivariateData& data, const bool& lazy) const
-        {
-            std::unique_ptr< UnivariateDistributionEstimation > estimation;
-            std::set< typename D::event_type::value_type > values;
+            Eigen::VectorXd masses = Eigen::VectorXd::Zero(values.size());
+            generator = data.generator();
             double total = data.compute_total();
-            if(total > 0. && boost::math::isfinite(total))
-            {
-                std::unique_ptr< UnivariateData::Generator > generator = data.generator();
-                while(generator->is_valid())
-                {
-                    auto event = generator->event();
-                    if(event)
-                    {
-                        if(event->get_event() == ELEMENTARY)
-                        { values.insert(static_cast< const ElementaryEvent< typename D::event_type >* >(event)->get_value()); }
+            while (generator->is_valid()) {
+                auto event = generator->get_event();
+                if (event) {
+                    if (event->get_censoring() == censoring_type::NONE) {
+                        typename std::set< value_type >::iterator it = values.find(static_cast< const event_type* >(event)->get_value());
+                        masses[distance(values.begin(), it)] += generator->get_weight() / total;
                     }
-                    ++(*generator);
                 }
-                Eigen::VectorXd masses = Eigen::VectorXd::Zero(values.size());
-                generator = data.generator();
-                while(generator->is_valid())
-                {
-                    auto event = generator->event();
-                    if(event)
-                    {
-                        if(event->get_event() == ELEMENTARY)
-                        {
-                            typename std::set< typename D::event_type::value_type >::iterator it = values.find(static_cast< const ElementaryEvent< typename D::event_type >* >(event)->get_value());
-                            masses[distance(values.begin(), it)] += generator->weight() / total;
-                        }
-                    }
-                    ++(*generator);
-                }
-                if(lazy)
-                { estimation = std::make_unique< LazyEstimation< D, B > >(new D(values, masses)); }
-                else
-                { estimation = std::make_unique< UnivariateFrequencyDistributionEstimation< D, B > >(new D(values, masses), &data); }
+                ++(*generator);
             }
-            return estimation;
+            return std::make_unique< UnivariateFrequencyDistributionEstimation<B> >(data.copy().release(),
+                                                                                    this->create(values, masses));
         }
-
-    template<class D, class B>
-        std::unique_ptr< UnivariateDistributionEstimation::Estimator > UnivariateFrequencyDistributionEstimation< D, B >::Estimator::copy() const
-        { return std::make_unique< Estimator >(*this); }
 
     /*template<class E>
         SplittingDistributionEstimation< E >::SplittingDistributionEstimation() : E()
@@ -423,7 +352,7 @@ namespace statiskit
         }
 
     template<class D, class E>
-        std::unique_ptr< MultivariateDistributionEstimation > IndependentMultivariateDistributionEstimation< D, E >::Estimator::operator() (const MultivariateData& data, const bool& lazy) const 
+        std::unique_ptr< MultivariateDistributionEstimation > IndependentMultivariateDistributionEstimation< D, E >::Estimator::operator() (const MultivariateData& data) const 
         { 
             std::unique_ptr< MultivariateDistributionEstimation > estimation;
             typename std::map< Index, typename E::Estimator::marginal_type* >::const_iterator it = _estimators.cbegin(), it_end = _estimators.cend();
@@ -506,234 +435,6 @@ namespace statiskit
                 _estimators.erase(it);
             }
         }*/
-
-    template<class D, class E>
-        MixtureDistributionEMEstimation< D, E >::MixtureDistributionEMEstimation() : OptimizationEstimation< D*, D, E >()
-        {}
-
-    template<class D, class E>
-        MixtureDistributionEMEstimation< D, E >::MixtureDistributionEMEstimation(D const * estimated, typename E::data_type const * data) : OptimizationEstimation< D*, D, E >(estimated, data)
-        {}   
-
-    template<class D, class E>
-        MixtureDistributionEMEstimation< D, E >::MixtureDistributionEMEstimation(const MixtureDistributionEMEstimation< D, E >& estimation) : OptimizationEstimation< D*, D, E >(estimation)
-        {}    
-
-    template<class D, class E>
-        MixtureDistributionEMEstimation< D, E >::~MixtureDistributionEMEstimation()
-        {}    
-
-    template<class D, class E>
-        MixtureDistributionEMEstimation< D, E >::Estimator::Estimator(): OptimizationEstimation< D*, D, E >::Estimator()
-        {
-            _pi = true;
-            _initializator = nullptr;
-            _default_estimator = nullptr;
-            _estimators.clear();
-            _limit = true;
-            this->_minits = 10;
-        }    
-
-    template<class D, class E>
-        MixtureDistributionEMEstimation< D, E >::Estimator::Estimator(const Estimator& estimator) : OptimizationEstimation< D*, D, E >::Estimator(estimator)
-        {
-            _pi = estimator._pi;
-            if(estimator._initializator)
-            { _initializator = static_cast< D* >(estimator._initializator->copy().release()); }
-            else
-            { _initializator = nullptr; }
-            if(estimator._default_estimator)
-            { _default_estimator = static_cast< typename E::Estimator* >(estimator._default_estimator->copy().release()); }
-            else
-            { _default_estimator = nullptr; }
-            _estimators.clear();
-            for(typename std::map< Index, typename E::Estimator* >::const_iterator it = estimator._estimators.cbegin(), it_end = estimator._estimators.cend(); it != it_end; ++it)            
-            { _estimators[it->first] = static_cast< typename E::Estimator* >(it->second->copy().release()); }
-            _limit = estimator._limit;
-        }
-
-    template<class D, class E>
-        MixtureDistributionEMEstimation< D, E >::Estimator::~Estimator() 
-        {
-            delete _initializator;
-            delete _default_estimator;
-            for(typename std::map< Index, typename E::Estimator* >::iterator it = _estimators.begin(), it_end = _estimators.end(); it != it_end; ++it)            
-            {
-                delete it->second;
-                it->second = nullptr;
-            }
-            _estimators.clear();
-        }
-
-    template<class D, class E>
-        std::unique_ptr< typename E::Estimator::estimation_type > MixtureDistributionEMEstimation< D, E >::Estimator::operator() (const typename E::Estimator::estimation_type::data_type& data, const bool& lazy) const
-        {
-            if(!_initializator)
-            { throw member_error("initializator", "you must give an initial mixture distribution in order to initialize the expectation-maximization algorithm"); }
-            D* mixture = static_cast< D* >(_initializator->copy().release());
-            typename E::Estimator::estimation_type::data_type::weighted_type weighted = typename E::Estimator::estimation_type::data_type::weighted_type(&data);
-            double prev, curr = mixture->loglikelihood(data);
-            unsigned int its = 0;
-            std::unique_ptr< typename E::Estimator::estimation_type > estimation;
-            D* buffer = nullptr;
-            if(!lazy)
-            {
-                estimation = std::make_unique< MixtureDistributionEMEstimation< D, E > >(mixture, &data);
-                static_cast< MixtureDistributionEMEstimation< D, E >* >(estimation.get())->_iterations.push_back(static_cast< D* >(mixture->copy().release()));
-            }
-            else
-            { estimation = std::make_unique< LazyEstimation< D, MixtureDistributionEMEstimation< D, E > > >(mixture); }
-            std::unordered_set< uintptr_t > ch = this->children();
-            do
-            {
-                if(_limit)
-                {
-                    for(std::unordered_set< uintptr_t >::const_iterator it = ch.begin(), it_end = ch.end(); it != it_end; ++it)
-                    { __impl::set_maxits(*it, its + 1); }
-                }
-                delete buffer;
-                buffer = static_cast< D* >((mixture->copy().release()));
-                prev = curr;
-                Eigen::VectorXd pi = mixture->get_pi();
-                std::vector< typename E::Estimator::estimation_type* > estimations(mixture->get_nb_states(), nullptr);
-                for(Index state = 0, max_state = mixture->get_nb_states(); state < max_state; ++state)
-                {
-                    typename E::Estimator::estimation_type::data_type::weighted_type::Generator* generator = static_cast< typename E::Estimator::estimation_type::data_type::weighted_type::Generator* >(weighted.generator().release());
-                    while(generator->is_valid())
-                    {
-                        generator->weight(mixture->posterior(generator->event())[state]);
-                        ++(*generator);
-                    }
-                    const typename E::Estimator* estimator = get_estimator(state);
-                    if(estimator)
-                    {
-                        try
-                        { estimations[state] = (*estimator)(weighted, true).release(); }
-                        catch(const std::exception& exception)
-                        { estimations[state] = nullptr; }
-                    }
-                    else
-                    { estimations[state] = nullptr; }
-                    pi[state] = weighted.compute_total();
-                }
-                for(Index state = 0, max_state = mixture->get_nb_states(); state < max_state; ++state)
-                {
-                    if(estimations[state])
-                    {
-                        mixture->set_observation(state, *(static_cast< const typename D::observation_type* >(estimations[state]->get_estimated())));
-                        delete estimations[state];
-                    }
-                }
-                pi = pi / pi.sum();
-                if(_pi)
-                { mixture->set_pi(pi); }
-                curr = mixture->loglikelihood(data);
-                if(!lazy)
-                { static_cast< MixtureDistributionEMEstimation< D, E >* >(estimation.get())->_iterations.push_back(static_cast< D* >(mixture->copy().release())); }
-                ++its;
-            } while(this->run(its, __impl::reldiff(prev, curr)) && curr > prev);
-            if(!boost::math::isfinite(curr) || curr < prev)
-            {
-                mixture->set_pi(buffer->get_pi());
-                for(Index state = 0, max_state = buffer->get_nb_states(); state < max_state; ++state)
-                { mixture->set_observation(state, *(buffer->get_observation(state))); }
-            }
-            delete buffer;
-            if(_limit)
-            {
-                for(std::unordered_set< uintptr_t >::const_iterator it = ch.begin(), it_end = ch.end(); it != it_end; ++it)
-                { __impl::unset_maxits(*it); }
-            }
-            return estimation;
-        }
-
-    template<class D, class E>
-        std::unique_ptr< typename E::Estimator::estimation_type::Estimator > MixtureDistributionEMEstimation< D, E >::Estimator::copy() const
-        { return std::make_unique< Estimator >(*this); }
-
-    template<class D, class E>
-        bool MixtureDistributionEMEstimation< D, E >::Estimator::get_pi() const
-        { return _pi; }
-
-    template<class D, class E>
-        void MixtureDistributionEMEstimation< D, E >::Estimator::set_pi(const bool& pi)
-        { _pi = pi; }
-
-    template<class D, class E>
-        const typename E::Estimator* MixtureDistributionEMEstimation< D, E >::Estimator::get_default_estimator() const
-        { return _default_estimator; }
-
-    template<class D, class E>
-        void MixtureDistributionEMEstimation< D, E >::Estimator::set_default_estimator(const typename E::Estimator* estimator)
-        { 
-            if(_default_estimator)
-            { delete _default_estimator; }
-            if(estimator)
-            { _default_estimator = static_cast< typename E::Estimator* >(estimator->copy().release()); }
-            else
-            { _default_estimator = nullptr; }
-        }
-
-    template<class D, class E>
-        const typename E::Estimator* MixtureDistributionEMEstimation< D, E >::Estimator::get_estimator(const Index& index) const
-        { 
-            typename std::map< Index, typename E::Estimator* >::const_iterator it = _estimators.find(index);
-            typename E::Estimator* estimator;
-            if(it == _estimators.cend())
-            { estimator = _default_estimator; }
-            else
-            { estimator = it->second; }
-            return estimator;
-        }
-
-    template<class D, class E>
-        void MixtureDistributionEMEstimation< D, E >::Estimator::set_estimator(const Index& index, const typename E::Estimator* estimator)
-        { 
-            typename std::map< Index, typename E::Estimator* >::iterator it = _estimators.find(index);
-            if(it == _estimators.end() && estimator)
-            { _estimators[index] = static_cast< typename E::Estimator* >(estimator->copy().release()); }
-            else if(estimator)
-            { 
-                delete it->second;
-                it->second = static_cast< typename E::Estimator* >(estimator->copy().release());
-            }
-            else
-            {
-                delete it->second;
-                _estimators.erase(it);
-            }
-        }
-
-    template<class D, class E>
-        const D* MixtureDistributionEMEstimation< D, E >::Estimator::get_initializator() const
-        { return _initializator; }
-
-    template<class D, class E>
-        void MixtureDistributionEMEstimation< D, E >::Estimator::set_initializator(const D& initializator)
-        { _initializator = static_cast< D* >(initializator.copy().release()); }
-
-    template<class D, class E>
-        bool MixtureDistributionEMEstimation< D, E >::Estimator::get_limit() const
-        { return _limit; }
-
-    template<class D, class E>
-        void MixtureDistributionEMEstimation< D, E >::Estimator::set_limit(const bool& limit)
-        { _limit = limit; }
-
-    template<class D, class E>
-        std::unordered_set< uintptr_t > MixtureDistributionEMEstimation< D, E >::Estimator::children() const
-        {
-            std::unordered_set< uintptr_t > ch;
-            for(typename std::map< Index, typename E::Estimator* >::const_iterator it = _estimators.cbegin(), it_end = _estimators.cend(); it != it_end; ++it)
-            {
-                ch.insert(this->compute_identifier(*(it->second)));
-                __impl::merge(ch, this->compute_children(*(it->second)));
-            }
-            ch.insert(this->compute_identifier(*_default_estimator));
-            __impl::merge(ch, this->compute_children(*_default_estimator));
-            return ch;
-        }
 }
 
-#endif
 #endif

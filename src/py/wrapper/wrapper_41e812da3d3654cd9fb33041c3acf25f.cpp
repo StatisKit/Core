@@ -9,28 +9,24 @@ namespace autowig
         public:
             using ::statiskit::UnivariateDistributionEstimation::Estimator::Estimator;
 
-            typedef class ::std::unique_ptr< struct ::statiskit::UnivariateDistributionEstimation::Estimator, struct ::std::default_delete< struct ::statiskit::UnivariateDistributionEstimation::Estimator > >  return_type_97c0dcb4b9a55407beb1affee63e5b47;
-            virtual return_type_97c0dcb4b9a55407beb1affee63e5b47 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_97c0dcb4b9a55407beb1affee63e5b47, class_type, copy, ); };
-            typedef class ::std::unique_ptr< struct ::statiskit::UnivariateDistributionEstimation, struct ::std::default_delete< struct ::statiskit::UnivariateDistributionEstimation > >  return_type_163f6bff094c5658b1290a9b2b3a9d26;
-            typedef ::statiskit::UnivariateDistributionEstimation::data_type const & param_163f6bff094c5658b1290a9b2b3a9d26_0_type;
-            typedef bool const & param_163f6bff094c5658b1290a9b2b3a9d26_1_type;
-            virtual return_type_163f6bff094c5658b1290a9b2b3a9d26 operator()(param_163f6bff094c5658b1290a9b2b3a9d26_0_type param_0, param_163f6bff094c5658b1290a9b2b3a9d26_1_type param_1) const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_163f6bff094c5658b1290a9b2b3a9d26, class_type, operator(), param_0, param_1); };
-            typedef ::uintptr_t  return_type_ed723b56ee6d50838db979e102419f39;
-            virtual return_type_ed723b56ee6d50838db979e102419f39 identifier() const override { PYBIND11_OVERLOAD(return_type_ed723b56ee6d50838db979e102419f39, class_type, identifier, ); };
-            typedef class ::std::unordered_set< statiskit::Index, struct ::std::hash< statiskit::Index >, struct ::std::equal_to< statiskit::Index >, class ::std::allocator< statiskit::Index > >  return_type_7ba100805cd95f1cba468c9ce84eb72c;
-            virtual return_type_7ba100805cd95f1cba468c9ce84eb72c children() const override { PYBIND11_OVERLOAD(return_type_7ba100805cd95f1cba468c9ce84eb72c, class_type, children, ); };
-    };
 
-    class Publicist : public class_type
-    {
         public:
-            using class_type::identifier;
-            using class_type::children;
+            typedef class ::std::unique_ptr< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution >::Estimator, struct ::std::default_delete< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution >::Estimator > >  return_type_26294945d2a55f42a4ff3b316d0eb4ab;
+            virtual return_type_26294945d2a55f42a4ff3b316d0eb4ab copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_26294945d2a55f42a4ff3b316d0eb4ab, class_type, copy, ); };
+
+        public:
+            typedef class ::std::unique_ptr< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution >, struct ::std::default_delete< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution > > >  return_type_ffc375e050255b0e93aeb875148628ea;
+            typedef struct ::statiskit::MultivariateData const & param_ffc375e050255b0e93aeb875148628ea_0_type;
+            typedef unsigned long int const & param_ffc375e050255b0e93aeb875148628ea_1_type;
+            virtual return_type_ffc375e050255b0e93aeb875148628ea operator()(param_ffc375e050255b0e93aeb875148628ea_0_type param_0, param_ffc375e050255b0e93aeb875148628ea_1_type param_1) const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_ffc375e050255b0e93aeb875148628ea, class_type, operator(), param_0, param_1); };
+
+        public:
+            typedef class ::std::unique_ptr< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution >, struct ::std::default_delete< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution > > >  return_type_f5006c7de7595cf1b83e7502ffda0880;
+            typedef ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution >::Estimator::data_type const & param_f5006c7de7595cf1b83e7502ffda0880_0_type;
+            virtual return_type_f5006c7de7595cf1b83e7502ffda0880 operator()(param_f5006c7de7595cf1b83e7502ffda0880_0_type param_0) const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_f5006c7de7595cf1b83e7502ffda0880, class_type, operator(), param_0); };
     };
 }
 
-class ::std::unique_ptr< struct ::statiskit::UnivariateDistributionEstimation, struct ::std::default_delete< struct ::statiskit::UnivariateDistributionEstimation > >  (::statiskit::UnivariateDistributionEstimation::Estimator::*method_pointer_163f6bff094c5658b1290a9b2b3a9d26)(::statiskit::UnivariateDistributionEstimation::data_type const &, bool const &)const= &::statiskit::UnivariateDistributionEstimation::Estimator::operator();
-class ::std::unique_ptr< struct ::statiskit::UnivariateDistributionEstimation::Estimator, struct ::std::default_delete< struct ::statiskit::UnivariateDistributionEstimation::Estimator > >  (::statiskit::UnivariateDistributionEstimation::Estimator::*method_pointer_97c0dcb4b9a55407beb1affee63e5b47)()const= &::statiskit::UnivariateDistributionEstimation::Estimator::copy;
 
 namespace autowig {
 }
@@ -38,8 +34,7 @@ namespace autowig {
 void wrapper_41e812da3d3654cd9fb33041c3acf25f(pybind11::module& module)
 {
 
-    pybind11::class_<struct ::statiskit::UnivariateDistributionEstimation::Estimator, autowig::Trampoline, autowig::HolderType< struct ::statiskit::UnivariateDistributionEstimation::Estimator >::Type, class ::statiskit::Estimator > class_41e812da3d3654cd9fb33041c3acf25f(module, "Estimator", "");
-    class_41e812da3d3654cd9fb33041c3acf25f.def("__call__", method_pointer_163f6bff094c5658b1290a9b2b3a9d26, "");
-    class_41e812da3d3654cd9fb33041c3acf25f.def("copy", method_pointer_97c0dcb4b9a55407beb1affee63e5b47, "");
+    pybind11::class_<struct ::statiskit::UnivariateDistributionEstimation::Estimator, autowig::Trampoline, autowig::HolderType< struct ::statiskit::UnivariateDistributionEstimation::Estimator >::Type, class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution >::Estimator > class_41e812da3d3654cd9fb33041c3acf25f(module, "Estimator", "");
+    class_41e812da3d3654cd9fb33041c3acf25f.def(pybind11::init<  >());
 
 }

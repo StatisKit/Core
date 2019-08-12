@@ -13,10 +13,8 @@ class TestBetaBinomial(unittest.TestCase, AbstractTestDiscreteUnivariateDistribu
 
     @classmethod
     def setUpClass(cls):
-        """Test beta binomial distribution construction"""
         cls._dist = core.BetaBinomialDistribution(5, 3., 3.)
 
     @classmethod
     def tearDownClass(cls):
-        """Test beta binomial distribution deletion"""
         del cls._dist

@@ -9,8 +9,12 @@ namespace autowig
         public:
             using ::statiskit::SlopeHeuristicSolver::SlopeHeuristicSolver;
 
+
+        public:
             typedef class ::std::unique_ptr< class ::statiskit::SlopeHeuristicSolver, struct ::std::default_delete< class ::statiskit::SlopeHeuristicSolver > >  return_type_c193a50a08b25a91813276a3c5fd5c33;
             virtual return_type_c193a50a08b25a91813276a3c5fd5c33 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_c193a50a08b25a91813276a3c5fd5c33, class_type, copy, ); };
+
+        public:
             typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 >  return_type_d3975f18eb9652cea17c1ce078741a5e;
             typedef class ::Eigen::Matrix< double, -1, -1, 0, -1, -1 > const & param_d3975f18eb9652cea17c1ce078741a5e_0_type;
             typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_d3975f18eb9652cea17c1ce078741a5e_1_type;

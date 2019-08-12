@@ -10,7 +10,9 @@
 #include <statiskit/core/estimator.h>
 #include <statiskit/core/event.h>
 #include <statiskit/core/indicator.h>
+#include <statiskit/core/optimization.h>
 #include <statiskit/core/sample_space.h>
+#include <statiskit/core/selection.h>
 #include <statiskit/core/singular.h>
 #include <statiskit/core/slope_heuristic.h>
 

@@ -27,7 +27,6 @@ class AbstractTestDiscreteUnivariateDistribution(AbstractTestUnivariateDistribut
     _simulate = 10000
 
     def test_pdf_ldf_cdf(self):
-        """Test probability distribution function and related functions"""
         for v in numpy.linspace(self._dist.quantile(self._pmin),
                                 self._dist.quantile(self._pmax) + 1,
                                 num=self._num,
@@ -38,7 +37,6 @@ class AbstractTestDiscreteUnivariateDistribution(AbstractTestUnivariateDistribut
                 self.assertAlmostEqual(math.log(self._dist.pdf(v)), self._dist.ldf(v))
 
     def test_quantile(self):
-        """Test quantile computation"""
         for p in numpy.linspace(self._pmin, self._pmax, num=self._num):
             p = float(p)
             q = self._dist.quantile(p)
@@ -46,7 +44,6 @@ class AbstractTestDiscreteUnivariateDistribution(AbstractTestUnivariateDistribut
             self.assertLess(self._dist.cdf(q - 1), p)
 
     def test_moments(self):
-        """Test moments"""
         data = self._dist.simulation(self._simulate)
         self.assertAlmostEqual(abs(data.location - self._dist.mean) / data.location, self._epsilon, delta=self._delta)
         self.assertAlmostEqual(abs(data.dispersion - self._dist.variance) / data.dispersion, self._epsilon, delta=self._delta)
@@ -56,7 +53,6 @@ class AbstractTestContinuousUnivariateDistribution(AbstractTestUnivariateDistrib
     _places = 7
 
     def test_pdf_ldf_cdf(self):
-        """Test probability distribution function and related functions"""
         for v in numpy.linspace(self._dist.quantile(self._pmin),
                                 self._dist.quantile(self._pmax),
                                 num=self._num,
@@ -67,7 +63,6 @@ class AbstractTestContinuousUnivariateDistribution(AbstractTestUnivariateDistrib
                 self.assertAlmostEqual(math.log(self._dist.pdf(v)), self._dist.ldf(v))
 
     def test_quantile(self):
-        """Test quantile computation"""
         for p in numpy.linspace(self._pmin, self._pmax, num=self._num):
             p = float(p)
             q = self._dist.quantile(p)
@@ -75,7 +70,6 @@ class AbstractTestContinuousUnivariateDistribution(AbstractTestUnivariateDistrib
             self.assertLessEqual(self._dist.cdf(q - self._epsilon), p)
 
     def test_moments(self):
-        """Test moments"""
         data = self._dist.simulation(1000)
         self.assertAlmostEqual(abs(data.location - self._dist.mean) / data.location, self._epsilon, delta=self._delta)
         self.assertAlmostEqual(abs(data.dispersion - self._dist.variance) / data.dispersion, self._epsilon, delta=self._delta)

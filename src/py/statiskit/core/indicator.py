@@ -2,13 +2,13 @@ from functools import wraps
 
 from . import _core
 from .__core.statiskit import (UnivariateLocationEstimation,
-                                 UnivariateMeanEstimation,
+                               UnivariateMeanEstimation,
                                MultivariateLocationEstimation,
-                                 MultivariateMeanEstimation,
+                               MultivariateMeanEstimation,
                                UnivariateDispersionEstimation,
-                                 UnivariateVarianceEstimation,
+                               UnivariateVarianceEstimation,
                                MultivariateDispersionEstimation,
-                                 MultivariateVarianceEstimation)
+                               MultivariateVarianceEstimation)
 from .data import (UnivariateData,
                    MultivariateData)
 __all__ = []

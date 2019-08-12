@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_3557273679395cf2a3e4b3d3f227accd(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::LaplaceDistribution, autowig::HolderType< class ::statiskit::LaplaceDistribution >::Type, struct ::statiskit::PolymorphicCopy< struct ::statiskit::UnivariateDistribution, class ::statiskit::LaplaceDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_3557273679395cf2a3e4b3d3f227accd(module, "LaplaceDistribution", "This class LaplaceDistribution represents a `Laplace\ndistribution <https://en.wikipedia.org/wiki/Laplace_distribution>`__.\n\nThe Laplace distribution is an univariate continuous distribution. The\nsupport is the set of real values :math:`\\mathbb{R}`.\n\n");
+    pybind11::class_<class ::statiskit::LaplaceDistribution, autowig::HolderType< class ::statiskit::LaplaceDistribution >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::LaplaceDistribution, struct ::statiskit::ContinuousUnivariateDistribution > > class_3557273679395cf2a3e4b3d3f227accd(module, "LaplaceDistribution", "This class LaplaceDistribution represents a `Laplace\ndistribution <https://en.wikipedia.org/wiki/Laplace_distribution>`__.\n\nThe Laplace distribution is an univariate continuous distribution. The\nsupport is the set of real values :math:`\\mathbb{R}`.\n\n");
     class_3557273679395cf2a3e4b3d3f227accd.def(pybind11::init<  >());
     class_3557273679395cf2a3e4b3d3f227accd.def(pybind11::init< double const &, double const & >());
     class_3557273679395cf2a3e4b3d3f227accd.def(pybind11::init< class ::statiskit::LaplaceDistribution const & >());

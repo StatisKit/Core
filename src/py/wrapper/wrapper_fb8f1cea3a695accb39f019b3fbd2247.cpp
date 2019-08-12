@@ -11,7 +11,7 @@ namespace autowig {
 void wrapper_fb8f1cea3a695accb39f019b3fbd2247(pybind11::module& module)
 {
 
-    pybind11::class_<class ::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent >, autowig::HolderType< class ::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent > >::Type, struct ::statiskit::DiscreteEvent > class_fb8f1cea3a695accb39f019b3fbd2247(module, "_IntervalCensoredEvent_fb8f1cea3a695accb39f019b3fbd2247", "");
+    pybind11::class_<class ::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent >, autowig::HolderType< class ::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent > >::Type, struct ::statiskit::PolymorphicCopy< class ::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent >, struct ::statiskit::DiscreteEvent > > class_fb8f1cea3a695accb39f019b3fbd2247(module, "_IntervalCensoredEvent_fb8f1cea3a695accb39f019b3fbd2247", "");
     class_fb8f1cea3a695accb39f019b3fbd2247.def(pybind11::init< int const &, int const & >());
     class_fb8f1cea3a695accb39f019b3fbd2247.def(pybind11::init< class ::statiskit::IntervalCensoredEvent< struct ::statiskit::DiscreteEvent > const & >());
     class_fb8f1cea3a695accb39f019b3fbd2247.def("get_lower_bound", method_pointer_8376654e7157578aa3f686833ab27fac, pybind11::return_value_policy::copy, "");

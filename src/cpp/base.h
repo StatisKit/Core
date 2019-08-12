@@ -1,59 +1,64 @@
-#ifndef STATISKIT_CORE_BASE_H
-#define STATISKIT_CORE_BASE_H
+#pragma once
+
+#include <cassert>
+#include <exception>
+#include <iostream>
+#include <map>
+#include <memory>
+#include <type_traits>
+#include <unordered_map>
+
+#include <boost/math/constants/constants.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_01.hpp>
 
 #include <statiskit/linalg/Eigen.h>
 #include <statiskit/stl/STL.h>
 
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/math/constants/constants.hpp>
-#include <boost/random/uniform_01.hpp>
-#include <type_traits>
-#include <map>
-#include <exception>
-#include <assert.h>
-#include <iostream>
-#include <memory>
-#include <unordered_map>
-
 #if defined WIN32 || defined _WIN32 || defined __CYGWIN__
-  #ifdef LIBSTATISKIT_CORE
-    #ifdef __GNUC__
-      #define STATISKIT_CORE_API __attribute__ ((dllexport))
+    #define __PRETTY_FUNCTION__ __FUNCSIG__
+    #ifdef LIBSTATISKIT_CORE
+        #ifdef __GNUC__
+            #define STATISKIT_CORE_API __attribute__ ((dllexport))
+        #else
+            #define STATISKIT_CORE_API __declspec(dllexport)
+        #endif
     #else
-      #define STATISKIT_CORE_API __declspec(dllexport)
+        #ifdef __GNUC__
+            #define STATISKIT_CORE_API __attribute__ ((dllimport))
+        #else
+            #define STATISKIT_CORE_API __declspec(dllimport)
+        #endif
     #endif
-  #else
-    #ifdef __GNUC__
-      #define STATISKIT_CORE_API __attribute__ ((dllimport))
-    #else
-      #define STATISKIT_CORE_API __declspec(dllimport)
-    #endif
-  #endif
 #else
-  #if __GNUC__ >= 4
-    #define STATISKIT_CORE_API __attribute__ ((visibility ("default")))
-  #else
-    #define STATISKIT_CORE_API
-  #endif
+    #if __GNUC__ >= 4
+        #define STATISKIT_CORE_API __attribute__ ((visibility ("default")))
+    #else
+        #define STATISKIT_CORE_API
+    #endif
 #endif
 
+#define NOT_IMPLEMENTED() _Pragma("message \"not implemented function\""); throw not_implemented_error(__PRETTY_FUNCTION__, __FILE__, __LINE__)
+
+#define INFOPOINT() std::cout << __PRETTY_FUNCTION__ << "in file '" << __FILE__ << "' at line " << __LINE__ << std::endl
+
 #ifdef NDEBUG
-#define BREAKPOINT __pragma(message("BREAKPOINT found in file '" __FILE__ "' at line " STR(__LINE__)) " but not used");
+#define BREAKPOINT() _Pragma("message \"breakpoint ignored\"")
 #else
 #include <csignal>
-#define BREAKPOINT std::raise(SIGINT);
+#define BREAKPOINT() std::raise(SIGINT)
 #endif
 
 namespace statiskit
 {
 
-    template<class T, class D, class B=T> struct PolymorphicCopy : public B
+    template<class D, class B=D> struct PolymorphicCopy : public B
     {
-        PolymorphicCopy();
-        PolymorphicCopy(const PolymorphicCopy<T, D, B>& other);
+        using B::B;
+
         virtual ~PolymorphicCopy() = default;
          
-        virtual std::unique_ptr< T > copy() const;
+        virtual std::unique_ptr< typename B::copy_type > copy() const;
     };
 
     namespace __impl
@@ -82,16 +87,19 @@ namespace statiskit
         template<class T> void merge(std::unordered_set< T >& lhs, const std::unordered_set< T >& rhs);
 
         template<class U, class V> std::set< U > keys(const std::map< U, V >& map);
+
+        template<class T> void delete_vector(std::vector<T>& v);
+        template<class T> void delete_vector(std::vector<T*>& v);
+
+        template<class T> std::vector<T> copy_vector(const std::vector<T>& v);
+        template<class T> std::vector<T*> copy_vector(const std::vector<T*>& v);
     }
 
     STATISKIT_CORE_API void set_seed();
     STATISKIT_CORE_API void set_seed(const Index& seed);
 
     struct STATISKIT_CORE_API not_implemented_error : std::runtime_error
-    { not_implemented_error(const std::string& function); };
-
-    struct STATISKIT_CORE_API proxy_connection_error : std::exception
-    { proxy_connection_error(); };
+    { not_implemented_error(const std::string& function, const std::string& file, const unsigned int& line); };
 
     struct STATISKIT_CORE_API parameter_error : std::runtime_error
     { parameter_error(const std::string& parameter, const std::string& error); };
@@ -127,84 +135,6 @@ namespace statiskit
 
     struct STATISKIT_CORE_API duplicated_value_error : parameter_error
     { template<typename T> duplicated_value_error(const std::string& parameter, const T& value); };
-
-    template<class T>
-        class Optimization : public T
-        {
-            public:
-                Optimization();
-                Optimization(const Optimization< T >& optimization);
-                virtual ~Optimization();
-
-                const double& get_mindiff() const;
-                void set_mindiff(const double& mindiff);
-                
-                unsigned int get_minits() const;
-                void set_minits(const unsigned int& maxits);
-
-                unsigned int get_maxits() const;
-                void set_maxits(const unsigned int& maxits);
-
-            protected:
-                double _mindiff;
-                unsigned int _minits;
-                unsigned int _maxits;
-
-                bool run(const unsigned int& its, const double& delta) const;
-        };
-
-    struct STATISKIT_CORE_API Schedule
-    {
-        virtual ~Schedule() = 0;
-
-        virtual double operator() (const double& stage) const = 0;
-
-        virtual std::unique_ptr< Schedule > copy() const = 0;
-    };
-
-    class STATISKIT_CORE_API ExponentialSchedule : public PolymorphicCopy< Schedule, ExponentialSchedule >
-    { 
-        public:
-            ExponentialSchedule(const double& theta);
-            ExponentialSchedule(const ExponentialSchedule& schedule);
-            virtual ~ExponentialSchedule();
-
-            virtual double operator() (const double& stage) const;
-
-            const double& get_theta() const;
-            void set_theta(const double& theta);
-
-        protected:
-            double _theta;
-    };
-
-    template<class T>
-        class SimulatedAnnealing : public T
-        {
-            public:
-                SimulatedAnnealing();
-                SimulatedAnnealing(const SimulatedAnnealing< T >& simulated_annealing);
-                virtual ~SimulatedAnnealing();
-
-                const Schedule* get_schedule() const;
-                void set_schedule(const Schedule& schedule);
-                
-                unsigned int get_minits() const;
-                void set_minits(const unsigned int& maxits);
-
-                unsigned int get_maxits() const;
-                void set_maxits(const unsigned int& maxits);
-
-            protected:
-                Schedule* _schedule;
-                unsigned int _minits;
-                unsigned int _maxits;
-
-                bool accept(const unsigned int& its, const double& delta) const;
-        };
 }
 
-#ifndef AUTOWIG
 #include "base.hpp"
-#endif
-#endif
