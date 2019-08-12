@@ -159,6 +159,11 @@ namespace statiskit
         return std::make_unique< Generator >(*this);
     }
 
+    const UnivariateSampleSpace* WeightedUnivariateData::get_sample_space() const
+    {
+        return this->data->get_sample_space();
+    }
+
     const UnivariateEvent* WeightedUnivariateData::Generator::get_event() const
     {
         return this->generator->get_event();
@@ -203,14 +208,19 @@ namespace statiskit
     {}
 
     std::unique_ptr< UnivariateData::Generator > UnivariateDataFrame::generator() const
-    { return std::make_unique< UnivariateDataFrame::Generator >(*this); }
-
+    {
+        return std::make_unique< UnivariateDataFrame::Generator >(*this);
+    }
 
     Index UnivariateDataFrame::get_nb_events() const
-    { return this->events->size(); }
+    {
+        return this->events->size();
+    }
 
     const UnivariateSampleSpace* UnivariateDataFrame::get_sample_space() const
-    { return this->sample_space.get(); }
+    {
+        return this->sample_space.get();
+    }
    
     void UnivariateDataFrame::set_sample_space(const UnivariateSampleSpace& sample_space)
     {
@@ -389,6 +399,31 @@ namespace statiskit
         return std::make_unique< IndicesSelectedData >(*this, indices);
     }
 
+    std::unique_ptr< MultivariateData::Generator > WeightedMultivariateData::generator() const
+    {
+        return std::make_unique< Generator >(*this);
+    }
+
+    Index WeightedMultivariateData::get_nb_components() const
+    {
+        return this->data->get_nb_components();
+    }
+
+    const UnivariateEvent* WeightedMultivariateData::Generator::get_event(const Index& index) const
+    {
+        return this->generator->get_event(index);
+    } 
+
+    Index WeightedMultivariateData::Generator::size() const
+    {
+        return this->generator->size();
+    } 
+
+    const UnivariateSampleSpace* WeightedMultivariateData::get_sample_space(const Index& index) const
+    {
+        return this->data->get_sample_space(index);
+    } 
+
     IndexSelectedData::IndexSelectedData(const MultivariateData& data, const Index& index)
     {
         this->data = data.copy().release();
@@ -407,13 +442,19 @@ namespace statiskit
     }
 
     const MultivariateData* IndexSelectedData::origin() const
-    { return this->data; }
+    {
+        return this->data;
+    }
 
     std::unique_ptr< UnivariateData::Generator > IndexSelectedData::generator() const
-    { return std::make_unique< IndexSelectedData::Generator >(*this); }
+    {
+        return std::make_unique< IndexSelectedData::Generator >(*this);
+    }
 
     const UnivariateSampleSpace* IndexSelectedData::get_sample_space() const
-    { return this->data->get_sample_space(this->index); }
+    {
+        return this->data->get_sample_space(this->index);
+    }
 
     Index IndexSelectedData::get_index() const
     {
@@ -464,13 +505,19 @@ namespace statiskit
     }
 
     const MultivariateData* IndicesSelectedData::origin() const
-    { return this->data; }
+    {
+        return this->data;
+    }
 
     std::unique_ptr< MultivariateData::Generator > IndicesSelectedData::generator() const
-    { return std::make_unique< IndicesSelectedData::Generator >(*this); }
+    {
+        return std::make_unique< IndicesSelectedData::Generator >(*this);
+    }
 
     Index IndicesSelectedData::get_nb_components() const
-    { return this->indices->size(); }
+    {
+        return this->indices->size();
+    }
 
     const UnivariateSampleSpace* IndicesSelectedData::get_sample_space(const Index& index) const
     {
@@ -489,13 +536,21 @@ namespace statiskit
         this->indices = data.indices;
     }
 
+    IndicesSelectedData::Generator::Generator(const Generator& generator)
+    {
+        this->generator = static_cast<statiskit::MultivariateData::Generator*>(generator.generator->copy().release());
+        this->indices = generator.indices;
+    }
+
     IndicesSelectedData::Generator::~Generator()
     {
         delete this->generator;
     }
 
     Index IndicesSelectedData::Generator::size() const
-    { return this->indices->size(); }
+    {
+        return this->indices->size();
+    }
 
     const UnivariateEvent* IndicesSelectedData::Generator::get_event(const Index& index) const
     {
@@ -506,10 +561,14 @@ namespace statiskit
     }
 
     double IndicesSelectedData::Generator::get_weight() const
-    { return this->generator->get_weight(); }
+    {
+        return this->generator->get_weight();
+    }
 
     bool IndicesSelectedData::Generator::is_valid() const
-    { return this->generator->is_valid(); }
+    {
+        return this->generator->is_valid();
+    }
 
     MultivariateData::Generator& IndicesSelectedData::Generator::operator++()
     {

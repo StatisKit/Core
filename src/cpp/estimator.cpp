@@ -1,7 +1,9 @@
 #include "estimator.h"
 #include "singular.h"
 
-#include <boost/math/special_functions/digamma.hpp>
+#include <boost/math/special_functions/beta.hpp>
+#include <boost/math/special_functions/erf.hpp>
+#include <boost/math/special_functions/gamma.hpp>
 
 namespace statiskit
 {    
@@ -39,12 +41,12 @@ namespace statiskit
                                                                    new PoissonDistribution(mean));
     }
 
-    BinomialDistributionMLEstimation::Estimator::Estimator() : PolymorphicCopy< Estimator, Optimization< DiscreteUnivariateDistributionEstimation::Estimator > >()
+    BinomialDistributionMLEstimation::Estimator::Estimator() : PolymorphicCopy< Estimator, Optimization< BinomialDistributionEstimation::Estimator > >()
     { 
         this->force = false;
     }
     
-    BinomialDistributionMLEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< Estimator, Optimization< DiscreteUnivariateDistributionEstimation::Estimator > >(estimator)
+    BinomialDistributionMLEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< Estimator, Optimization< BinomialDistributionEstimation::Estimator > >(estimator)
     {
         this->force = estimator.force;
     }
@@ -183,10 +185,10 @@ namespace statiskit
         this->dispersion = dispersion.copy().release();
     }
 
-    LogarithmicDistributionMLEstimation::Estimator::Estimator() : PolymorphicCopy< Estimator, Optimization< DiscreteUnivariateDistributionEstimation::Estimator > >()
+    LogarithmicDistributionMLEstimation::Estimator::Estimator() : PolymorphicCopy< Estimator, Optimization< LogarithmicDistributionEstimation::Estimator > >()
     {}
 
-    LogarithmicDistributionMLEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< Estimator, Optimization< DiscreteUnivariateDistributionEstimation::Estimator > >(estimator)
+    LogarithmicDistributionMLEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< Estimator, Optimization< LogarithmicDistributionEstimation::Estimator > >(estimator)
     {}
 
     LogarithmicDistributionMLEstimation::Estimator::~Estimator()
@@ -241,12 +243,12 @@ namespace statiskit
                                                                      new GeometricDistribution(1 - 1 / mean));
     }
 
-    NegativeBinomialDistributionMLEstimation::Estimator::Estimator() : PolymorphicCopy< Estimator, Optimization< DiscreteUnivariateDistributionEstimation::Estimator > >()
+    NegativeBinomialDistributionMLEstimation::Estimator::Estimator() : PolymorphicCopy< Estimator, Optimization< NegativeBinomialDistributionEstimation::Estimator > >()
     {
         this->force = false;
     }
     
-    NegativeBinomialDistributionMLEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< Estimator, Optimization< DiscreteUnivariateDistributionEstimation::Estimator > >(estimator)
+    NegativeBinomialDistributionMLEstimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< Estimator, Optimization< NegativeBinomialDistributionEstimation::Estimator > >(estimator)
     {
         this->force = estimator.force;
     }
@@ -372,6 +374,9 @@ namespace statiskit
     NormalDistributionMLEstimation::Estimator::Estimator()
     {}
 
+    NormalDistributionMLEstimation::Estimator::Estimator(const Estimator& estimator)
+    {}
+
     NormalDistributionMLEstimation::Estimator::~Estimator()
     {}
 
@@ -388,20 +393,20 @@ namespace statiskit
                                                                   new NormalDistribution(mean, std_err));
     }
 
-    UnivariateHistogramDistributionEstimation::Estimator::Estimator()
+    UnivariateHistogramDistributionClassicEstimation::Estimator::Estimator()
     {
         this->nb_bins = 0;
     }
 
-    UnivariateHistogramDistributionEstimation::Estimator::Estimator(const Estimator& estimator)
+    UnivariateHistogramDistributionClassicEstimation::Estimator::Estimator(const Estimator& estimator)
     {
         this->nb_bins = estimator.nb_bins;
     }
 
-    UnivariateHistogramDistributionEstimation::Estimator::~Estimator()
+    UnivariateHistogramDistributionClassicEstimation::Estimator::~Estimator()
     {}
 
-    std::unique_ptr< UnivariateHistogramDistributionEstimation::Estimator::estimation_type > UnivariateHistogramDistributionEstimation::Estimator::operator() (const data_type& data) const
+    std::unique_ptr< UnivariateHistogramDistributionClassicEstimation::Estimator::estimation_type > UnivariateHistogramDistributionClassicEstimation::Estimator::operator() (const data_type& data) const
     {
         this->check(data);
         std::set< double > bins = std::set< double >();
@@ -458,39 +463,39 @@ namespace statiskit
             }
             ++(*generator);
         }
-        return std::make_unique< UnivariateHistogramDistributionEstimation >(data.copy().release(),
+        return std::make_unique< UnivariateHistogramDistributionClassicEstimation >(data.copy().release(),
                                                                              new UnivariateHistogramDistribution(bins, densities));
     }
 
-    const unsigned int& UnivariateHistogramDistributionEstimation::Estimator::get_nb_bins() const
+    const unsigned int& UnivariateHistogramDistributionClassicEstimation::Estimator::get_nb_bins() const
     {
         return this->nb_bins;
     }
 
-    void UnivariateHistogramDistributionEstimation::Estimator::set_nb_bins(const unsigned int& nb_bins)
+    void UnivariateHistogramDistributionClassicEstimation::Estimator::set_nb_bins(const unsigned int& nb_bins)
     {
         this->nb_bins = nb_bins;
     }
 
-    RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::Estimator()
+    UnivariateHistogramDistributionRegularEstimation::Estimator::Estimator()
     {
         this->maxbins = 100;
     }
 
-    RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::Estimator(const Estimator& estimator)
+    UnivariateHistogramDistributionRegularEstimation::Estimator::Estimator(const Estimator& estimator)
     {
         this->maxbins = estimator.maxbins;
     }
 
-    RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::~Estimator()
+    UnivariateHistogramDistributionRegularEstimation::Estimator::~Estimator()
     {}
 
-    std::unique_ptr< RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::estimation_type > RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::operator() (const UnivariateData& data) const
+    std::unique_ptr< UnivariateHistogramDistributionRegularEstimation::Estimator::estimation_type > UnivariateHistogramDistributionRegularEstimation::Estimator::operator() (const UnivariateData& data) const
     {
         this->check(data);
-        std::unique_ptr< RegularUnivariateHistogramDistributionSlopeHeuristicSelection > estimation = std::make_unique< RegularUnivariateHistogramDistributionSlopeHeuristicSelection >(data.copy().release());
+        std::unique_ptr< UnivariateHistogramDistributionRegularEstimation > estimation = std::make_unique< UnivariateHistogramDistributionRegularEstimation >(data.copy().release());
         std::set< double > bins = std::set< double >();
-        UnivariateHistogramDistributionEstimation::Estimator estimator = UnivariateHistogramDistributionEstimation::Estimator();
+        UnivariateHistogramDistributionClassicEstimation::Estimator estimator = UnivariateHistogramDistributionClassicEstimation::Estimator();
         for (Index nb_bins = this->maxbins; nb_bins > 0; --nb_bins) {
             estimator.set_nb_bins(nb_bins);
             try {
@@ -504,12 +509,12 @@ namespace statiskit
         return estimation;
     }
 
-    const unsigned int& RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::get_maxbins() const
+    const unsigned int& UnivariateHistogramDistributionRegularEstimation::Estimator::get_maxbins() const
     {
         return this->maxbins;
     }
 
-    void RegularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::set_maxbins(const unsigned int& maxbins)
+    void UnivariateHistogramDistributionRegularEstimation::Estimator::set_maxbins(const unsigned int& maxbins)
     {
         if (maxbins == 0) {
             throw statiskit::lower_bound_error("maxbins", 0, 0, true);
@@ -517,25 +522,25 @@ namespace statiskit
         this->maxbins = maxbins;
     }
 
-    IrregularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::Estimator()
+    UnivariateHistogramDistributionIrregularEstimation::Estimator::Estimator()
     {
         this->maxbins = 100; 
         this->constant = 1.;
     }
 
-    IrregularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::Estimator(const Estimator& estimator)
+    UnivariateHistogramDistributionIrregularEstimation::Estimator::Estimator(const Estimator& estimator)
     { 
         this->maxbins = estimator.maxbins;
         this->constant = estimator.constant;
     }
 
-    IrregularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::~Estimator()
+    UnivariateHistogramDistributionIrregularEstimation::Estimator::~Estimator()
     {}
 
-    std::unique_ptr< IrregularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::estimation_type > IrregularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::operator() (const data_type& data) const
+    std::unique_ptr< UnivariateHistogramDistributionIrregularEstimation::Estimator::estimation_type > UnivariateHistogramDistributionIrregularEstimation::Estimator::operator() (const data_type& data) const
     {
         this->check(data);
-        std::unique_ptr< IrregularUnivariateHistogramDistributionSlopeHeuristicSelection > estimation = std::make_unique< IrregularUnivariateHistogramDistributionSlopeHeuristicSelection >(data.copy().release());
+        std::unique_ptr< UnivariateHistogramDistributionIrregularEstimation > estimation = std::make_unique< UnivariateHistogramDistributionIrregularEstimation >(data.copy().release());
         std::set< double > bins = std::set< double >();
         unsigned int elements = 0;
         double total = 0., min = std::numeric_limits< double >::infinity(), max = -1 * std::numeric_limits< double >::infinity();
@@ -646,12 +651,12 @@ namespace statiskit
         return estimation;
     }
 
-    const unsigned int& IrregularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::get_maxbins() const
+    const unsigned int& UnivariateHistogramDistributionIrregularEstimation::Estimator::get_maxbins() const
     {
         return this->maxbins;
     }
 
-    void IrregularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::set_maxbins(const unsigned int& maxbins)
+    void UnivariateHistogramDistributionIrregularEstimation::Estimator::set_maxbins(const unsigned int& maxbins)
     {
         if (maxbins == 0) {
             throw statiskit::lower_bound_error("maxbins", 0, 0, true);
@@ -659,12 +664,12 @@ namespace statiskit
         this->maxbins = maxbins;
     }
     
-    const double& IrregularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::get_constant() const
+    const double& UnivariateHistogramDistributionIrregularEstimation::Estimator::get_constant() const
     {
         return this->constant;
     }
 
-    void IrregularUnivariateHistogramDistributionSlopeHeuristicSelection::Estimator::set_constant(const double& constant)
+    void UnivariateHistogramDistributionIrregularEstimation::Estimator::set_constant(const double& constant)
     {
         if (constant <= 0.) {
             throw statiskit::lower_bound_error("constant", constant, 0.0, true);
@@ -672,16 +677,16 @@ namespace statiskit
         this->constant = constant;
     }
 
-    NegativeMultinomialDistributionEstimation::WZ99Estimator::WZ99Estimator() : PolymorphicCopy< WZ99Estimator, Optimization< DiscreteMultivariateDistributionEstimation::Estimator > >()
+    NegativeMultinomialDistributionWZ99Estimation::Estimator::Estimator() : PolymorphicCopy< Estimator, Optimization< NegativeMultinomialDistributionEstimation::Estimator > >()
     {}
 
-    NegativeMultinomialDistributionEstimation::WZ99Estimator::WZ99Estimator(const WZ99Estimator& estimator) : PolymorphicCopy< WZ99Estimator, Optimization< DiscreteMultivariateDistributionEstimation::Estimator > >(estimator)
+    NegativeMultinomialDistributionWZ99Estimation::Estimator::Estimator(const Estimator& estimator) : PolymorphicCopy< Estimator, Optimization< NegativeMultinomialDistributionEstimation::Estimator > >(estimator)
     {}
 
-    NegativeMultinomialDistributionEstimation::WZ99Estimator::~WZ99Estimator()
+    NegativeMultinomialDistributionWZ99Estimation::Estimator::~Estimator()
     {}
 
-    std::unique_ptr< NegativeMultinomialDistributionEstimation::WZ99Estimator::estimation_type > NegativeMultinomialDistributionEstimation::WZ99Estimator::operator() (const data_type& data) const
+    std::unique_ptr< NegativeMultinomialDistributionWZ99Estimation::Estimator::estimation_type > NegativeMultinomialDistributionWZ99Estimation::Estimator::operator() (const data_type& data) const
     {
         this->check(data);
         MultivariateMeanEstimation::Estimator mean_estimator = MultivariateMeanEstimation::Estimator();
@@ -708,8 +713,8 @@ namespace statiskit
         double q =  location / (location + kappa);
         NegativeBinomialDistribution negative_binomial = NegativeBinomialDistribution(kappa, 1. - q);
         SplittingDistribution* negative_multinomial = new SplittingDistribution(negative_binomial, MultinomialSingularDistribution(mean * q / kappa));
-        std::unique_ptr< NegativeMultinomialDistributionEstimation > estimation = std::make_unique< NegativeMultinomialDistributionEstimation >(data.copy().release(),
-                                                                                                                                                negative_multinomial);
+        std::unique_ptr< NegativeMultinomialDistributionWZ99Estimation > estimation = std::make_unique< NegativeMultinomialDistributionWZ99Estimation >(data.copy().release(),
+                                                                                                                                                        negative_multinomial);
         estimation->steps.push_back(kappa);
         double prev;
         double curr = kappa;

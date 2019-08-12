@@ -98,6 +98,12 @@ namespace statiskit
         {}
 
     template<class D>
+        std::unique_ptr< typename DistributionEstimation<D>::Estimator::estimation_type > DistributionEstimation< D >::Estimator::operator() (const MultivariateData& data, const typename D::indexing_type& select) const
+        {
+            return this->operator()(*data.select(select));
+        }
+        
+    template<class D>
         void DistributionEstimation< D >::Estimator::check(const data_type& data) const
         {
             if (data.get_nb_events() == 0) {
@@ -182,6 +188,15 @@ namespace statiskit
     template<class D>
         ConditionalDistributionEstimation< D >::Estimator::~Estimator()
         {}
+
+
+    template<class D>
+        void ConditionalDistributionEstimation< D >::Estimator::check(const response_data_type& data) const
+        {
+            if (data.get_nb_events() == 0) {
+                throw sample_size_error(1);
+            }
+        }
 }
 
 #endif

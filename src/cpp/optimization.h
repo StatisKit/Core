@@ -6,7 +6,7 @@ namespace statiskit
 {
     struct STATISKIT_CORE_API Schedule
     {
-        using copy_type = Schedule;
+        typedef Schedule copy_type;
 
         virtual ~Schedule() = 0;
 

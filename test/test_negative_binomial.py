@@ -17,15 +17,16 @@ class TestNegativeBinomial(unittest.TestCase, AbstractTestDiscreteUnivariateDist
 
     def test_mle(self):
         data = self._dist.simulation(90)
-        mle = core.negative_binomial_estimation('ml', data)
-        self.assertGreaterEqual(mle.estimated.loglikelihood(data), self._dist.loglikelihood(data))
+        mle = core.negative_binomial_estimation('ML', data)
+        self.assertGreaterEqual(mle.distribution.loglikelihood(data),
+                                self._dist.loglikelihood(data))
 
 
     def test_mme(self):
         data = self._dist.simulation(100)
-        mme = core.negative_binomial_estimation('mm', data)
-        self.assertAlmostEqual(mme.estimated.mean, float(data.location))
-        self.assertAlmostEqual(mme.estimated.variance, float(data.dispersion))
+        mme = core.negative_binomial_estimation('MM', data)
+        self.assertAlmostEqual(mme.distribution.mean, data.location)
+        self.assertAlmostEqual(mme.distribution.variance, data.dispersion)
 
     @classmethod
     def tearDownClass(cls):

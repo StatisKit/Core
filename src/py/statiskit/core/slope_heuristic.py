@@ -3,7 +3,8 @@ from functools import wraps
 from statiskit import stl
 
 from . import _core
-from .__core.statiskit import SlopeHeuristic, _SlopeHeuristicSelection
+from .__core.statiskit import (SlopeHeuristic,
+                               _SlopeHeuristicSelection)
 
 from .optionals import pyplot
 
@@ -203,3 +204,10 @@ def slope_heuristic_selection_decorator(cls):
 
 for cls in (_SlopeHeuristicSelection,):
     slope_heuristic_selection_decorator(cls)
+
+
+# IrregularUnivariateHistogramDistributionSlopeHeuristicSelection.Estimator.maxbins = property(IrregularUnivariateHistogramDistributionSlopeHeuristicSelection.Estimator.get_maxbins, IrregularUnivariateHistogramDistributionSlopeHeuristicSelection.Estimator.set_maxbins)
+# del IrregularUnivariateHistogramDistributionSlopeHeuristicSelection.Estimator.get_maxbins, IrregularUnivariateHistogramDistributionSlopeHeuristicSelection.Estimator.set_maxbins
+
+# RegularUnivariateHistogramDistributionSlopeHeuristicSelection.Estimator.maxbins = property(RegularUnivariateHistogramDistributionSlopeHeuristicSelection.Estimator.get_maxbins, RegularUnivariateHistogramDistributionSlopeHeuristicSelection.Estimator.set_maxbins)
+# del RegularUnivariateHistogramDistributionSlopeHeuristicSelection.Estimator.get_maxbins, RegularUnivariateHistogramDistributionSlopeHeuristicSelection.Estimator.set_maxbins

@@ -13,8 +13,9 @@ namespace statiskit
 {
     struct STATISKIT_CORE_API SingularDistribution
     {
-        using copy_type = SingularDistribution;
-        using data_type = MultivariateData;
+        typedef SingularDistribution copy_type;
+        typedef MultivariateData data_type;
+        typedef Indices indexing_type;
 
         virtual ~SingularDistribution() = 0;
         
@@ -75,9 +76,9 @@ namespace statiskit
             Eigen::VectorXd alpha;
     };
 
-    using SingularDistributionEstimation = DistributionEstimation< SingularDistribution >;
-    using SingularDistributionSelection = Selection< SingularDistributionEstimation >;
-    using SingularDistributionCriterionEstimator = SingularDistributionSelection::CriterionEstimator;
+    typedef DistributionEstimation< SingularDistribution > SingularDistributionEstimation;
+    typedef Selection< SingularDistributionEstimation > SingularDistributionSelection;
+    typedef SingularDistributionSelection::CriterionEstimator SingularDistributionCriterionEstimator;
 
     struct STATISKIT_CORE_API MultinomialSingularDistributionEstimation : PolymorphicCopy<MultinomialSingularDistributionEstimation, SingularDistributionEstimation>
     {
@@ -165,8 +166,6 @@ namespace statiskit
                 protected:
                     DiscreteUnivariateDistributionEstimation::Estimator* sum;
                     SingularDistributionEstimation::Estimator* singular;
-
-                    virtual std::unordered_set< uintptr_t > children() const;
             };
 
         protected:

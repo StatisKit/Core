@@ -17,5 +17,5 @@ class TestBinomial(unittest.TestCase, AbstractTestDiscreteUnivariateDistribution
 
     def test_mle(self):
         data = self._dist.simulation(10)
-        mle = core.poisson_estimation('ml', data)
-        self.assertGreaterEqual(mle.estimated.loglikelihood(data), self._dist.loglikelihood(data))
+        mle = core.poisson_estimation('ML', data)
+        self.assertGreaterEqual(mle.distribution.loglikelihood(data), self._dist.loglikelihood(data))

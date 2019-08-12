@@ -10,6 +10,7 @@
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/special_functions/gamma.hpp>
 #include <boost/math/special_functions/beta.hpp>
+#include <boost/math/special_functions/digamma.hpp>
 
 namespace statiskit
 {

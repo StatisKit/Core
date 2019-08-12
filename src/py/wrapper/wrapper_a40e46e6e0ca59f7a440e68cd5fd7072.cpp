@@ -9,11 +9,17 @@ namespace autowig
         public:
             using ::statiskit::MultivariateEvent::MultivariateEvent;
 
+
+        public:
             typedef class ::std::unique_ptr< struct ::statiskit::MultivariateEvent, struct ::std::default_delete< struct ::statiskit::MultivariateEvent > >  return_type_ee0381fa29a75d5782f895a637e2a8d5;
             virtual return_type_ee0381fa29a75d5782f895a637e2a8d5 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_ee0381fa29a75d5782f895a637e2a8d5, class_type, copy, ); };
+
+        public:
             typedef struct ::statiskit::UnivariateEvent const * return_type_09d1fd5db58a5234abee68232835e76b;
             typedef ::statiskit::Index const & param_09d1fd5db58a5234abee68232835e76b_0_type;
             virtual return_type_09d1fd5db58a5234abee68232835e76b get_event(param_09d1fd5db58a5234abee68232835e76b_0_type param_0) const override { PYBIND11_OVERLOAD_PURE(return_type_09d1fd5db58a5234abee68232835e76b, class_type, get_event, param_0); };
+
+        public:
             typedef ::statiskit::Index  return_type_b16ba67d442357de95884c2b80cd9413;
             virtual return_type_b16ba67d442357de95884c2b80cd9413 size() const override { PYBIND11_OVERLOAD_PURE(return_type_b16ba67d442357de95884c2b80cd9413, class_type, size, ); };
     };

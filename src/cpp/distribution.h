@@ -10,8 +10,9 @@ namespace statiskit
     /// \brief This virtual class UnivariateDistribution represents the distribution of a random univariate component \f$ X \f$. The support of this distribution is a set \f$ \mathcal{X} \f$ with one dimension.
     struct STATISKIT_CORE_API UnivariateDistribution
     {	
-        using copy_type = UnivariateDistribution;
-        using data_type = UnivariateData;
+        typedef UnivariateDistribution copy_type;
+        typedef UnivariateData data_type;
+        typedef Index indexing_type;
 
         virtual ~UnivariateDistribution() = 0;
 
@@ -71,7 +72,7 @@ namespace statiskit
      * */
     struct STATISKIT_CORE_API CategoricalUnivariateDistribution : UnivariateDistribution
     {
-        using event_type = CategoricalEvent;
+        typedef CategoricalEvent event_type;
         
 		/** \brief Compute the probability of a set of values.
          *
@@ -245,7 +246,7 @@ namespace statiskit
     class STATISKIT_CORE_API HierarchicalDistribution : public PolymorphicCopy< HierarchicalDistribution, CategoricalUnivariateDistribution >
     {
         public:
-            using const_iterator = std::map< std::string, CategoricalUnivariateDistribution* >::const_iterator;
+            typedef std::map< std::string, CategoricalUnivariateDistribution* >::const_iterator const_iterator;
 
             HierarchicalDistribution();
             HierarchicalDistribution(const HierarchicalSampleSpace& hss);
@@ -337,7 +338,7 @@ namespace statiskit
      * */
     struct STATISKIT_CORE_API DiscreteUnivariateDistribution : UnivariateDistribution
     {
-        using event_type = DiscreteEvent;
+        typedef DiscreteEvent event_type;
         
 		/** \brief Compute the probability of a set of values.
          *
@@ -385,8 +386,8 @@ namespace statiskit
         virtual double get_variance() const = 0;
     };
 
-    using DiscreteUnivariateFrequencyDistribution = QuantitativeUnivariateFrequencyDistribution< DiscreteUnivariateDistribution >;
-    using ShiftedDiscreteUnivariateDistribution = ShiftedDistribution< DiscreteUnivariateDistribution >;
+    typedef QuantitativeUnivariateFrequencyDistribution< DiscreteUnivariateDistribution > DiscreteUnivariateFrequencyDistribution;
+    typedef ShiftedDistribution< DiscreteUnivariateDistribution > ShiftedDiscreteUnivariateDistribution;
 
     /** \brief This class PoissonDistribution represents a [Poisson distribution](https://en.wikipedia.org/wiki/Poisson_distribution)
      * 
@@ -900,7 +901,7 @@ namespace statiskit
      * */
     struct STATISKIT_CORE_API ContinuousUnivariateDistribution : UnivariateDistribution
     { 
-        using event_type = ContinuousEvent;
+        typedef ContinuousEvent event_type;
         
 		/** \brief Compute the probability of a set of values.
          *
@@ -943,8 +944,8 @@ namespace statiskit
         virtual double get_variance() const = 0;    
     };
 
-    using ShiftedContinuousUnivariateDistribution = ShiftedDistribution< ContinuousUnivariateDistribution >;
-    using ContinuousUnivariateFrequencyDistribution = QuantitativeUnivariateFrequencyDistribution< ContinuousUnivariateDistribution >;
+    typedef ShiftedDistribution< ContinuousUnivariateDistribution > ShiftedContinuousUnivariateDistribution;
+    typedef QuantitativeUnivariateFrequencyDistribution< ContinuousUnivariateDistribution > ContinuousUnivariateFrequencyDistribution;
 
     /** \brief This class NormalDistribution represents a [normal distribution](https://en.wikipedia.org/wiki/Normal_distribution).
      * 
@@ -2175,7 +2176,7 @@ namespace statiskit
      */
     struct STATISKIT_CORE_API UnivariateConditionalDistribution
     {
-        using response_type = UnivariateDistribution;
+        typedef UnivariateDistribution response_type;
                 
         virtual ~UnivariateConditionalDistribution() = 0;
 
@@ -2198,24 +2199,25 @@ namespace statiskit
     
     struct STATISKIT_CORE_API CategoricalUnivariateConditionalDistribution : UnivariateConditionalDistribution
     {
-        using event_type = CategoricalEvent;
+        typedef CategoricalEvent event_type;
     };
     
     struct STATISKIT_CORE_API DiscreteUnivariateConditionalDistribution : UnivariateConditionalDistribution
     {
-        using event_type = DiscreteEvent;
+        typedef DiscreteEvent event_type;
     };        
     
     struct STATISKIT_CORE_API ContinuousUnivariateConditionalDistribution : UnivariateConditionalDistribution
     {
-        using event_type = ContinuousEvent;
+        typedef ContinuousEvent event_type;
     };      
 
     struct STATISKIT_CORE_API MultivariateDistribution
     {
-        using copy_type = MultivariateDistribution;
-        using data_type = MultivariateData;
-            
+        typedef MultivariateDistribution copy_type;
+        typedef MultivariateData data_type;
+        typedef Indices indexing_type;
+
         virtual ~MultivariateDistribution() = 0;
 
         /// \brief Get the number of components of the distribution.
@@ -2302,7 +2304,7 @@ namespace statiskit
 
     struct STATISKIT_CORE_API MultivariateConditionalDistribution
     {
-        using response_type = MultivariateDistribution;
+        typedef MultivariateDistribution response_type;
         
         virtual ~MultivariateConditionalDistribution() = 0;
         

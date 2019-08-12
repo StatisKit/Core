@@ -13,7 +13,7 @@ namespace statiskit
     class STATISKIT_CORE_API SlopeHeuristicSolver
     { 
         public:
-            using copy_type = SlopeHeuristicSolver;
+            typedef SlopeHeuristicSolver copy_type;
 
             SlopeHeuristicSolver();
             SlopeHeuristicSolver(const SlopeHeuristicSolver& solver);
@@ -36,8 +36,6 @@ namespace statiskit
         SlopeHeuristicOLSSolver(const SlopeHeuristicOLSSolver& solver);
 
         virtual Eigen::VectorXd operator() (const Eigen::MatrixXd& X, const Eigen::VectorXd& y) const; 
-
-        virtual std::unique_ptr< SlopeHeuristicSolver > copy() const;
     };
 
     class STATISKIT_CORE_API SlopeHeuristicIWLSSolver : public SlopeHeuristicSolver
@@ -95,7 +93,7 @@ namespace statiskit
 
     struct STATISKIT_CORE_API SlopeHeuristicSelector
     { 
-        using copy_type = SlopeHeuristicSelector;
+        typedef SlopeHeuristicSelector copy_type;
 
         SlopeHeuristicSelector() = default;
         SlopeHeuristicSelector(const SlopeHeuristicSelector& selector) = default;

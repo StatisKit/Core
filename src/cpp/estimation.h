@@ -38,9 +38,9 @@ namespace statiskit
     class DistributionEstimation
     {
         public:
-            using copy_type = DistributionEstimation< D >;
-            using distribution_type = D;
-            using data_type = typename D::data_type;
+            typedef DistributionEstimation< D > copy_type;
+            typedef D distribution_type;
+            typedef typename D::data_type data_type;
 
             DistributionEstimation();
             DistributionEstimation(data_type const * data);
@@ -58,15 +58,16 @@ namespace statiskit
             class STATISKIT_CORE_API Estimator
             { 
                 public:
-                    using copy_type = Estimator;
-                    using estimation_type = DistributionEstimation<D>;
+                    typedef Estimator copy_type;
+                    typedef DistributionEstimation<D> estimation_type;
 
-                    using data_type = estimation_type::data_type;
-                    using distribution_type = estimation_type::distribution_type;
+                    typedef estimation_type::data_type data_type;
+                    typedef estimation_type::distribution_type distribution_type;
 
                     virtual ~Estimator() = 0;
 
                     virtual std::unique_ptr< estimation_type > operator() (const data_type& data) const = 0;
+                    virtual std::unique_ptr< estimation_type > operator() (const MultivariateData& data, const typename D::indexing_type& select) const;
 
                     virtual std::unique_ptr< copy_type > copy() const = 0;
 
@@ -87,24 +88,19 @@ namespace statiskit
         { 
             using DistributionEstimation< UnivariateDistribution >::Estimator::Estimator;
             using DistributionEstimation< UnivariateDistribution >::Estimator::estimation_type;
-
-            using DistributionEstimation< UnivariateDistribution >::Estimator::operator();
-
-            virtual std::unique_ptr< estimation_type > operator() (const MultivariateData& data,
-                                                                   const Index& variable) const;
         };
     };
 
     struct STATISKIT_CORE_API CategoricalUnivariateDistributionEstimation : UnivariateDistributionEstimation
     {
-        using distribution_type = CategoricalUnivariateDistribution;
+        typedef CategoricalUnivariateDistribution distribution_type;
 
         using UnivariateDistributionEstimation::UnivariateDistributionEstimation;
 
         class STATISKIT_CORE_API Estimator : public UnivariateDistributionEstimation::Estimator
         {
             public:
-                using event_type = CategoricalEvent;
+                typedef CategoricalEvent event_type;
 
             protected:
                 void check(const data_type& data) const;
@@ -113,14 +109,14 @@ namespace statiskit
 
     struct STATISKIT_CORE_API DiscreteUnivariateDistributionEstimation : UnivariateDistributionEstimation
     {
-        using distribution_type = DiscreteUnivariateDistribution;
+        typedef DiscreteUnivariateDistribution distribution_type;
 
         using UnivariateDistributionEstimation::UnivariateDistributionEstimation;
 
         class STATISKIT_CORE_API Estimator : public UnivariateDistributionEstimation::Estimator
         {
             public:
-                using event_type = DiscreteEvent;
+                typedef DiscreteEvent event_type;
 
             protected:
                 void check(const data_type& data) const;
@@ -129,14 +125,14 @@ namespace statiskit
 
     struct STATISKIT_CORE_API ContinuousUnivariateDistributionEstimation : UnivariateDistributionEstimation
     {
-        using distribution_type = ContinuousUnivariateDistribution;
+        typedef ContinuousUnivariateDistribution distribution_type;
 
         using UnivariateDistributionEstimation::UnivariateDistributionEstimation;
 
         class STATISKIT_CORE_API Estimator : public UnivariateDistributionEstimation::Estimator
         {
             public:
-                using event_type = ContinuousEvent;
+                typedef ContinuousEvent event_type;
 
             protected:
                 void check(const data_type& data) const;
@@ -151,17 +147,12 @@ namespace statiskit
         { 
             using DistributionEstimation< MultivariateDistribution >::Estimator::Estimator;
             using DistributionEstimation< MultivariateDistribution >::Estimator::estimation_type;
-
-            using DistributionEstimation< MultivariateDistribution >::Estimator::operator();
-
-            virtual std::unique_ptr< estimation_type > operator() (const MultivariateData& data,
-                                                                   const Indices& variables) const;
         };
     };
 
     struct STATISKIT_CORE_API CategoricalMultivariateDistributionEstimation : MultivariateDistributionEstimation
     {
-        using distribution_type = CategoricalMultivariateDistribution;
+        typedef CategoricalMultivariateDistribution distribution_type;
 
         using MultivariateDistributionEstimation::MultivariateDistributionEstimation;
 
@@ -172,16 +163,9 @@ namespace statiskit
         };
     };
 
-        // const MultivariateSampleSpace* sample_space = data.get_sample_space();
-        // for(Index index = 0, max_index = sample_space->size(); index < max_index; ++index)
-        // {
-        //     if(sample_space->get(index)->get_outcome() != DISCRETE)
-        //     { throw statiskit::sample_space_error(DISCRETE); }
-        // }
-
     struct STATISKIT_CORE_API DiscreteMultivariateDistributionEstimation : MultivariateDistributionEstimation
     {
-        using distribution_type = DiscreteMultivariateDistribution;
+        typedef DiscreteMultivariateDistribution distribution_type;
 
         using MultivariateDistributionEstimation::MultivariateDistributionEstimation;
 
@@ -194,7 +178,7 @@ namespace statiskit
 
     struct STATISKIT_CORE_API ContinuousMultivariateDistributionEstimation : MultivariateDistributionEstimation
     {
-        using distribution_type = ContinuousMultivariateDistribution;
+        typedef ContinuousMultivariateDistribution distribution_type;
 
         using MultivariateDistributionEstimation::MultivariateDistributionEstimation;
 
@@ -205,14 +189,15 @@ namespace statiskit
         };
     };
 
-    using explanatory_data_type = MultivariateData;
+    typedef MultivariateData explanatory_data_type;
 
     template<class D>
     class ConditionalDistributionEstimation
     {
         public:
-            using distribution_type = D;
-            using response_data_type = typename D::response_type::data_type;
+            typedef ConditionalDistributionEstimation< D > copy_type;
+            typedef D distribution_type;
+            typedef typename D::response_type::data_type response_data_type;
 
             ConditionalDistributionEstimation();
             ConditionalDistributionEstimation(response_data_type const* response_data,
@@ -232,7 +217,8 @@ namespace statiskit
             class STATISKIT_CORE_API Estimator
             {
                 public: 
-                    using estimation_type = ConditionalDistributionEstimation<D>;
+                    typedef Estimator copy_type;
+                    typedef ConditionalDistributionEstimation<D> estimation_type;
 
                     virtual ~Estimator() = 0;
 
@@ -241,6 +227,8 @@ namespace statiskit
                 protected:
                     virtual std::unique_ptr< estimation_type > operator() (const response_data_type& response_data,
                                                                            const explanatory_data_type& explanatory_data) const = 0;
+
+                    virtual void check(const response_data_type& data) const;
             };
 
         protected:
@@ -268,6 +256,54 @@ namespace statiskit
         };
     };
 
+    struct STATISKIT_CORE_API CategoricalUnivariateConditionalDistributionEstimation : UnivariateConditionalDistributionEstimation
+    {
+        typedef CategoricalUnivariateConditionalDistribution distribution_type;
+
+        using UnivariateConditionalDistributionEstimation::UnivariateConditionalDistributionEstimation;
+
+        class STATISKIT_CORE_API Estimator : public UnivariateConditionalDistributionEstimation::Estimator
+        {
+            public:
+                typedef CategoricalEvent event_type;
+
+            protected:
+                virtual void check(const response_data_type& data) const;
+        };
+    };
+
+    struct STATISKIT_CORE_API DiscreteUnivariateConditionalDistributionEstimation : UnivariateConditionalDistributionEstimation
+    {
+        typedef DiscreteUnivariateConditionalDistribution distribution_type;
+
+        using UnivariateConditionalDistributionEstimation::UnivariateConditionalDistributionEstimation;
+
+        class STATISKIT_CORE_API Estimator : public UnivariateConditionalDistributionEstimation::Estimator
+        {
+            public:
+                typedef DiscreteEvent event_type;
+
+            protected:
+                virtual void check(const response_data_type& data) const;
+        };
+    };
+
+    struct STATISKIT_CORE_API ContinuousUnivariateConditionalDistributionEstimation : UnivariateConditionalDistributionEstimation
+    {
+        typedef ContinuousUnivariateConditionalDistribution distribution_type;
+
+        using UnivariateConditionalDistributionEstimation::UnivariateConditionalDistributionEstimation;
+
+        class STATISKIT_CORE_API Estimator : public UnivariateConditionalDistributionEstimation::Estimator
+        {
+            public:
+                typedef ContinuousEvent event_type;
+
+            protected:
+                virtual void check(const response_data_type& data) const;
+        };
+    };
+
     struct STATISKIT_CORE_API MultivariateConditionalDistributionEstimation : ConditionalDistributionEstimation< MultivariateConditionalDistribution >
     {
         using ConditionalDistributionEstimation< MultivariateConditionalDistribution >::ConditionalDistributionEstimation;
@@ -284,6 +320,54 @@ namespace statiskit
 
             protected:
                 using ConditionalDistributionEstimation< MultivariateConditionalDistribution >::Estimator::operator();
+        };
+    };
+
+    struct STATISKIT_CORE_API CategoricalMultivariateConditionalDistributionEstimation : MultivariateConditionalDistributionEstimation
+    {
+        typedef CategoricalMultivariateConditionalDistribution distribution_type;
+
+        using MultivariateConditionalDistributionEstimation::MultivariateConditionalDistributionEstimation;
+
+        class STATISKIT_CORE_API Estimator : public MultivariateConditionalDistributionEstimation::Estimator
+        {
+            public:
+                typedef CategoricalEvent event_type;
+
+            protected:
+                virtual void check(const response_data_type& data) const;
+        };
+    };
+
+    struct STATISKIT_CORE_API DiscreteMultivariateConditionalDistributionEstimation : MultivariateConditionalDistributionEstimation
+    {
+        typedef DiscreteMultivariateConditionalDistribution distribution_type;
+
+        using MultivariateConditionalDistributionEstimation::MultivariateConditionalDistributionEstimation;
+
+        class STATISKIT_CORE_API Estimator : public MultivariateConditionalDistributionEstimation::Estimator
+        {
+            public:
+                typedef DiscreteEvent event_type;
+
+            protected:
+                virtual void check(const response_data_type& data) const;
+        };
+    };
+
+    struct STATISKIT_CORE_API ContinuousMultivariateConditionalDistributionEstimation : MultivariateConditionalDistributionEstimation
+    {
+        typedef ContinuousMultivariateConditionalDistribution distribution_type;
+
+        using MultivariateConditionalDistributionEstimation::MultivariateConditionalDistributionEstimation;
+
+        class STATISKIT_CORE_API Estimator : public MultivariateConditionalDistributionEstimation::Estimator
+        {
+            public:
+                typedef ContinuousEvent event_type;
+
+            protected:
+                virtual void check(const response_data_type& data) const;
         };
     };
 }

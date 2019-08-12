@@ -6,27 +6,29 @@ from statiskit import stl
 from . import _core
 from .__core.statiskit import (encoding_type,
                                SampleSpaceVector,
-                                             UnivariateSampleSpace,
-                                                 CategoricalSampleSpace,
-                                                    NominalSampleSpace,
-                                                    OrdinalSampleSpace,
-                                                    HierarchicalSampleSpace,
-                                                 DiscreteSampleSpace,
-                                                    IntegerSampleSpace,
-                                                 ContinuousSampleSpace,
-                                                    RealSampleSpace,
-                                              UnivariateEvent,
-                                                 CategoricalEvent,
-                                                 DiscreteEvent,
-                                                 ContinuousEvent,
-                                              MultivariateSampleSpace,
-                                                 VectorSampleSpace)
+                               UnivariateSampleSpace,
+                               CategoricalSampleSpace,
+                               NominalSampleSpace,
+                               OrdinalSampleSpace,
+                               HierarchicalSampleSpace,
+                               DiscreteSampleSpace,
+                               IntegerSampleSpace,
+                               ContinuousSampleSpace,
+                               RealSampleSpace,
+                               UnivariateEvent,
+                               CategoricalEvent,
+                               DiscreteEvent,
+                               ContinuousEvent,
+                               MultivariateSampleSpace,
+                               VectorSampleSpace)
 
 from .controls import *
 from .event import *
 from ._tools import remove_latex
 
-__all__ = ['NominalSampleSpace', 'OrdinalSampleSpace', 'HierarchicalSampleSpace',
+__all__ = ['NominalSampleSpace',
+           'OrdinalSampleSpace',
+           'HierarchicalSampleSpace',
            'IntegerSampleSpace',
            'RealSampleSpace',
            'VectorSampleSpace']
@@ -390,8 +392,8 @@ def wrapper_get(f):
 
     return __getitem__
     
-MultivariateSampleSpace.__getitem__ = wrapper_get(MultivariateSampleSpace.get)
-del MultivariateSampleSpace.get
+MultivariateSampleSpace.__getitem__ = wrapper_get(MultivariateSampleSpace.get_sample_space)
+del MultivariateSampleSpace.get_sample_space
 
 def wrapper(f):
     @wraps(f)
@@ -417,5 +419,5 @@ def wrapper_set(f):
 
     return __setitem__
 
-VectorSampleSpace.__setitem__ = wrapper_set(VectorSampleSpace.set)
-del VectorSampleSpace.set
+VectorSampleSpace.__setitem__ = wrapper_set(VectorSampleSpace.set_sample_space)
+del VectorSampleSpace.set_sample_space

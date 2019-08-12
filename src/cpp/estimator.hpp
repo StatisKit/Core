@@ -61,7 +61,7 @@ namespace statiskit
                 ++index;
             }
             return std::make_unique< ShiftedDistributionEstimation<B> >(weighted,
-                                                                        new distribution_type(*static_cast< typename B::distribution_type const * >(((*(this->estimator))(weighted))->get_distribution()), this->shift));
+                                                                        new distribution_type(*static_cast< typename B::distribution_type const * >(((*(this->estimator))(*weighted))->get_distribution()), this->shift));
         }
 
     template<class B>
@@ -80,6 +80,12 @@ namespace statiskit
         const typename ShiftedDistributionEstimation<B>::Estimator::estimator_type* ShiftedDistributionEstimation<B>::Estimator::get_estimator() const
         {
             return this->estimator;
+        }
+
+    template<class B>
+        void ShiftedDistributionEstimation<B>::Estimator::set_estimator(const estimator_type& estimator)
+        {
+            this->estimator = static_cast< estimator_type* >(estimator.copy().release());
         }
 
     template<class B>

@@ -32,12 +32,6 @@ namespace statiskit
         }
 
     template<class E>
-        std::unique_ptr< UnivariateEvent > ElementaryEvent< E >::copy() const
-        {
-            return std::make_unique< ElementaryEvent< E > >(*this);
-        }
-
-    template<class E>
         CensoredEvent< E >::CensoredEvent(const std::vector< typename E::value_type >& values)
         {
             this->values = values;

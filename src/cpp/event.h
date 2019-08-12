@@ -15,7 +15,7 @@ namespace statiskit
         MIXED,
     };
 
-    std::ostream& operator<<(std::ostream& os, const outcome_type& outcome);
+    STATISKIT_CORE_API std::ostream& operator<<(std::ostream& os, const outcome_type& outcome);
 
     enum class censoring_type
     {
@@ -28,7 +28,7 @@ namespace statiskit
 
     struct STATISKIT_CORE_API UnivariateEvent
     {
-        using copy_type = UnivariateEvent;
+        typedef UnivariateEvent copy_type;
 
         virtual ~UnivariateEvent();
         
@@ -49,8 +49,6 @@ namespace statiskit
             virtual censoring_type get_censoring() const;
 
             const typename E::value_type& get_value() const;
-
-            virtual std::unique_ptr< UnivariateEvent > copy() const;
             
         protected:
             typename E::value_type value;
@@ -66,8 +64,6 @@ namespace statiskit
 
             const std::vector< typename E::value_type >& get_values() const;
 
-            virtual std::unique_ptr< UnivariateEvent > copy() const;
-
         protected:
             std::vector< typename E::value_type > values;
     };
@@ -82,8 +78,6 @@ namespace statiskit
 
             const typename E::value_type& get_upper_bound() const;
 
-            virtual std::unique_ptr< UnivariateEvent > copy() const;
-
         protected:
             typename E::value_type upper_bound;
     };
@@ -97,8 +91,6 @@ namespace statiskit
             virtual censoring_type get_censoring() const;
 
             const typename E::value_type& get_lower_bound() const;
-
-            virtual std::unique_ptr< UnivariateEvent > copy() const;
         
         protected:
             typename E::value_type lower_bound;
@@ -117,8 +109,6 @@ namespace statiskit
             
             typename E::value_type get_range() const;
             typename E::value_type get_center() const;
-
-            virtual std::unique_ptr< UnivariateEvent > copy() const;
             
         protected:
             std::pair<typename E::value_type, typename E::value_type > bounds;
@@ -171,7 +161,7 @@ namespace statiskit
 
     struct STATISKIT_CORE_API MultivariateEvent
     {        
-        using copy_type = MultivariateEvent;
+        typedef MultivariateEvent copy_type;
 
         virtual ~MultivariateEvent() = 0;
 

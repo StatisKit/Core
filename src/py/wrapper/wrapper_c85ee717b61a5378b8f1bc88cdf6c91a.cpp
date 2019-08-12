@@ -9,8 +9,12 @@ namespace autowig
         public:
             using ::statiskit::UnivariateLocationEstimation::UnivariateLocationEstimation;
 
+
+        public:
             typedef class ::std::unique_ptr< struct ::statiskit::UnivariateLocationEstimation, struct ::std::default_delete< struct ::statiskit::UnivariateLocationEstimation > >  return_type_f62d06e83b8a572c85ec833896347ff2;
             virtual return_type_f62d06e83b8a572c85ec833896347ff2 copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_f62d06e83b8a572c85ec833896347ff2, class_type, copy, ); };
+
+        public:
             typedef double const & return_type_9dde6f7d86c45ddd8e7676fbf005dcc2;
             virtual return_type_9dde6f7d86c45ddd8e7676fbf005dcc2 get_location() const override { PYBIND11_OVERLOAD_PURE(return_type_9dde6f7d86c45ddd8e7676fbf005dcc2, class_type, get_location, ); };
     };

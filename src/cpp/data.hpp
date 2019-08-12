@@ -25,11 +25,15 @@ namespace statiskit
 
     template<class B>
         const B* WeightedData<B>::origin() const
-        { return this->data; }
+        {
+            return this->data;
+        }
 
     template<class B>
         Index WeightedData<B>::get_nb_weights() const
-        { return this->weights->size(); }
+        {
+            return this->weights->size();
+        }
 
     template<class B>
         double WeightedData<B>::get_weight(const Index& index) const

@@ -9,8 +9,8 @@ namespace autowig
         public:
             using ::statiskit::PolymorphicCopy< struct ::statiskit::MultivariateMeanEstimation::Estimator, struct ::statiskit::MultivariateLocationEstimation::Estimator >::PolymorphicCopy;
 
-            typedef class ::std::unique_ptr< struct ::statiskit::MultivariateLocationEstimation::Estimator, struct ::std::default_delete< struct ::statiskit::MultivariateLocationEstimation::Estimator > >  return_type_5a6b8c33bc2a51f9946990fb646f8b2d;
-            virtual return_type_5a6b8c33bc2a51f9946990fb646f8b2d copy() const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_5a6b8c33bc2a51f9946990fb646f8b2d, class_type, copy, ); };
+
+        public:
             typedef class ::std::unique_ptr< struct ::statiskit::MultivariateLocationEstimation, struct ::std::default_delete< struct ::statiskit::MultivariateLocationEstimation > >  return_type_e9ba7deeca0056cb9754cfd757b7c670;
             typedef struct ::statiskit::MultivariateData const & param_e9ba7deeca0056cb9754cfd757b7c670_0_type;
             virtual return_type_e9ba7deeca0056cb9754cfd757b7c670 operator()(param_e9ba7deeca0056cb9754cfd757b7c670_0_type param_0) const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_e9ba7deeca0056cb9754cfd757b7c670, class_type, operator(), param_0); };

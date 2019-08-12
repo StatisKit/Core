@@ -17,8 +17,8 @@ class TestLogarithmic(unittest.TestCase, AbstractTestDiscreteUnivariateDistribut
 
     def test_mle(self):
         data = self._dist.simulation(20)
-        mle = core.logarithmic_estimation('ml', data)
-        self.assertGreaterEqual(mle.estimated.loglikelihood(data), self._dist.loglikelihood(data))
+        mle = core.logarithmic_estimation('ML', data)
+        self.assertGreaterEqual(mle.distribution.loglikelihood(data), self._dist.loglikelihood(data))
 
     @classmethod
     def tearDownClass(cls):

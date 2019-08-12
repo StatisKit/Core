@@ -17,10 +17,6 @@ namespace statiskit
                 WeightedData(const WeightedData<B>& data);
                 virtual ~WeightedData();
 
-                // std::unique_ptr< typename B::Generator > generator() const;
-
-                virtual const typename B::sample_space_type* get_sample_space() const;
-
                 const B* origin() const;
 
                 Index get_nb_weights() const;
@@ -56,10 +52,10 @@ namespace statiskit
 
     struct STATISKIT_CORE_API UnivariateData
     {
-        using copy_type = UnivariateData;
-        using sample_space_type = UnivariateSampleSpace;
-        using event_type = UnivariateEvent;
-        using weighted_type = class WeightedUnivariateData;
+        typedef UnivariateData copy_type;
+        typedef UnivariateSampleSpace sample_space_type;
+        typedef UnivariateEvent event_type;
+        typedef class WeightedUnivariateData weighted_type;
 
         virtual ~UnivariateData() = 0;
 
@@ -98,6 +94,8 @@ namespace statiskit
             using PolymorphicCopy<WeightedUnivariateData, WeightedData<UnivariateData>>::PolymorphicCopy;
 
             virtual std::unique_ptr< UnivariateData::Generator > generator() const;
+
+            virtual const UnivariateSampleSpace* get_sample_space() const;
 
         protected:
             struct STATISKIT_CORE_API Generator : WeightedData< UnivariateData >::Generator
@@ -179,10 +177,10 @@ namespace statiskit
 
     struct STATISKIT_CORE_API MultivariateData
     {
-        using copy_type = MultivariateData;
-        using sample_space_type = MultivariateSampleSpace;
-        using event_type = MultivariateEvent;
-        using weighted_type = class WeightedMultivariateData;
+        typedef MultivariateData copy_type;
+        typedef MultivariateSampleSpace sample_space_type;
+        typedef MultivariateEvent event_type;
+        typedef class WeightedMultivariateData weighted_type;
 
         virtual ~MultivariateData() = 0;
 
@@ -218,12 +216,16 @@ namespace statiskit
 
             virtual std::unique_ptr< MultivariateData::Generator > generator() const;
 
+            virtual Index get_nb_components() const;
+
+            virtual const UnivariateSampleSpace* get_sample_space(const Index& index) const;
+
         protected:
             struct STATISKIT_CORE_API Generator : PolymorphicCopy<Generator, WeightedData<MultivariateData>::Generator>
             {
                 using PolymorphicCopy<Generator, WeightedData<MultivariateData>::Generator>::PolymorphicCopy;
 
-                virtual const UnivariateEvent* get_event(const Index& index);
+                virtual const UnivariateEvent* get_event(const Index& index) const;
 
                 virtual Index size() const;
             };
@@ -369,8 +371,6 @@ namespace statiskit
                     Index index;
             }; 
     };
-
-    using WeightedMultivariateDataFrame = WeightedData< MultivariateDataFrame >;
 }
 
 #include "data.hpp"

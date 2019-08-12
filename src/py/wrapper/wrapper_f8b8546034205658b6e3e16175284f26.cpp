@@ -21,7 +21,7 @@ namespace autowig {
 void wrapper_f8b8546034205658b6e3e16175284f26(pybind11::module& module)
 {
 
-    pybind11::class_<class ::std::basic_ios< char, struct ::std::char_traits< char > >, autowig::HolderType< class ::std::basic_ios< char, struct ::std::char_traits< char > > >::Type, class ::std::ios_base > class_f8b8546034205658b6e3e16175284f26(module, "_BasicIos_f8b8546034205658b6e3e16175284f26", "");
+    pybind11::class_<class ::std::basic_ios< char, struct ::std::char_traits< char > >, autowig::HolderType< class ::std::basic_ios< char, struct ::std::char_traits< char > > >::Type > class_f8b8546034205658b6e3e16175284f26(module, "_BasicIos_f8b8546034205658b6e3e16175284f26", "");
     class_f8b8546034205658b6e3e16175284f26.def(pybind11::init< class ::std::basic_streambuf< char, struct ::std::char_traits< char > > * >());
     class_f8b8546034205658b6e3e16175284f26.def("__not__", method_pointer_a0c0805d4b6b59ba88690cd3db015da7, "");
     class_f8b8546034205658b6e3e16175284f26.def("good", method_pointer_59f0426d0a165494be5b3531e0d18c9e, "");

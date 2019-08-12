@@ -24,7 +24,8 @@ namespace statiskit
                 public:
                     virtual ~Estimator();
                   
-                    virtual std::unique_ptr< typename B::Estimator::estimation_type > operator() (typename B::data_type const & data, const bool& lazy=true) const;
+                    using B::Estimator::operator();
+                    virtual std::unique_ptr< typename B::Estimator::estimation_type > operator() (typename B::data_type const & data) const;
 
                     Index size() const;
 
@@ -72,6 +73,48 @@ namespace statiskit
 
             void finalize();
     };
+
+    typedef Selection< CategoricalUnivariateDistributionEstimation > CategoricalUnivariateDistributionSelection;
+    typedef CategoricalUnivariateDistributionSelection::CriterionEstimator CategoricalUnivariateDistributionCriterionEstimator;
+
+    typedef Selection< DiscreteUnivariateDistributionEstimation > DiscreteUnivariateDistributionSelection;
+    typedef DiscreteUnivariateDistributionSelection::CriterionEstimator DiscreteUnivariateDistributionCriterionEstimator;
+
+    typedef Selection< ContinuousUnivariateDistributionEstimation > ContinuousUnivariateDistributionSelection;
+    typedef ContinuousUnivariateDistributionSelection::CriterionEstimator ContinuousUnivariateDistributionCriterionEstimator;
+
+    typedef Selection< MultivariateDistributionEstimation > MultivariateDistributionSelection;
+    typedef MultivariateDistributionSelection::CriterionEstimator MultivariateDistributionCriterionEstimator;
+
+    typedef Selection< CategoricalMultivariateDistributionEstimation > CategoricalMultivariateDistributionSelection;
+    typedef CategoricalMultivariateDistributionSelection::CriterionEstimator CategoricalMultivariateDistributionCriterionEstimator;
+
+    typedef Selection< DiscreteMultivariateDistributionEstimation > DiscreteMultivariateDistributionSelection;
+    typedef DiscreteMultivariateDistributionSelection::CriterionEstimator DiscreteMultivariateDistributionCriterionEstimator;
+
+    typedef Selection< ContinuousMultivariateDistributionEstimation > ContinuousMultivariateDistributionSelection;
+    typedef ContinuousMultivariateDistributionSelection::CriterionEstimator ContinuousMultivariateDistributionCriterionEstimator;
+
+    // typedef Selection< CategoricalUnivariateConditionalDistributionEstimation > CategoricalUnivariateConditionalDistributionSelection;
+    // typedef CategoricalUnivariateConditionalDistributionSelection::CriterionEstimator CategoricalUnivariateConditionalDistributionCriterionEstimator;
+
+    // typedef Selection< DiscreteUnivariateConditionalDistributionEstimation > DiscreteUnivariateConditionalDistributionSelection;
+    // typedef DiscreteUnivariateConditionalDistributionSelection::CriterionEstimator DiscreteUnivariateConditionalDistributionCriterionEstimator;
+
+    // typedef Selection< ContinuousUnivariateConditionalDistributionEstimation > ContinuousUnivariateConditionalDistributionSelection;
+    // typedef ContinuousUnivariateConditionalDistributionSelection::CriterionEstimator ContinuousUnivariateConditionalDistributionCriterionEstimator;
+
+    // typedef Selection< MultivariateConditionalDistributionEstimation > MultivariateConditionalDistributionSelection;
+    // typedef MultivariateConditionalDistributionSelection::CriterionEstimator MultivariateConditionalDistributionCriterionEstimator;
+
+    // typedef Selection< CategoricalMultivariateConditionalDistributionEstimation > CategoricalMultivariateConditionalDistributionSelection;
+    // typedef CategoricalMultivariateConditionalDistributionSelection::CriterionEstimator CategoricalMultivariateConditionalDistributionCriterionEstimator;
+
+    // typedef Selection< DiscreteMultivariateConditionalDistributionEstimation > DiscreteMultivariateConditionalDistributionSelection;
+    // typedef DiscreteMultivariateConditionalDistributionSelection::CriterionEstimator DiscreteMultivariateConditionalDistributionCriterionEstimator;
+
+    // typedef Selection< ContinuousMultivariateConditionalDistributionEstimation > ContinuousMultivariateConditionalDistributionSelection;
+    // typedef ContinuousMultivariateConditionalDistributionSelection::CriterionEstimator ContinuousMultivariateConditionalDistributionCriterionEstimator;
 
     template<class B> class SlopeHeuristicSelection : public SlopeHeuristic, public PolymorphicCopy<SlopeHeuristicSelection<B>, B>
     {

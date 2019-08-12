@@ -1,28 +1,56 @@
 from functools import wraps
 
 from . import _core
-from .__core.statiskit import (outcome_type, event_type,
-                               UnivariateEvent, CategoricalEvent, DiscreteEvent, ContinuousEvent,
-                               _ElementaryEvent, _CensoredEvent, _LeftCensoredEvent, _RightCensoredEvent, _IntervalCensoredEvent,
-                               CategoricalElementaryEvent, CategoricalCensoredEvent,
-                               DiscreteElementaryEvent, DiscreteCensoredEvent, DiscreteLeftCensoredEvent, DiscreteRightCensoredEvent, DiscreteIntervalCensoredEvent,
-                               ContinuousElementaryEvent, ContinuousCensoredEvent, ContinuousLeftCensoredEvent, ContinuousRightCensoredEvent,ContinuousIntervalCensoredEvent,
-                               MultivariateEvent, VectorEvent)
+from .__core.statiskit import (outcome_type,
+                               censoring_type,
+                               UnivariateEvent,
+                               CategoricalEvent,
+                               DiscreteEvent,
+                               ContinuousEvent,
+                               _ElementaryEvent,
+                               _CensoredEvent,
+                               _LeftCensoredEvent,
+                               _RightCensoredEvent,
+                               _IntervalCensoredEvent,
+                               CategoricalElementaryEvent,
+                               CategoricalCensoredEvent,
+                               DiscreteElementaryEvent,
+                               DiscreteCensoredEvent,
+                               DiscreteLeftCensoredEvent,
+                               DiscreteRightCensoredEvent,
+                               DiscreteIntervalCensoredEvent,
+                               ContinuousElementaryEvent,
+                               ContinuousCensoredEvent,
+                               ContinuousLeftCensoredEvent,
+                               ContinuousRightCensoredEvent,
+                               ContinuousIntervalCensoredEvent,
+                               MultivariateEvent,
+                               VectorEvent)
 
 from .controls import controls
 from ._tools import float_str, remove_latex
 
-__all__ = ['outcome_type', 'event_type',
-           'CategoricalElementaryEvent', 'CategoricalCensoredEvent',
-           'DiscreteElementaryEvent', 'DiscreteCensoredEvent', 'DiscreteLeftCensoredEvent', 'DiscreteRightCensoredEvent', 'DiscreteIntervalCensoredEvent',
-           'ContinuousElementaryEvent', 'ContinuousCensoredEvent', 'ContinuousLeftCensoredEvent', 'ContinuousRightCensoredEvent', 'ContinuousIntervalCensoredEvent',
+__all__ = ['outcome_type',
+           'censoring_type',
+           'CategoricalElementaryEvent',
+           'CategoricalCensoredEvent',
+           'DiscreteElementaryEvent',
+           'DiscreteCensoredEvent',
+           'DiscreteLeftCensoredEvent',
+           'DiscreteRightCensoredEvent',
+           'DiscreteIntervalCensoredEvent',
+           'ContinuousElementaryEvent',
+           'ContinuousCensoredEvent',
+           'ContinuousLeftCensoredEvent',
+           'ContinuousRightCensoredEvent',
+           'ContinuousIntervalCensoredEvent',
            'VectorEvent']
 
 UnivariateEvent.outcome = property(UnivariateEvent.get_outcome)
 del UnivariateEvent.get_outcome
 
-UnivariateEvent.event = property(UnivariateEvent.get_event)
-del UnivariateEvent.get_event
+UnivariateEvent.censoring = property(UnivariateEvent.get_censoring)
+del UnivariateEvent.get_censoring
 
 def type_to_event(event):
     if isinstance(event, str):
@@ -272,8 +300,8 @@ def wrapper(f):
             return f(self, index)
     return __getitem__
 
-MultivariateEvent.__getitem__ = wrapper(MultivariateEvent.get)
-del wrapper, MultivariateEvent.get
+MultivariateEvent.__getitem__ = wrapper(MultivariateEvent.get_event)
+del wrapper, MultivariateEvent.get_event
 
 def __str__(self):
     return '(' + ', '.join(str(event) if not event is None else '?' for event in self) + ')'
@@ -300,5 +328,5 @@ def wrapper(f):
         f(self, index, event)
     return __setitem__
 
-VectorEvent.__setitem__ = wrapper(VectorEvent.set)
-del wrapper, VectorEvent.set
+VectorEvent.__setitem__ = wrapper(VectorEvent.set_event)
+del wrapper, VectorEvent.set_event

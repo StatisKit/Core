@@ -8,7 +8,10 @@ from statiskit import stl
 from . import _core
 
 from .controls import controls
-from .data import UnivariateDataFrame, MultivariateDataFrame, WeightedUnivariateData, WeightedMultivariateData
+from .data import (UnivariateDataFrame,
+                   MultivariateDataFrame,
+                   WeightedUnivariateData,
+                   WeightedMultivariateData)
 from .sample_space import NominalSampleSpace
 from .event import outcome_type
 

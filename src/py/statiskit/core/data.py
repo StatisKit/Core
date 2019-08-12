@@ -5,15 +5,13 @@ import ast
 
 from . import _core
 from .__core.statiskit import (UnivariateData,
-                                 WeightedUnivariateData,
-                                 NamedData,
                                MultivariateData,
-                                 MultivariateDataFrame,
+                               NamedData,
+                               UnivariateDataFrame,
+                               MultivariateDataFrame,
                                _WeightedData,
-                                    UnivariateDataFrame,
-                                    WeightedMultivariateData,
-                               UnivariateConditionalData,
-                               MultivariateConditionalData,
+                               WeightedUnivariateData,
+                               WeightedMultivariateData,
                                Indices)
 
 from .controls import controls
@@ -27,8 +25,7 @@ __all__ = ['UnivariateDataFrame',
            'WeightedMultivariateData']
 
 for cls in _WeightedData:
-    cls.data = property(cls.get_data)
-    del cls.get_data
+    cls.origin = property(cls.origin)
 
 UnivariateData.sample_space = property(UnivariateData.get_sample_space)
 MultivariateData.sample_space = property(MultivariateData.get_sample_space)
@@ -102,90 +99,22 @@ def wrapper_set_name(f):
 NamedData.name = property(NamedData.get_name, wrapper_set_name(NamedData.set_name))
 del wrapper_set_name, NamedData.get_name, NamedData.set_name
 
-
-class Events(object):
-
-    def __init__(self, dataframe):
-        self._dataframe = dataframe
-
-    def __iter__(self):
-
-        class Iterator(object):
-
-            def __init__(self, events):
-                self._events = events
-                self._index = 0
-
-            def __next__(self):
-                if self._index < len(self._events):
-                    event = self._events[self._index]
-                    self._index += 1
-                    return event
-                else:
-                    raise StopIteration()
-
-        return Iterator(self)
-
-def wrapper_events(f0, f1, f2):
-
-    @wraps(f0)
-    def __len__(self):
-        return f0(self._dataframe)
-
-    @wraps(f1)
-    def __getitem__(self, index):
-        if isinstance(index, slice):
-            return [self[index] for index in range(*index.indices(len(self)))]
-        else:
-            if index < 0:
-                index += len(self)
-            if not 0 <= index < len(self):
-                raise IndexError(self._dataframe.__class__.__name__ + " index out of range")
-            return f1(self._dataframe, index)
-
-    @wraps(f2)
-    def __setitem__(self, index, value):
-        if isinstance(index, slice):
-            try:
-                indices = index
-                values = self[index]
-                for index, value in zip(index.indices(len(self)), value):
-                    self[index] = value
-            except:
-                for index, value in zip(indices, values):
-                     self[index] = value
-                raise
-        else:
-            if index < 0:
-                index += len(self)
-            if not 0 <= index < len(self):
-                raise IndexError(self._dataframe.__class__.__name__ + " index out of range")
-            return f2(self._dataframe, index, value)
-
-    return __len__, __getitem__, __setitem__
-
-class UnivariateEvents(Events):
-    pass
-
-UnivariateEvents.__len__, UnivariateEvents.__getitem__, UnivariateEvents.__setitem__ = wrapper_events(UnivariateDataFrame.get_nb_events, UnivariateDataFrame.get_event, UnivariateDataFrame.set_event)
-del UnivariateDataFrame.get_nb_events, UnivariateDataFrame.get_event, UnivariateDataFrame.set_event
-UnivariateDataFrame.events = property(UnivariateEvents)
-
 UnivariateDataFrame.sample_space = property(UnivariateData.sample_space.fget, UnivariateDataFrame.set_sample_space)
 del UnivariateDataFrame.set_sample_space
 
 def __str__(self):
-    events = self.events
-    if len(events) > controls.head:
-        rows = [("", str(self.name))] + [(str(index), str(event)) if event is not None else (repr(index), '?') for index, event in enumerate(events) if index < controls.head] + [('...', '...')] + [(repr(index), repr(event)) if event is not None else (repr(index), '?') for index, event in enumerate(events) if index > max(len(events) - controls.tail, controls.head)]
-    else:
-        rows = [("", str(self.name))] + [(str(index), str(event)) if event is not None else (repr(index), '?') for index, event in enumerate(events)]
-    columns = list(zip(*rows))
-    maxima = [max(max(*[len(row) for row in column]), 3) + 2 for column in columns]
-    string = []
-    for index, row in enumerate(rows):
-        string.append(' '.join(('{:<' + repr(maximum) + '}').format(row[index]) for index, maximum in enumerate(maxima)))
-    return '\n'.join(string)
+    return ""
+    # events = self.events
+    # if len(events) > controls.head:
+    #     rows = [("", str(self.name))] + [(str(index), str(event)) if event is not None else (repr(index), '?') for index, event in enumerate(events) if index < controls.head] + [('...', '...')] + [(repr(index), repr(event)) if event is not None else (repr(index), '?') for index, event in enumerate(events) if index > max(len(events) - controls.tail, controls.head)]
+    # else:
+    #     rows = [("", str(self.name))] + [(str(index), str(event)) if event is not None else (repr(index), '?') for index, event in enumerate(events)]
+    # columns = list(zip(*rows))
+    # maxima = [max(max(*[len(row) for row in column]), 3) + 2 for column in columns]
+    # string = []
+    # for index, row in enumerate(rows):
+    #     string.append(' '.join(('{:<' + repr(maximum) + '}').format(row[index]) for index, maximum in enumerate(maxima)))
+    # return '\n'.join(string)
 
 UnivariateDataFrame.__str__ = UnivariateDataFrame.__str__
 UnivariateDataFrame.__repr__ = __str__
@@ -288,54 +217,20 @@ del box_plot
 MultivariateData.total = property(MultivariateData.compute_total)
 del MultivariateData.compute_total
 
-def wrapper_extract(f):
+def wrapper_select(f):
 
     @wraps(f)
-    def extract(self, *args, **kwargs):
-        if len(kwargs) == 0:
-            args = [index if index >= 0 else index + len(self.components) for index in args]
-            if len(args) == 1:
-                args = args.pop()
-                return f(self, args)
-            else:
-                return f(self, Indices(*args))
+    def select(self, *args):
+        args = [index if index >= 0 else index + len(self.components) for index in args]
+        if len(args) == 1:
+            args = args.pop()
+            return f(self, args)
         else:
-            if "response" in kwargs:
-                response = kwargs.pop("response")
-                if response < 0:
-                    response += len(self.components)
-                if not 0 <= response < len(self.components):
-                    raise IndexError(self.__class__.__name__ + " response component index out of range")
-                kwargs['response'] = response
-            elif "responses" in kwargs:
-                responses = [index if index >= 0 else index + len(self.components) for index in kwargs.pop("responses")]
-                if not all(0 <= index < len(self.components) for index in responses):
-                    raise IndexError(self.__class__.__name__ + " response component indices out of range")
-                kwargs['responses'] = responses
-            if 'explanatories' not in kwargs:
-                if 'response' in kwargs:
-                    kwargs['explanatories'] = [index for index in range(len(self.components)) if not index == response]
-                elif 'responses' in kwargs:
-                    kwargs['explanatories'] = [index for index in range(len(self.components)) if index not in responses]
-                else:
-                    raise ValueError()
-            explanatories = Indices(*[index if index >= 0 else index + len(self.components) for index in kwargs.pop('explanatories')])
-            if not all(0 <= index < len(self.components) for index in explanatories):
-                raise IndexError(self.__class__.__name__ + " explanatory component indices out of range")
-            if 'response' in kwargs:
-                return UnivariateConditionalData(self, response, explanatories)
-            elif "responses" in kwargs:
-                return MultivariateConditionalData(self, Indices(*responses), explanatories)
-            else:
-                responses = [index for index in range(len(self.components)) if not index in explanatories]
-                if len(responses) == 1:
-                    return self.extract(explanatories=explanatories, response=responses.pop())
-                else:
-                    return self.extract(explanatories=explanatories, responses=Indices(*responses))
-    return extract
+            return f(self, Indices(*args))
+    return select
 
-MultivariateData.extract = wrapper_extract(MultivariateData.extract)
-del wrapper_extract
+MultivariateData.select = wrapper_select(MultivariateData.select)
+del wrapper_select
 
 def get_location(self):
     if not hasattr(self, '_location'):
@@ -379,7 +274,7 @@ class Components(object):
 
             def __next__(self):
                 if self._index < len(self._components):
-                    component = self._components.extract(self._index)
+                    component = self._components.select(self._index)
                     self._index += 1
                     return component
                 else:
@@ -398,7 +293,7 @@ def wrapper_components(f):
         return f(self._data, index)
 
     return __getitem__
-Components.__getitem__ = wrapper_components(MultivariateData.extract)
+Components.__getitem__ = wrapper_components(MultivariateData.select)
 del wrapper_components,
 MultivariateData.components = property(Components)
 
@@ -430,64 +325,6 @@ def __getattr__(self, attr):
 
 MultivariateDataFrame.__getattr__ = __getattr__
 del __getattr__
-
-class MultivariateEvents(Events):
-    pass
-
-MultivariateEvents.__len__, MultivariateEvents.__getitem__, MultivariateEvents.__setitem__ = wrapper_events(MultivariateDataFrame.get_nb_events, MultivariateDataFrame.get_event, MultivariateDataFrame.set_event)
-del MultivariateDataFrame.get_nb_events, MultivariateDataFrame.get_event, MultivariateDataFrame.set_event
-MultivariateDataFrame.events = property(MultivariateEvents)
-
-class Components(object):
-
-    def __init__(self, dataframe):
-        self._dataframe = dataframe
-
-    def __iter__(self):
-
-        class Iterator(object):
-
-            def __init__(self, components):
-                self._components = components
-                self._index = 0
-
-            def __next__(self):
-                if self._index < len(self._components):
-                    component = self._components[self._index]
-                    self._index += 1
-                    return component
-                else:
-                    raise StopIteration()
-
-        return Iterator(self)
-        
-def wrapper_components(f0, f1, f2):
-
-    @wraps(f0)
-    def __len__(self):
-        return f0(self._dataframe)
-
-    @wraps(f1)
-    def __getitem__(self, index):
-        if index < 0:
-            index += len(self)
-        if not 0 <= index < len(self):
-            raise IndexError(self._dataframe.__class__.__name__ + " index out of range")
-        return f1(self._dataframe, index)
-
-    @wraps(f2)
-    def __setitem__(self, index, value):
-        if index < 0:
-            index += len(self)
-        if not 0 <= index < len(self):
-            raise IndexError(self._dataframe.__class__.__name__ + " index out of range")
-        return f2(self._dataframe, index, value)
-
-    return __len__, __getitem__, __setitem__
-
-Components.__len__, Components.__getitem__, Components.__setitem__ = wrapper_components(MultivariateDataFrame.get_nb_components, MultivariateDataFrame.get_component, MultivariateDataFrame.set_component)
-del wrapper_components, MultivariateDataFrame.get_nb_components, MultivariateDataFrame.get_component, MultivariateDataFrame.set_component
-MultivariateDataFrame.components = property(Components)
 
 def __repr__(self):
     events = self.events
@@ -545,5 +382,3 @@ del _repr_html_
 #
 #UnivariateDataFrame.lorenz_plot = lorenz_plot
 #del lorenz_plot
-
-UnivariateConditionalData.response = property(UnivariateConditionalData.get_response)

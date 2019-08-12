@@ -9,8 +9,8 @@ namespace autowig
         public:
             using ::statiskit::PolymorphicCopy< ::statiskit::MultivariateVarianceEstimation::Estimator, struct ::statiskit::MultivariateDispersionEstimation::Estimator >::PolymorphicCopy;
 
-            typedef class ::std::unique_ptr< struct ::statiskit::MultivariateDispersionEstimation::Estimator, struct ::std::default_delete< struct ::statiskit::MultivariateDispersionEstimation::Estimator > >  return_type_a9cf793dd2c45d07b722097c2a05e58d;
-            virtual return_type_a9cf793dd2c45d07b722097c2a05e58d copy() const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_a9cf793dd2c45d07b722097c2a05e58d, class_type, copy, ); };
+
+        public:
             typedef class ::std::unique_ptr< class ::statiskit::MultivariateDispersionEstimation, struct ::std::default_delete< class ::statiskit::MultivariateDispersionEstimation > >  return_type_362d225b055b59faab2c348f93722cb7;
             typedef struct ::statiskit::MultivariateData const & param_362d225b055b59faab2c348f93722cb7_0_type;
             typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_362d225b055b59faab2c348f93722cb7_1_type;

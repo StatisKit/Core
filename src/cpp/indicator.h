@@ -10,7 +10,7 @@ namespace statiskit
 
     struct STATISKIT_CORE_API UnivariateLocationEstimation
     { 
-        using copy_type = UnivariateLocationEstimation;
+        typedef UnivariateLocationEstimation copy_type;
 
         virtual ~UnivariateLocationEstimation() = 0;
 
@@ -20,7 +20,7 @@ namespace statiskit
 
         struct STATISKIT_CORE_API Estimator
         { 
-            using copy_type = Estimator;
+            typedef Estimator copy_type;
 
             virtual ~Estimator() = 0;
 
@@ -32,7 +32,7 @@ namespace statiskit
 
     struct STATISKIT_CORE_API MultivariateLocationEstimation
     {
-        using copy_type = MultivariateLocationEstimation;
+        typedef MultivariateLocationEstimation copy_type;
 
         virtual ~MultivariateLocationEstimation() = 0;
 
@@ -42,7 +42,7 @@ namespace statiskit
 
         struct STATISKIT_CORE_API Estimator
         { 
-            using copy_type = Estimator;
+            typedef Estimator copy_type;
 
             virtual ~Estimator() = 0;
 
@@ -99,7 +99,7 @@ namespace statiskit
     class STATISKIT_CORE_API UnivariateDispersionEstimation
     {
         public:
-            using copy_type = UnivariateDispersionEstimation;
+            typedef UnivariateDispersionEstimation copy_type;
 
             UnivariateDispersionEstimation(const double& location);
             UnivariateDispersionEstimation(const UnivariateDispersionEstimation& estimation);
@@ -113,7 +113,7 @@ namespace statiskit
 
             struct STATISKIT_CORE_API Estimator
             {
-                using copy_type = Estimator;
+                typedef Estimator copy_type;
 
                 virtual ~Estimator() = 0;
 
@@ -129,7 +129,7 @@ namespace statiskit
     class STATISKIT_CORE_API MultivariateDispersionEstimation
     {
         public:
-            using copy_type = MultivariateDispersionEstimation;
+            typedef MultivariateDispersionEstimation copy_type;
 
             MultivariateDispersionEstimation(const Eigen::VectorXd& location);
             MultivariateDispersionEstimation(const MultivariateDispersionEstimation& estimation);
@@ -143,7 +143,7 @@ namespace statiskit
 
             struct STATISKIT_CORE_API Estimator
             { 
-                using copy_type = Estimator;
+                typedef Estimator copy_type;
 
                 virtual ~Estimator() = 0;
 

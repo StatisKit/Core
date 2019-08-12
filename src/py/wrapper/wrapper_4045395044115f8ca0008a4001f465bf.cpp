@@ -9,19 +9,18 @@ namespace autowig
         public:
             using ::statiskit::PolymorphicCopy< ::statiskit::NominalDistributionEstimator, class ::statiskit::UnivariateFrequencyDistributionEstimation< struct ::statiskit::CategoricalUnivariateDistributionEstimation >::Estimator >::PolymorphicCopy;
 
-            typedef class ::std::unique_ptr< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution >::Estimator, struct ::std::default_delete< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution >::Estimator > >  return_type_821c6dc1536755f6ab282e83be065e39;
-            virtual return_type_821c6dc1536755f6ab282e83be065e39 copy() const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_821c6dc1536755f6ab282e83be065e39, class_type, copy, ); };
+
+        protected:
             typedef ::statiskit::UnivariateFrequencyDistributionEstimation< struct ::statiskit::CategoricalUnivariateDistributionEstimation >::Estimator::distribution_type * return_type_66f3e21cd67a5feab63c9578335a2d04;
             typedef class ::std::set< class ::std::basic_string< char, struct ::std::char_traits< char >, class ::std::allocator< char > >, struct ::std::less< class ::std::basic_string< char, struct ::std::char_traits< char >, class ::std::allocator< char > > >, class ::std::allocator< class ::std::basic_string< char, struct ::std::char_traits< char >, class ::std::allocator< char > > > > const & param_66f3e21cd67a5feab63c9578335a2d04_0_type;
             typedef class ::Eigen::Matrix< double, -1, 1, 0, -1, 1 > const & param_66f3e21cd67a5feab63c9578335a2d04_1_type;
             virtual return_type_66f3e21cd67a5feab63c9578335a2d04 create(param_66f3e21cd67a5feab63c9578335a2d04_0_type param_0, param_66f3e21cd67a5feab63c9578335a2d04_1_type param_1) const override { PYBIND11_OVERLOAD_PURE(return_type_66f3e21cd67a5feab63c9578335a2d04, class_type, create, param_0, param_1); };
-            typedef class ::std::unique_ptr< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution >, struct ::std::default_delete< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution > > >  return_type_f29c0026008c59ff9139a939b30969fd;
-            typedef ::statiskit::UnivariateFrequencyDistributionEstimation< struct ::statiskit::CategoricalUnivariateDistributionEstimation >::Estimator::data_type const & param_f29c0026008c59ff9139a939b30969fd_0_type;
-            virtual return_type_f29c0026008c59ff9139a939b30969fd operator()(param_f29c0026008c59ff9139a939b30969fd_0_type param_0) const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_f29c0026008c59ff9139a939b30969fd, class_type, operator(), param_0); };
-            typedef class ::std::unique_ptr< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution >, struct ::std::default_delete< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution > > >  return_type_47877b68ac8c5802b57686bea7f9f547;
-            typedef struct ::statiskit::MultivariateData const & param_47877b68ac8c5802b57686bea7f9f547_0_type;
-            typedef ::statiskit::Index const & param_47877b68ac8c5802b57686bea7f9f547_1_type;
-            virtual return_type_47877b68ac8c5802b57686bea7f9f547 operator()(param_47877b68ac8c5802b57686bea7f9f547_0_type param_0, param_47877b68ac8c5802b57686bea7f9f547_1_type param_1) const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_47877b68ac8c5802b57686bea7f9f547, class_type, operator(), param_0, param_1); };
+
+        public:
+            typedef class ::std::unique_ptr< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution >, struct ::std::default_delete< class ::statiskit::DistributionEstimation< struct ::statiskit::UnivariateDistribution > > >  return_type_ffc375e050255b0e93aeb875148628ea;
+            typedef struct ::statiskit::MultivariateData const & param_ffc375e050255b0e93aeb875148628ea_0_type;
+            typedef unsigned long int const & param_ffc375e050255b0e93aeb875148628ea_1_type;
+            virtual return_type_ffc375e050255b0e93aeb875148628ea operator()(param_ffc375e050255b0e93aeb875148628ea_0_type param_0, param_ffc375e050255b0e93aeb875148628ea_1_type param_1) const override { PYBIND11_OVERLOAD_UNIQUE_PTR(return_type_ffc375e050255b0e93aeb875148628ea, class_type, operator(), param_0, param_1); };
     };
 
     class Publicist : public class_type

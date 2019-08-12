@@ -85,13 +85,13 @@ namespace statiskit
         }
 
     template<class B>
-        std::unique_ptr< typename B::Estimator::estimation_type > Selection<B>::Estimator::operator() (const typename B::data_type& data, const bool& lazy) const
+        std::unique_ptr< typename B::Estimator::estimation_type > Selection<B>::Estimator::operator() (const typename B::data_type& data) const
         {
             std::unique_ptr<Selection<B>> estimation = std::make_unique<Selection<B>>(data.copy().release());
             for (Index index = 0, max_index = this->size(); index < max_index; ++index) {
                 try {
                     estimation->estimations.push_back(static_cast< B* >((*(this->estimators[index]))(data).release()));
-                    estimation->scores.push_back(scoring(estimation->estimations.back()->get_distribution(), data));
+                    estimation->scores.push_back(this->scoring(static_cast< const typename B::distribution_type * >(estimation->estimations.back()->get_distribution()), data));
                 } catch (const std::exception& e) {
                     estimation->estimations.push_back(nullptr);
                     estimation->scores.push_back(std::numeric_limits< double >::quiet_NaN());

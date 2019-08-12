@@ -9,8 +9,12 @@ namespace autowig
         public:
             using ::statiskit::UnivariateDispersionEstimation::UnivariateDispersionEstimation;
 
+
+        public:
             typedef class ::std::unique_ptr< class ::statiskit::UnivariateDispersionEstimation, struct ::std::default_delete< class ::statiskit::UnivariateDispersionEstimation > >  return_type_0b82141bcbce5248908bd378832e2a9c;
             virtual return_type_0b82141bcbce5248908bd378832e2a9c copy() const override { PYBIND11_OVERLOAD_PURE_UNIQUE_PTR(return_type_0b82141bcbce5248908bd378832e2a9c, class_type, copy, ); };
+
+        public:
             typedef double const & return_type_a18c7d90bacb538d9895cf5c0091b871;
             virtual return_type_a18c7d90bacb538d9895cf5c0091b871 get_dispersion() const override { PYBIND11_OVERLOAD_PURE(return_type_a18c7d90bacb538d9895cf5c0091b871, class_type, get_dispersion, ); };
     };
