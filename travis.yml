@@ -15,10 +15,13 @@ dist: trusty
 osx_image: xcode8.3
 
 env:
-  - CONDA_RECIPE=etc/conda/libstatiskit_core-dev
-  - CONDA_RECIPE=etc/conda/autowig-libstatiskit_core
-  - CONDA_RECIPE=etc/conda/libstatiskit_core
-  - CONDA_RECIPE=etc/conda/python-statiskit_core
+  global:
+    - PYTHON_VERSION=3.7
+  jobs:
+    - CONDA_RECIPE=etc/conda/libstatiskit_core-dev
+    - CONDA_RECIPE=etc/conda/autowig-libstatiskit_core
+    - CONDA_RECIPE=etc/conda/libstatiskit_core
+    - CONDA_RECIPE=etc/conda/python-statiskit_core
       
 matrix:
   exclude:
