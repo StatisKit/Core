@@ -368,7 +368,18 @@ def pdf_plot(self, axes=None, fmt='|', **kwargs):
             kwargs['qmin'] = int(qmin)
         if 'qmax' not in kwargs and 'pmax' not in kwargs:
             kwargs['qmax'] = int(qmax)
-    x = kwargs.pop('quantiles', list(range(kwargs.pop('qmin', self.quantile(kwargs.pop('pmin', 0.025))), kwargs.pop('qmax', self.quantile(kwargs.pop('pmax', 0.975)))+1)))
+    if 'quantiles' in kwargs:
+      x = kwargs.pop('quantiles')
+    else:
+      if 'qmin' in kwargs:
+        qmin = kwargs.pop('qmin')
+      else:
+        qmin = self.quantile(kwargs.pop('pmin', 0.025))
+      if 'qmax' in kwargs:
+        qmax = kwargs.pop('qmax')
+      else:
+        qmax = self.quantile(kwargs.pop('pmax', 0.975))
+      x = list(range(qmin, qmax + 1))
     y = [self.pdf(q) for q in x]
     if 'norm' in kwargs:
         norm = kwargs.pop('norm')
