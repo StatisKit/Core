@@ -2627,7 +2627,7 @@ namespace statiskit
                         { throw std::exception(); }
                     }
                 }  
-                p = _sum->ldf(sum) + _singular->probability(event, logarithm);
+                p = _sum->ldf(sum) + _singular->probability(event, true);
             }
             catch(const std::exception& error)
             { p = log(0.); }
